@@ -19,7 +19,7 @@ File `v2xker32.dll` will do workaround for XP.
 2. Drop the EXE/DLL files to the dialog to be converted.
 3. Click the `[Convert]` button.
 4. Files will be converted. File `v2xker32.dll` will be automatically added if necessary.
-5. If you want to revert, please use the files inside the "Vista2XP-Backup" folder that was created.
+5. If you want to revert, please use the files inside the `Vista2XP-Backup` folder that was created.
 
 ## Contact Us
 
