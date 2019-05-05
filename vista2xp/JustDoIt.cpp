@@ -28,8 +28,8 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszV2XKRE32, LPCTSTR pszFile)
     if (image.is_64bit())
     {
         LoadString(NULL, IDS_NOTSUP64BIT, szText, ARRAYSIZE(szText));
-        MessageBox(hwnd, szText, NULL, MB_ICONERROR);
-        return E_FAIL;
+        MessageBox(hwnd, szText, TEXT("Warning"), MB_ICONWARNING);
+        return S_FALSE;
     }
 
     std::vector<const char *> names;
