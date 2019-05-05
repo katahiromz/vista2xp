@@ -32,28 +32,45 @@ static FN_ChangeWindowMessageFilter s_pChangeWindowMessageFilter = NULL;
         DWORD ExtStatus;
     } CHANGEFILTERSTRUCT, *PCHANGEFILTERSTRUCT;
 #endif
+#ifndef MSGFLTINFO_NONE
+    #define MSGFLTINFO_NONE 0
+    #define MSGFLTINFO_ALLOWED_HIGHER 3
+    #define MSGFLTINFO_ALREADYALLOWED_FORWND 1
+    #define MSGFLTINFO_ALREADYDISALLOWED_FORWND 2
+#endif
 typedef BOOL (WINAPI *FN_ChangeWindowMessageFilterEx)(HWND, UINT, DWORD, PCHANGEFILTERSTRUCT);
 static FN_ChangeWindowMessageFilterEx s_pChangeWindowMessageFilterEx = NULL;
 
 BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
-    HINSTANCE hKernel32 = GetModuleHandleA("kernel32");
+    HINSTANCE hUser32 = GetModuleHandleA("user32");
 
     s_pChangeWindowMessageFilterEx =
         (FN_ChangeWindowMessageFilterEx)
-            GetProcAddress(hKernel32, "ChangeWindowMessageFilterEx");
+            GetProcAddress(hUser32, "ChangeWindowMessageFilterEx");
 
     s_pChangeWindowMessageFilter =
         (FN_ChangeWindowMessageFilter)
-            GetProcAddress(hKernel32, "ChangeWindowMessageFilter");
+            GetProcAddress(hUser32, "ChangeWindowMessageFilter");
 
+    BOOL ret = FALSE;
     if (s_pChangeWindowMessageFilterEx)
     {
-        (*s_pChangeWindowMessageFilterEx)(hwnd, WM_DROPFILES, MSGFLT_ALLOW, NULL);
+        CHANGEFILTERSTRUCT change;
+        change.cbSize = sizeof(change);
+        ret = (*s_pChangeWindowMessageFilterEx)(hwnd, WM_DROPFILES, MSGFLT_ALLOW, &change);
+        ret = (*s_pChangeWindowMessageFilterEx)(hwnd, 0x0049, MSGFLT_ALLOW, &change);
     }
     else if (s_pChangeWindowMessageFilter)
     {
-        (*s_pChangeWindowMessageFilter)(WM_DROPFILES, MSGFLT_ADD);
+        ret = (*s_pChangeWindowMessageFilter)(WM_DROPFILES, MSGFLT_ADD);
+        ret = (*s_pChangeWindowMessageFilter)(0x0049, MSGFLT_ADD);
+    }
+    if (!ret)
+    {
+        TCHAR sz[32];
+        StringCbPrintf(sz, sizeof(sz), TEXT("%ld"), GetLastError());
+        MessageBox(hwnd, sz, NULL, MB_ICONERROR);
     }
 
     DragAcceptFiles(hwnd, TRUE);
