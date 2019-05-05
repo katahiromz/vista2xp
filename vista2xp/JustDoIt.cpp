@@ -82,7 +82,6 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszV2XKRE32, LPCTSTR pszFile)
     *pch = 0;
 
     PathAppend(szPath, TEXT("v2xker32.dll"));
-    MessageBox(NULL, szPath, NULL, 0);
     if (PathFileExists(szPath) || CopyFile(pszV2XKRE32, szPath, FALSE))
         return S_OK;
 
