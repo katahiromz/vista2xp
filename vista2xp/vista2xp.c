@@ -66,12 +66,6 @@ BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         ret = (*s_pChangeWindowMessageFilter)(WM_DROPFILES, MSGFLT_ADD);
         ret = (*s_pChangeWindowMessageFilter)(0x0049, MSGFLT_ADD);
     }
-    if (!ret)
-    {
-        TCHAR sz[32];
-        StringCbPrintf(sz, sizeof(sz), TEXT("%ld"), GetLastError());
-        MessageBox(hwnd, sz, NULL, MB_ICONERROR);
-    }
 
     DragAcceptFiles(hwnd, TRUE);
     return TRUE;
