@@ -45,7 +45,10 @@ void AddFolder(HWND hwnd, LPCTSTR pszDir)
                 }
 
                 if (find.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+                {
+                    AddFolder(hwnd, find.cFileName);
                     continue;
+                }
 
                 if (!GetBinaryType(find.cFileName, &dwType))
                     continue;

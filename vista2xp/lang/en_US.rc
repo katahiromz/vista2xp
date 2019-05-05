@@ -9,13 +9,13 @@ LANGUAGE LANG_ENGLISH, SUBLANG_DEFAULT
 // RT_DIALOG
 
 IDD_MAIN DIALOG 0, 0, 240, 175
-CAPTION "vista2xp ver.0.0 by katahiromz"
+CAPTION "vista2xp ver.0.1 by katahiromz"
 STYLE DS_CENTER | DS_MODALFRAME | WS_POPUPWINDOW | WS_DLGFRAME
 FONT 8, "Arial"
 {
     ICON IDI_MAIN, ico1, 5, 5, 0, 0
-    LTEXT "This software may be able to convert an app for Vista/7/10 to an app for XP. I'm sorry if unable to do it.", -1, 35, 5, 200, 25
-    LTEXT "Drop the EXE/DLL files, plug-in files, or folders here, add them to the list below, and click the ""Convert"" button.", -1, 5, 35, 230, 25
+    LTEXT "This software may be able to convert an app for Vista/7/10 to an XP app. I'm sorry if unable to do it.", IDC_STATIC, 35, 5, 200, 25
+    LTEXT "Drop the EXE/DLL files, plug-in files, or folders here, add them to the list below, and click the ""Convert"" button.", IDC_STATIC, 5, 35, 230, 25
     LISTBOX lst1, 5, 65, 230, 60, LBS_NOINTEGRALHEIGHT | LBS_HASSTRINGS | LBS_MULTIPLESEL | WS_VSCROLL | WS_TABSTOP
     PUSHBUTTON "&Add File...", psh1, 5, 130, 80, 14
     PUSHBUTTON "Add &Folder...", psh2, 90, 130, 80, 14
