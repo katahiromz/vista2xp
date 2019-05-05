@@ -16,23 +16,45 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszV2XKRE32, LPCTSTR pszFile);
 static HINSTANCE s_hInst;
 static TCHAR s_szV2XKER32[MAX_PATH];
 
-typedef BOOL (WINAPI *FN_ChangeWindowMessageFilter)(UINT, DWORD);
-static FN_ChangeWindowMessageFilter s_pChangeWindowMessageFilter = NULL;
 #ifndef MSGFLT_ADD
     #define MSGFLT_ADD 1
     #define MSGFLT_REMOVE 2
 #endif
+typedef BOOL (WINAPI *FN_ChangeWindowMessageFilter)(UINT, DWORD);
+static FN_ChangeWindowMessageFilter s_pChangeWindowMessageFilter = NULL;
+
+#ifndef MSGFLT_ALLOW
+    #define MSGFLT_ALLOW 1
+    #define MSGFLT_DISALLOW 2
+    #define MSGFLT_RESET 0
+    typedef struct tagCHANGEFILTERSTRUCT {
+        DWORD cbSize;
+        DWORD ExtStatus;
+    } CHANGEFILTERSTRUCT, *PCHANGEFILTERSTRUCT;
+#endif
+typedef BOOL (WINAPI *FN_ChangeWindowMessageFilterEx)(HWND, UINT, DWORD, PCHANGEFILTERSTRUCT);
+static FN_ChangeWindowMessageFilterEx s_pChangeWindowMessageFilterEx = NULL;
 
 BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     HINSTANCE hKernel32 = GetModuleHandleA("kernel32");
 
+    s_pChangeWindowMessageFilterEx =
+        (FN_ChangeWindowMessageFilterEx)
+            GetProcAddress(hKernel32, "ChangeWindowMessageFilterEx");
+
     s_pChangeWindowMessageFilter =
         (FN_ChangeWindowMessageFilter)
             GetProcAddress(hKernel32, "ChangeWindowMessageFilter");
 
-    if (s_pChangeWindowMessageFilter)
+    if (s_pChangeWindowMessageFilterEx)
+    {
+        (*s_pChangeWindowMessageFilterEx)(hwnd, WM_DROPFILES, MSGFLT_ALLOW, NULL);
+    }
+    else if (s_pChangeWindowMessageFilter)
+    {
         (*s_pChangeWindowMessageFilter)(WM_DROPFILES, MSGFLT_ADD);
+    }
 
     DragAcceptFiles(hwnd, TRUE);
     return TRUE;
@@ -71,7 +93,7 @@ void AddFolder(HWND hwnd, LPCTSTR pszDir)
 
                 GetFullPathName(find.cFileName, ARRAYSIZE(szPath), szPath, NULL);
 
-                SendDlgItemMessage(hwnd, lst1, LB_ADDFILE, 0, (LPARAM)szPath);
+                SendDlgItemMessage(hwnd, lst1, LB_ADDSTRING, 0, (LPARAM)szPath);
             } while (FindNextFile(hFind, &find));
 
             FindClose(hFind);
@@ -85,9 +107,6 @@ void AddFile(HWND hwnd, LPCTSTR pszFile)
 {
     DWORD dwType;
 
-    if (!PathFileExists(pszFile))
-        return;
-
     if (PathIsDirectory(pszFile))
     {
         AddFolder(hwnd, pszFile);
@@ -97,7 +116,7 @@ void AddFile(HWND hwnd, LPCTSTR pszFile)
     if (!GetBinaryType(pszFile, &dwType))
         return;
 
-    SendDlgItemMessage(hwnd, lst1, LB_ADDFILE, 0, (LPARAM)pszFile);
+    SendDlgItemMessage(hwnd, lst1, LB_ADDSTRING, 0, (LPARAM)pszFile);
 }
 
 void OnDropFiles(HWND hwnd, HDROP hdrop)
