@@ -62,44 +62,45 @@ BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
 void AddFolder(HWND hwnd, LPCTSTR pszDir)
 {
-    TCHAR szCurDir[MAX_PATH], szPath[MAX_PATH];
+    TCHAR szPath[MAX_PATH], szFullPath[MAX_PATH];
     HANDLE hFind;
     WIN32_FIND_DATA find;
-    DWORD dwType;
+    DWORD dwCount, dwType;
 
-    GetCurrentDirectory(ARRAYSIZE(szCurDir), szCurDir);
-
-    if (SetCurrentDirectory(pszDir))
+    dwCount = 0;
+    StringCbCopy(szPath, sizeof(szPath), pszDir);
+    PathAppend(szPath, TEXT("*"));
+    hFind = FindFirstFile(szPath, &find);
+    if (hFind != INVALID_HANDLE_VALUE)
     {
-        hFind = FindFirstFile(TEXT("*"), &find);
-        if (hFind != INVALID_HANDLE_VALUE)
+        do
         {
-            do
+            if (dwCount++ > 64)
+                break;
+
+            if (lstrcmp(find.cFileName, TEXT(".")) == 0 ||
+                lstrcmp(find.cFileName, TEXT("..")) == 0)
             {
-                if (lstrcmp(find.cFileName, TEXT(".")) == 0 ||
-                    lstrcmp(find.cFileName, TEXT("..")) == 0)
-                {
-                    continue;
-                }
+                continue;
+            }
 
-                if (find.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-                {
-                    AddFolder(hwnd, find.cFileName);
-                    continue;
-                }
+            StringCbCopy(szPath, sizeof(szPath), pszDir);
+            PathAppend(szPath, find.cFileName);
+            GetFullPathName(szPath, ARRAYSIZE(szFullPath), szFullPath, NULL);
 
-                if (!GetBinaryType(find.cFileName, &dwType))
-                    continue;
+            if (find.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+            {
+                AddFolder(hwnd, szFullPath);
+                continue;
+            }
 
-                GetFullPathName(find.cFileName, ARRAYSIZE(szPath), szPath, NULL);
+            if (!GetBinaryType(szFullPath, &dwType))
+                continue;
 
-                SendDlgItemMessage(hwnd, lst1, LB_ADDSTRING, 0, (LPARAM)szPath);
-            } while (FindNextFile(hFind, &find));
+            SendDlgItemMessage(hwnd, lst1, LB_ADDSTRING, 0, (LPARAM)szFullPath);
+        } while (FindNextFile(hFind, &find));
 
-            FindClose(hFind);
-        }
-
-        SetCurrentDirectory(szCurDir);
+        FindClose(hFind);
     }
 }
 
