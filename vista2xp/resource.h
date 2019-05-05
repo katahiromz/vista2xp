@@ -16,6 +16,7 @@
 #define IDS_CANTWRITE                       104
 #define IDS_LOADV2XKER32                    105
 #define IDS_COMPLETE                        106
+#define IDS_NOTSUP64BIT                     107
 
 #ifdef APSTUDIO_INVOKED
     #ifndef APSTUDIO_READONLY_SYMBOLS

@@ -36,6 +36,7 @@ STRINGTABLE
     IDS_CANTWRITE, "Unable to write it."
     IDS_LOADV2XKER32, "Unable to find a required file ""v2xker32.dll""."
     IDS_COMPLETE, "Conversion is complete."
+    IDS_NOTSUP64BIT, "Conversion of 64-bit programs is not supported yet."
 }
 
 //////////////////////////////////////////////////////////////////////////////

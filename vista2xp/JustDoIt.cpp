@@ -25,6 +25,13 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszV2XKRE32, LPCTSTR pszFile)
         return E_FAIL;
     }
 
+    if (image.is_64bit())
+    {
+        LoadString(NULL, IDS_NOTSUP64BIT, szText, ARRAYSIZE(szText));
+        MessageBox(hwnd, szText, NULL, MB_ICONERROR);
+        return E_FAIL;
+    }
+
     std::vector<const char *> names;
     if (!image.get_import_dll_names(names))
     {
