@@ -9,6 +9,8 @@
 
 対応環境: Vista/7/10
 
+ダウンロード: https://katahiromz.web.fc2.com/vista2xp/ja
+
 ## どのように動作する？
 
 これは、EXE/DLL ファイルの IAT (Import Address Table) を改変します。
