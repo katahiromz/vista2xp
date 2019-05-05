@@ -53,15 +53,15 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszV2XKRE32, LPCTSTR pszFile)
         }
     }
 
+    TCHAR szPath[MAX_PATH];
+    StringCbCopy(szPath, sizeof(szPath), pszFile);
+    LPTSTR pch = PathFindFileName(szPath);
+    if (pch == NULL)
+        return E_FAIL;
+
     if (found)
     {
-        TCHAR szPath[MAX_PATH];
-        StringCbCopy(szPath, sizeof(szPath), pszFile);
-
         // cut off file title
-        LPTSTR pch = PathFindFileName(szPath);
-        if (pch == NULL)
-            return FALSE;
         *pch = 0;
 
         // create backup
@@ -76,9 +76,15 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszV2XKRE32, LPCTSTR pszFile)
             MessageBox(hwnd, szText, NULL, MB_ICONERROR);
             return E_FAIL;
         }
-
-        return S_OK;
     }
+
+    // cut off file title
+    *pch = 0;
+
+    PathAppend(szPath, TEXT("v2xker32.dll"));
+    MessageBox(NULL, szPath, NULL, 0);
+    if (PathFileExists(szPath) || CopyFile(pszV2XKRE32, szPath, FALSE))
+        return S_OK;
 
     return S_FALSE;
 }
