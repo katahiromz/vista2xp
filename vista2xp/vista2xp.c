@@ -4,11 +4,13 @@
 #include "targetver.h"
 #include <windows.h>
 #include <windowsx.h>
+#include <tchar.h>
 #include <commctrl.h>
 #include <commdlg.h>
 #include <shlobj.h>
 #include <shlwapi.h>
 #include <strsafe.h>
+#include <stdio.h>
 #include "resource.h"
 
 HRESULT JustDoIt(HWND hwnd, LPCTSTR pszV2XKRE32, LPCTSTR pszFile);
@@ -72,6 +74,19 @@ BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     return TRUE;
 }
 
+BOOL IsBinaryFile(LPCTSTR pszFile)
+{
+    char buf[3];
+    FILE *fp = _tfopen(pszFile, TEXT("rb"));
+    if (!fp)
+        return FALSE;
+
+    fread(buf, 2, 1, fp);
+    fclose(fp);
+
+    return (buf[0] == 'M' && buf[1] == 'Z');
+}
+
 void AddFolder(HWND hwnd, LPCTSTR pszDir)
 {
     TCHAR szPath[MAX_PATH], szFullPath[MAX_PATH];
@@ -106,7 +121,7 @@ void AddFolder(HWND hwnd, LPCTSTR pszDir)
                 continue;
             }
 
-            if (!GetBinaryType(szFullPath, &dwType))
+            if (!IsBinaryFile(szFullPath))
                 continue;
 
             SendDlgItemMessage(hwnd, lst1, LB_ADDSTRING, 0, (LPARAM)szFullPath);
@@ -126,7 +141,7 @@ void AddFile(HWND hwnd, LPCTSTR pszFile)
         return;
     }
 
-    if (!GetBinaryType(pszFile, &dwType))
+    if (!IsBinaryFile(pszFile))
         return;
 
     SendDlgItemMessage(hwnd, lst1, LB_ADDSTRING, 0, (LPARAM)pszFile);
