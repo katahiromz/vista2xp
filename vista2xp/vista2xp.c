@@ -68,6 +68,7 @@ BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
 
     DragAcceptFiles(hwnd, TRUE);
+    SendDlgItemMessage(hwnd, lst1, LB_SETHORIZONTALEXTENT, 800, 0);
     return TRUE;
 }
 
