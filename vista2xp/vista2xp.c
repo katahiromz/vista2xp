@@ -11,13 +11,29 @@
 #include <strsafe.h>
 #include "resource.h"
 
+HRESULT JustDoIt(HWND hwnd, LPCTSTR pszV2XKRE32, LPCTSTR pszFile);
+
 static HINSTANCE s_hInst;
 static TCHAR s_szV2XKER32[MAX_PATH];
 
-HRESULT JustDoIt(HWND hwnd, LPCTSTR pszV2XKRE32, LPCTSTR pszFile);
+typedef BOOL (WINAPI *FN_ChangeWindowMessageFilter)(UINT, DWORD);
+static FN_ChangeWindowMessageFilter s_pChangeWindowMessageFilter = NULL;
+#ifndef MSGFLT_ADD
+    #define MSGFLT_ADD 1
+    #define MSGFLT_REMOVE 2
+#endif
 
 BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
+    HINSTANCE hKernel32 = GetModuleHandleA("kernel32");
+
+    s_pChangeWindowMessageFilter =
+        (FN_ChangeWindowMessageFilter)
+            GetProcAddress(hKernel32, "ChangeWindowMessageFilter");
+
+    if (s_pChangeWindowMessageFilter)
+        (*s_pChangeWindowMessageFilter)(WM_DROPFILES, MSGFLT_ADD);
+
     DragAcceptFiles(hwnd, TRUE);
     return TRUE;
 }
