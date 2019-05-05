@@ -1032,3 +1032,29 @@ EXPORTS
     lstrlen = kernel32.lstrlen
     lstrlenA = kernel32.lstrlenA
     lstrlenW = kernel32.lstrlenW
+
+    ; kernel32 --> psapi
+    K32EmptyWorkingSet = psapi.EmptyWorkingSet
+    K32EnumDeviceDrivers = psapi.EnumDeviceDrivers
+    K32EnumPageFilesA = psapi.EnumPageFilesA
+    K32EnumPageFilesW = psapi.EnumPageFilesW
+    K32EnumProcessModules = psapi.EnumProcessModules
+    K32EnumProcesses = psapi.K32EnumProcesses
+    K32GetDeviceDriverBaseNameA = psapi.GetDeviceDriverBaseNameA 
+    K32GetDeviceDriverBaseNameW = psapi.GetDeviceDriverBaseNameW
+    K32GetDeviceDriverFileNameA = psapi.GetDeviceDriverFileNameA
+    K32GetDeviceDriverFileNameW = psapi.GetDeviceDriverFileNameW
+    K32GetMappedFileNameA = psapi.GetMappedFileNameA
+    K32GetMappedFileNameW = psapi.GetMappedFileNameW
+    K32GetModuleBaseNameA = psapi.GetModuleBaseNameA
+    K32GetModuleBaseNameW = psapi.GetModuleBaseNameW
+    K32GetModuleFileNameExA = psapi.GetModuleFileNameExA
+    K32GetModuleFileNameExW = psapi.GetModuleFileNameExW
+    K32GetModuleInformation = psapi.GetModuleInformation
+    K32GetPerformanceInfo = psapi.GetPerformanceInfo
+    K32GetProcessImageFileNameA = psapi.GetProcessImageFileNameA
+    K32GetProcessImageFileNameW = psapi.GetProcessImageFileNameW
+    K32GetProcessMemoryInfo = psapi.GetProcessMemoryInfo
+    K32GetWsChanges = psapi.GetWsChanges
+    K32InitializeProcessForWsWatch = psapi.InitializeProcessForWsWatch
+    K32QueryWorkingSet = psapi.QueryWorkingSet
