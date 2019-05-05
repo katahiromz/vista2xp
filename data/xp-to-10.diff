@@ -1,0 +1,1474 @@
+--- winxp.dat	2019-05-05 10:17:01.320915300 +0900
++++ win10.dat	2019-05-05 10:16:54.914890300 +0900
+@@ -1,14 +1,38 @@
++kernel32.dll	AcquireSRWLockExclusive
++kernel32.dll	AcquireSRWLockShared
+ kernel32.dll	ActivateActCtx
++kernel32.dll	ActivateActCtxWorker
+ kernel32.dll	AddAtomA
+ kernel32.dll	AddAtomW
+ kernel32.dll	AddConsoleAliasA
+ kernel32.dll	AddConsoleAliasW
++kernel32.dll	AddDllDirectory
++kernel32.dll	AddIntegrityLabelToBoundaryDescriptor
+ kernel32.dll	AddLocalAlternateComputerNameA
+ kernel32.dll	AddLocalAlternateComputerNameW
+ kernel32.dll	AddRefActCtx
++kernel32.dll	AddRefActCtxWorker
++kernel32.dll	AddResourceAttributeAce
++kernel32.dll	AddSIDToBoundaryDescriptor
++kernel32.dll	AddScopedPolicyIDAce
++kernel32.dll	AddSecureMemoryCacheCallback
++kernel32.dll	AddVectoredContinueHandler
+ kernel32.dll	AddVectoredExceptionHandler
++kernel32.dll	AdjustCalendarDate
+ kernel32.dll	AllocConsole
+ kernel32.dll	AllocateUserPhysicalPages
++kernel32.dll	AllocateUserPhysicalPagesNuma
++kernel32.dll	AppPolicyGetClrCompat
++kernel32.dll	AppPolicyGetCreateFileAccess
++kernel32.dll	AppPolicyGetLifecycleManagement
++kernel32.dll	AppPolicyGetMediaFoundationCodecLoading
++kernel32.dll	AppPolicyGetProcessTerminationMethod
++kernel32.dll	AppPolicyGetShowDeveloperDiagnostic
++kernel32.dll	AppPolicyGetThreadInitializationType
++kernel32.dll	AppPolicyGetWindowingModel
++kernel32.dll	AppXGetOSMaxVersionTested
++kernel32.dll	ApplicationRecoveryFinished
++kernel32.dll	ApplicationRecoveryInProgress
+ kernel32.dll	AreFileApisANSI
+ kernel32.dll	AssignProcessToJobObject
+ kernel32.dll	AttachConsole
+@@ -16,16 +40,65 @@
+ kernel32.dll	BackupSeek
+ kernel32.dll	BackupWrite
+ kernel32.dll	BaseCheckAppcompatCache
+-kernel32.dll	BaseCleanupAppcompatCache
++kernel32.dll	BaseCheckAppcompatCacheEx
++kernel32.dll	BaseCheckAppcompatCacheExWorker
++kernel32.dll	BaseCheckAppcompatCacheWorker
++kernel32.dll	BaseCheckElevation
+ kernel32.dll	BaseCleanupAppcompatCacheSupport
++kernel32.dll	BaseCleanupAppcompatCacheSupportWorker
++kernel32.dll	BaseDestroyVDMEnvironment
++kernel32.dll	BaseDllReadWriteIniFile
+ kernel32.dll	BaseDumpAppcompatCache
++kernel32.dll	BaseDumpAppcompatCacheWorker
++kernel32.dll	BaseElevationPostProcessing
+ kernel32.dll	BaseFlushAppcompatCache
+-kernel32.dll	BaseInitAppcompatCache
++kernel32.dll	BaseFlushAppcompatCacheWorker
++kernel32.dll	BaseFormatObjectAttributes
++kernel32.dll	BaseFormatTimeOut
++kernel32.dll	BaseFreeAppCompatDataForProcessWorker
++kernel32.dll	BaseGenerateAppCompatData
++kernel32.dll	BaseGetNamedObjectDirectory
+ kernel32.dll	BaseInitAppcompatCacheSupport
+-kernel32.dll	BaseProcessInitPostImport
++kernel32.dll	BaseInitAppcompatCacheSupportWorker
++kernel32.dll	BaseIsAppcompatInfrastructureDisabled
++kernel32.dll	BaseIsAppcompatInfrastructureDisabledWorker
++kernel32.dll	BaseIsDosApplication
+ kernel32.dll	BaseQueryModuleData
++kernel32.dll	BaseReadAppCompatDataForProcessWorker
++kernel32.dll	BaseSetLastNTError
++kernel32.dll	BaseThreadInitThunk
+ kernel32.dll	BaseUpdateAppcompatCache
++kernel32.dll	BaseUpdateAppcompatCacheWorker
++kernel32.dll	BaseUpdateVDMEntry
++kernel32.dll	BaseVerifyUnicodeString
++kernel32.dll	BaseWriteErrorElevationRequiredEvent
++kernel32.dll	Basep8BitStringToDynamicUnicodeString
++kernel32.dll	BasepAllocateActivationContextActivationBlock
++kernel32.dll	BasepAnsiStringToDynamicUnicodeString
++kernel32.dll	BasepAppContainerEnvironmentExtension
++kernel32.dll	BasepAppXExtension
++kernel32.dll	BasepCheckAppCompat
++kernel32.dll	BasepCheckWebBladeHashes
+ kernel32.dll	BasepCheckWinSaferRestrictions
++kernel32.dll	BasepConstructSxsCreateProcessMessage
++kernel32.dll	BasepCopyEncryption
++kernel32.dll	BasepFreeActivationContextActivationBlock
++kernel32.dll	BasepFreeAppCompatData
++kernel32.dll	BasepGetAppCompatData
++kernel32.dll	BasepGetComputerNameFromNtPath
++kernel32.dll	BasepGetExeArchType
++kernel32.dll	BasepInitAppCompatData
++kernel32.dll	BasepIsProcessAllowed
++kernel32.dll	BasepMapModuleHandle
++kernel32.dll	BasepNotifyLoadStringResource
++kernel32.dll	BasepPostSuccessAppXExtension
++kernel32.dll	BasepProcessInvalidImage
++kernel32.dll	BasepQueryAppCompat
++kernel32.dll	BasepQueryModuleChpeSettings
++kernel32.dll	BasepReleaseAppXContext
++kernel32.dll	BasepReleaseSxsCreateProcessUtilityStruct
++kernel32.dll	BasepReportFault
++kernel32.dll	BasepSetFileEncryptionCompression
+ kernel32.dll	Beep
+ kernel32.dll	BeginUpdateResourceA
+ kernel32.dll	BeginUpdateResourceW
+@@ -36,52 +109,101 @@
+ kernel32.dll	BuildCommDCBW
+ kernel32.dll	CallNamedPipeA
+ kernel32.dll	CallNamedPipeW
++kernel32.dll	CallbackMayRunLong
+ kernel32.dll	CancelDeviceWakeupRequest
+ kernel32.dll	CancelIo
++kernel32.dll	CancelIoEx
++kernel32.dll	CancelSynchronousIo
++kernel32.dll	CancelThreadpoolIo
+ kernel32.dll	CancelTimerQueueTimer
+ kernel32.dll	CancelWaitableTimer
++kernel32.dll	CeipIsOptedIn
+ kernel32.dll	ChangeTimerQueueTimer
++kernel32.dll	CheckAllowDecryptedRemoteDestinationPolicy
++kernel32.dll	CheckElevation
++kernel32.dll	CheckElevationEnabled
++kernel32.dll	CheckForReadOnlyResource
++kernel32.dll	CheckForReadOnlyResourceFilter
+ kernel32.dll	CheckNameLegalDOS8Dot3A
+ kernel32.dll	CheckNameLegalDOS8Dot3W
+ kernel32.dll	CheckRemoteDebuggerPresent
++kernel32.dll	CheckTokenCapability
++kernel32.dll	CheckTokenMembershipEx
+ kernel32.dll	ClearCommBreak
+ kernel32.dll	ClearCommError
+ kernel32.dll	CloseConsoleHandle
+ kernel32.dll	CloseHandle
++kernel32.dll	ClosePackageInfo
++kernel32.dll	ClosePrivateNamespace
+ kernel32.dll	CloseProfileUserMapping
++kernel32.dll	CloseState
++kernel32.dll	CloseThreadpool
++kernel32.dll	CloseThreadpoolCleanupGroup
++kernel32.dll	CloseThreadpoolCleanupGroupMembers
++kernel32.dll	CloseThreadpoolIo
++kernel32.dll	CloseThreadpoolTimer
++kernel32.dll	CloseThreadpoolWait
++kernel32.dll	CloseThreadpoolWork
+ kernel32.dll	CmdBatNotification
+ kernel32.dll	CommConfigDialogA
+ kernel32.dll	CommConfigDialogW
++kernel32.dll	CompareCalendarDates
+ kernel32.dll	CompareFileTime
+ kernel32.dll	CompareStringA
++kernel32.dll	CompareStringEx
++kernel32.dll	CompareStringOrdinal
+ kernel32.dll	CompareStringW
+ kernel32.dll	ConnectNamedPipe
+ kernel32.dll	ConsoleMenuControl
+ kernel32.dll	ContinueDebugEvent
++kernel32.dll	ConvertCalDateTimeToSystemTime
+ kernel32.dll	ConvertDefaultLocale
+ kernel32.dll	ConvertFiberToThread
++kernel32.dll	ConvertNLSDayOfWeekToWin32DayOfWeek
++kernel32.dll	ConvertSystemTimeToCalDateTime
+ kernel32.dll	ConvertThreadToFiber
++kernel32.dll	ConvertThreadToFiberEx
++kernel32.dll	CopyContext
++kernel32.dll	CopyFile2
+ kernel32.dll	CopyFileA
+ kernel32.dll	CopyFileExA
+ kernel32.dll	CopyFileExW
++kernel32.dll	CopyFileTransactedA
++kernel32.dll	CopyFileTransactedW
+ kernel32.dll	CopyFileW
+ kernel32.dll	CopyLZFile
+ kernel32.dll	CreateActCtxA
+ kernel32.dll	CreateActCtxW
++kernel32.dll	CreateActCtxWWorker
++kernel32.dll	CreateBoundaryDescriptorA
++kernel32.dll	CreateBoundaryDescriptorW
+ kernel32.dll	CreateConsoleScreenBuffer
+ kernel32.dll	CreateDirectoryA
+ kernel32.dll	CreateDirectoryExA
+ kernel32.dll	CreateDirectoryExW
++kernel32.dll	CreateDirectoryTransactedA
++kernel32.dll	CreateDirectoryTransactedW
+ kernel32.dll	CreateDirectoryW
++kernel32.dll	CreateEnclave
+ kernel32.dll	CreateEventA
++kernel32.dll	CreateEventExA
++kernel32.dll	CreateEventExW
+ kernel32.dll	CreateEventW
+ kernel32.dll	CreateFiber
+ kernel32.dll	CreateFiberEx
++kernel32.dll	CreateFile2
+ kernel32.dll	CreateFileA
+ kernel32.dll	CreateFileMappingA
++kernel32.dll	CreateFileMappingFromApp
++kernel32.dll	CreateFileMappingNumaA
++kernel32.dll	CreateFileMappingNumaW
+ kernel32.dll	CreateFileMappingW
++kernel32.dll	CreateFileTransactedA
++kernel32.dll	CreateFileTransactedW
+ kernel32.dll	CreateFileW
+ kernel32.dll	CreateHardLinkA
++kernel32.dll	CreateHardLinkTransactedA
++kernel32.dll	CreateHardLinkTransactedW
+ kernel32.dll	CreateHardLinkW
+ kernel32.dll	CreateIoCompletionPort
+ kernel32.dll	CreateJobObjectA
+@@ -91,29 +213,49 @@
+ kernel32.dll	CreateMailslotW
+ kernel32.dll	CreateMemoryResourceNotification
+ kernel32.dll	CreateMutexA
++kernel32.dll	CreateMutexExA
++kernel32.dll	CreateMutexExW
+ kernel32.dll	CreateMutexW
+ kernel32.dll	CreateNamedPipeA
+ kernel32.dll	CreateNamedPipeW
+-kernel32.dll	CreateNlsSecurityDescriptor
+ kernel32.dll	CreatePipe
++kernel32.dll	CreatePrivateNamespaceA
++kernel32.dll	CreatePrivateNamespaceW
+ kernel32.dll	CreateProcessA
++kernel32.dll	CreateProcessAsUserA
++kernel32.dll	CreateProcessAsUserW
+ kernel32.dll	CreateProcessInternalA
+ kernel32.dll	CreateProcessInternalW
+-kernel32.dll	CreateProcessInternalWSecure
+ kernel32.dll	CreateProcessW
+ kernel32.dll	CreateRemoteThread
++kernel32.dll	CreateRemoteThreadEx
+ kernel32.dll	CreateSemaphoreA
++kernel32.dll	CreateSemaphoreExA
++kernel32.dll	CreateSemaphoreExW
+ kernel32.dll	CreateSemaphoreW
+ kernel32.dll	CreateSocketHandle
++kernel32.dll	CreateSymbolicLinkA
++kernel32.dll	CreateSymbolicLinkTransactedA
++kernel32.dll	CreateSymbolicLinkTransactedW
++kernel32.dll	CreateSymbolicLinkW
+ kernel32.dll	CreateTapePartition
+ kernel32.dll	CreateThread
++kernel32.dll	CreateThreadpool
++kernel32.dll	CreateThreadpoolCleanupGroup
++kernel32.dll	CreateThreadpoolIo
++kernel32.dll	CreateThreadpoolTimer
++kernel32.dll	CreateThreadpoolWait
++kernel32.dll	CreateThreadpoolWork
+ kernel32.dll	CreateTimerQueue
+ kernel32.dll	CreateTimerQueueTimer
+ kernel32.dll	CreateToolhelp32Snapshot
+-kernel32.dll	CreateVirtualBuffer
+ kernel32.dll	CreateWaitableTimerA
++kernel32.dll	CreateWaitableTimerExA
++kernel32.dll	CreateWaitableTimerExW
+ kernel32.dll	CreateWaitableTimerW
++kernel32.dll	CtrlRoutine
+ kernel32.dll	DeactivateActCtx
++kernel32.dll	DeactivateActCtxWorker
+ kernel32.dll	DebugActiveProcess
+ kernel32.dll	DebugActiveProcessStop
+ kernel32.dll	DebugBreak
+@@ -125,10 +267,15 @@
+ kernel32.dll	DefineDosDeviceW
+ kernel32.dll	DelayLoadFailureHook
+ kernel32.dll	DeleteAtom
++kernel32.dll	DeleteBoundaryDescriptor
+ kernel32.dll	DeleteCriticalSection
+ kernel32.dll	DeleteFiber
+ kernel32.dll	DeleteFileA
++kernel32.dll	DeleteFileTransactedA
++kernel32.dll	DeleteFileTransactedW
+ kernel32.dll	DeleteFileW
++kernel32.dll	DeleteProcThreadAttributeList
++kernel32.dll	DeleteSynchronizationBarrier
+ kernel32.dll	DeleteTimerQueue
+ kernel32.dll	DeleteTimerQueueEx
+ kernel32.dll	DeleteTimerQueueTimer
+@@ -136,43 +283,62 @@
+ kernel32.dll	DeleteVolumeMountPointW
+ kernel32.dll	DeviceIoControl
+ kernel32.dll	DisableThreadLibraryCalls
++kernel32.dll	DisableThreadProfiling
++kernel32.dll	DisassociateCurrentThreadFromCallback
++kernel32.dll	DiscardVirtualMemory
+ kernel32.dll	DisconnectNamedPipe
+ kernel32.dll	DnsHostnameToComputerNameA
++kernel32.dll	DnsHostnameToComputerNameExW
+ kernel32.dll	DnsHostnameToComputerNameW
+ kernel32.dll	DosDateTimeToFileTime
+ kernel32.dll	DosPathToSessionPathA
+ kernel32.dll	DosPathToSessionPathW
+ kernel32.dll	DuplicateConsoleHandle
++kernel32.dll	DuplicateEncryptionInfoFileExt
+ kernel32.dll	DuplicateHandle
++kernel32.dll	EnableThreadProfiling
+ kernel32.dll	EncodePointer
+ kernel32.dll	EncodeSystemPointer
+ kernel32.dll	EndUpdateResourceA
+ kernel32.dll	EndUpdateResourceW
+ kernel32.dll	EnterCriticalSection
++kernel32.dll	EnterSynchronizationBarrier
+ kernel32.dll	EnumCalendarInfoA
+ kernel32.dll	EnumCalendarInfoExA
++kernel32.dll	EnumCalendarInfoExEx
+ kernel32.dll	EnumCalendarInfoExW
+ kernel32.dll	EnumCalendarInfoW
+ kernel32.dll	EnumDateFormatsA
+ kernel32.dll	EnumDateFormatsExA
++kernel32.dll	EnumDateFormatsExEx
+ kernel32.dll	EnumDateFormatsExW
+ kernel32.dll	EnumDateFormatsW
+ kernel32.dll	EnumLanguageGroupLocalesA
+ kernel32.dll	EnumLanguageGroupLocalesW
+ kernel32.dll	EnumResourceLanguagesA
++kernel32.dll	EnumResourceLanguagesExA
++kernel32.dll	EnumResourceLanguagesExW
+ kernel32.dll	EnumResourceLanguagesW
+ kernel32.dll	EnumResourceNamesA
++kernel32.dll	EnumResourceNamesExA
++kernel32.dll	EnumResourceNamesExW
+ kernel32.dll	EnumResourceNamesW
+ kernel32.dll	EnumResourceTypesA
++kernel32.dll	EnumResourceTypesExA
++kernel32.dll	EnumResourceTypesExW
+ kernel32.dll	EnumResourceTypesW
+ kernel32.dll	EnumSystemCodePagesA
+ kernel32.dll	EnumSystemCodePagesW
++kernel32.dll	EnumSystemFirmwareTables
+ kernel32.dll	EnumSystemGeoID
++kernel32.dll	EnumSystemGeoNames
+ kernel32.dll	EnumSystemLanguageGroupsA
+ kernel32.dll	EnumSystemLanguageGroupsW
+ kernel32.dll	EnumSystemLocalesA
++kernel32.dll	EnumSystemLocalesEx
+ kernel32.dll	EnumSystemLocalesW
+ kernel32.dll	EnumTimeFormatsA
++kernel32.dll	EnumTimeFormatsEx
+ kernel32.dll	EnumTimeFormatsW
+ kernel32.dll	EnumUILanguagesA
+ kernel32.dll	EnumUILanguagesW
+@@ -187,7 +353,6 @@
+ kernel32.dll	ExpandEnvironmentStringsW
+ kernel32.dll	ExpungeConsoleCommandHistoryA
+ kernel32.dll	ExpungeConsoleCommandHistoryW
+-kernel32.dll	ExtendVirtualBuffer
+ kernel32.dll	FatalAppExitA
+ kernel32.dll	FatalAppExitW
+ kernel32.dll	FatalExit
+@@ -198,8 +363,10 @@
+ kernel32.dll	FillConsoleOutputCharacterA
+ kernel32.dll	FillConsoleOutputCharacterW
+ kernel32.dll	FindActCtxSectionGuid
++kernel32.dll	FindActCtxSectionGuidWorker
+ kernel32.dll	FindActCtxSectionStringA
+ kernel32.dll	FindActCtxSectionStringW
++kernel32.dll	FindActCtxSectionStringWWorker
+ kernel32.dll	FindAtomA
+ kernel32.dll	FindAtomW
+ kernel32.dll	FindClose
+@@ -209,30 +376,48 @@
+ kernel32.dll	FindFirstFileA
+ kernel32.dll	FindFirstFileExA
+ kernel32.dll	FindFirstFileExW
++kernel32.dll	FindFirstFileNameTransactedW
++kernel32.dll	FindFirstFileNameW
++kernel32.dll	FindFirstFileTransactedA
++kernel32.dll	FindFirstFileTransactedW
+ kernel32.dll	FindFirstFileW
++kernel32.dll	FindFirstStreamTransactedW
++kernel32.dll	FindFirstStreamW
+ kernel32.dll	FindFirstVolumeA
+ kernel32.dll	FindFirstVolumeMountPointA
+ kernel32.dll	FindFirstVolumeMountPointW
+ kernel32.dll	FindFirstVolumeW
++kernel32.dll	FindNLSString
++kernel32.dll	FindNLSStringEx
+ kernel32.dll	FindNextChangeNotification
+ kernel32.dll	FindNextFileA
++kernel32.dll	FindNextFileNameW
+ kernel32.dll	FindNextFileW
++kernel32.dll	FindNextStreamW
+ kernel32.dll	FindNextVolumeA
+ kernel32.dll	FindNextVolumeMountPointA
+ kernel32.dll	FindNextVolumeMountPointW
+ kernel32.dll	FindNextVolumeW
++kernel32.dll	FindPackagesByPackageFamily
+ kernel32.dll	FindResourceA
+ kernel32.dll	FindResourceExA
+ kernel32.dll	FindResourceExW
+ kernel32.dll	FindResourceW
++kernel32.dll	FindStringOrdinal
+ kernel32.dll	FindVolumeClose
+ kernel32.dll	FindVolumeMountPointClose
++kernel32.dll	FlsAlloc
++kernel32.dll	FlsFree
++kernel32.dll	FlsGetValue
++kernel32.dll	FlsSetValue
+ kernel32.dll	FlushConsoleInputBuffer
+ kernel32.dll	FlushFileBuffers
+ kernel32.dll	FlushInstructionCache
++kernel32.dll	FlushProcessWriteBuffers
+ kernel32.dll	FlushViewOfFile
+ kernel32.dll	FoldStringA
+ kernel32.dll	FoldStringW
++kernel32.dll	FormatApplicationUserModelId
+ kernel32.dll	FormatMessageA
+ kernel32.dll	FormatMessageW
+ kernel32.dll	FreeConsole
+@@ -240,22 +425,40 @@
+ kernel32.dll	FreeEnvironmentStringsW
+ kernel32.dll	FreeLibrary
+ kernel32.dll	FreeLibraryAndExitThread
++kernel32.dll	FreeLibraryWhenCallbackReturns
++kernel32.dll	FreeMemoryJobObject
+ kernel32.dll	FreeResource
+ kernel32.dll	FreeUserPhysicalPages
+-kernel32.dll	FreeVirtualBuffer
+ kernel32.dll	GenerateConsoleCtrlEvent
+ kernel32.dll	GetACP
++kernel32.dll	GetActiveProcessorCount
++kernel32.dll	GetActiveProcessorGroupCount
++kernel32.dll	GetAppContainerAce
++kernel32.dll	GetAppContainerNamedObjectPath
++kernel32.dll	GetApplicationRecoveryCallback
++kernel32.dll	GetApplicationRecoveryCallbackWorker
++kernel32.dll	GetApplicationRestartSettings
++kernel32.dll	GetApplicationRestartSettingsWorker
++kernel32.dll	GetApplicationUserModelId
+ kernel32.dll	GetAtomNameA
+ kernel32.dll	GetAtomNameW
+ kernel32.dll	GetBinaryType
+ kernel32.dll	GetBinaryTypeA
+ kernel32.dll	GetBinaryTypeW
+-kernel32.dll	GetCPFileNameFromRegistry
+ kernel32.dll	GetCPInfo
+ kernel32.dll	GetCPInfoExA
+ kernel32.dll	GetCPInfoExW
++kernel32.dll	GetCachedSigningLevel
++kernel32.dll	GetCalendarDateFormat
++kernel32.dll	GetCalendarDateFormatEx
++kernel32.dll	GetCalendarDaysInMonth
++kernel32.dll	GetCalendarDifferenceInDays
+ kernel32.dll	GetCalendarInfoA
++kernel32.dll	GetCalendarInfoEx
+ kernel32.dll	GetCalendarInfoW
++kernel32.dll	GetCalendarMonthsInYear
++kernel32.dll	GetCalendarSupportedDateRange
++kernel32.dll	GetCalendarWeekNumber
+ kernel32.dll	GetComPlusPackageInstallStatus
+ kernel32.dll	GetCommConfig
+ kernel32.dll	GetCommMask
+@@ -266,6 +469,8 @@
+ kernel32.dll	GetCommandLineA
+ kernel32.dll	GetCommandLineW
+ kernel32.dll	GetCompressedFileSizeA
++kernel32.dll	GetCompressedFileSizeTransactedA
++kernel32.dll	GetCompressedFileSizeTransactedW
+ kernel32.dll	GetCompressedFileSizeW
+ kernel32.dll	GetComputerNameA
+ kernel32.dll	GetComputerNameExA
+@@ -293,6 +498,7 @@
+ kernel32.dll	GetConsoleFontInfo
+ kernel32.dll	GetConsoleFontSize
+ kernel32.dll	GetConsoleHardwareState
++kernel32.dll	GetConsoleHistoryInfo
+ kernel32.dll	GetConsoleInputExeNameA
+ kernel32.dll	GetConsoleInputExeNameW
+ kernel32.dll	GetConsoleInputWaitHandle
+@@ -300,28 +506,45 @@
+ kernel32.dll	GetConsoleKeyboardLayoutNameW
+ kernel32.dll	GetConsoleMode
+ kernel32.dll	GetConsoleNlsMode
++kernel32.dll	GetConsoleOriginalTitleA
++kernel32.dll	GetConsoleOriginalTitleW
+ kernel32.dll	GetConsoleOutputCP
+ kernel32.dll	GetConsoleProcessList
+ kernel32.dll	GetConsoleScreenBufferInfo
++kernel32.dll	GetConsoleScreenBufferInfoEx
+ kernel32.dll	GetConsoleSelectionInfo
+ kernel32.dll	GetConsoleTitleA
+ kernel32.dll	GetConsoleTitleW
+ kernel32.dll	GetConsoleWindow
+ kernel32.dll	GetCurrencyFormatA
++kernel32.dll	GetCurrencyFormatEx
+ kernel32.dll	GetCurrencyFormatW
+ kernel32.dll	GetCurrentActCtx
++kernel32.dll	GetCurrentActCtxWorker
++kernel32.dll	GetCurrentApplicationUserModelId
+ kernel32.dll	GetCurrentConsoleFont
++kernel32.dll	GetCurrentConsoleFontEx
+ kernel32.dll	GetCurrentDirectoryA
+ kernel32.dll	GetCurrentDirectoryW
++kernel32.dll	GetCurrentPackageFamilyName
++kernel32.dll	GetCurrentPackageFullName
++kernel32.dll	GetCurrentPackageId
++kernel32.dll	GetCurrentPackageInfo
++kernel32.dll	GetCurrentPackagePath
+ kernel32.dll	GetCurrentProcess
+ kernel32.dll	GetCurrentProcessId
++kernel32.dll	GetCurrentProcessorNumber
++kernel32.dll	GetCurrentProcessorNumberEx
+ kernel32.dll	GetCurrentThread
+ kernel32.dll	GetCurrentThreadId
++kernel32.dll	GetCurrentThreadStackLimits
+ kernel32.dll	GetDateFormatA
++kernel32.dll	GetDateFormatAWorker
++kernel32.dll	GetDateFormatEx
+ kernel32.dll	GetDateFormatW
++kernel32.dll	GetDateFormatWWorker
+ kernel32.dll	GetDefaultCommConfigA
+ kernel32.dll	GetDefaultCommConfigW
+-kernel32.dll	GetDefaultSortkeySize
+ kernel32.dll	GetDevicePowerState
+ kernel32.dll	GetDiskFreeSpaceA
+ kernel32.dll	GetDiskFreeSpaceExA
+@@ -331,11 +554,18 @@
+ kernel32.dll	GetDllDirectoryW
+ kernel32.dll	GetDriveTypeA
+ kernel32.dll	GetDriveTypeW
++kernel32.dll	GetDurationFormat
++kernel32.dll	GetDurationFormatEx
++kernel32.dll	GetDynamicTimeZoneInformation
++kernel32.dll	GetEnabledXStateFeatures
++kernel32.dll	GetEncryptedFileVersionExt
+ kernel32.dll	GetEnvironmentStrings
+ kernel32.dll	GetEnvironmentStringsA
+ kernel32.dll	GetEnvironmentStringsW
+ kernel32.dll	GetEnvironmentVariableA
+ kernel32.dll	GetEnvironmentVariableW
++kernel32.dll	GetEraNameCountedString
++kernel32.dll	GetErrorMode
+ kernel32.dll	GetExitCodeProcess
+ kernel32.dll	GetExitCodeThread
+ kernel32.dll	GetExpandedNameA
+@@ -343,58 +573,102 @@
+ kernel32.dll	GetFileAttributesA
+ kernel32.dll	GetFileAttributesExA
+ kernel32.dll	GetFileAttributesExW
++kernel32.dll	GetFileAttributesTransactedA
++kernel32.dll	GetFileAttributesTransactedW
+ kernel32.dll	GetFileAttributesW
++kernel32.dll	GetFileBandwidthReservation
+ kernel32.dll	GetFileInformationByHandle
++kernel32.dll	GetFileInformationByHandleEx
++kernel32.dll	GetFileMUIInfo
++kernel32.dll	GetFileMUIPath
+ kernel32.dll	GetFileSize
+ kernel32.dll	GetFileSizeEx
+ kernel32.dll	GetFileTime
+ kernel32.dll	GetFileType
++kernel32.dll	GetFinalPathNameByHandleA
++kernel32.dll	GetFinalPathNameByHandleW
+ kernel32.dll	GetFirmwareEnvironmentVariableA
++kernel32.dll	GetFirmwareEnvironmentVariableExA
++kernel32.dll	GetFirmwareEnvironmentVariableExW
+ kernel32.dll	GetFirmwareEnvironmentVariableW
++kernel32.dll	GetFirmwareType
+ kernel32.dll	GetFullPathNameA
++kernel32.dll	GetFullPathNameTransactedA
++kernel32.dll	GetFullPathNameTransactedW
+ kernel32.dll	GetFullPathNameW
+ kernel32.dll	GetGeoInfoA
++kernel32.dll	GetGeoInfoEx
+ kernel32.dll	GetGeoInfoW
+ kernel32.dll	GetHandleContext
+ kernel32.dll	GetHandleInformation
++kernel32.dll	GetLargePageMinimum
+ kernel32.dll	GetLargestConsoleWindowSize
+ kernel32.dll	GetLastError
+-kernel32.dll	GetLinguistLangSize
+ kernel32.dll	GetLocalTime
+ kernel32.dll	GetLocaleInfoA
++kernel32.dll	GetLocaleInfoEx
+ kernel32.dll	GetLocaleInfoW
+ kernel32.dll	GetLogicalDriveStringsA
+ kernel32.dll	GetLogicalDriveStringsW
+ kernel32.dll	GetLogicalDrives
+ kernel32.dll	GetLogicalProcessorInformation
++kernel32.dll	GetLogicalProcessorInformationEx
+ kernel32.dll	GetLongPathNameA
++kernel32.dll	GetLongPathNameTransactedA
++kernel32.dll	GetLongPathNameTransactedW
+ kernel32.dll	GetLongPathNameW
+ kernel32.dll	GetMailslotInfo
++kernel32.dll	GetMaximumProcessorCount
++kernel32.dll	GetMaximumProcessorGroupCount
++kernel32.dll	GetMemoryErrorHandlingCapabilities
+ kernel32.dll	GetModuleFileNameA
+ kernel32.dll	GetModuleFileNameW
+ kernel32.dll	GetModuleHandleA
+ kernel32.dll	GetModuleHandleExA
+ kernel32.dll	GetModuleHandleExW
+ kernel32.dll	GetModuleHandleW
++kernel32.dll	GetNLSVersion
++kernel32.dll	GetNLSVersionEx
++kernel32.dll	GetNamedPipeAttribute
++kernel32.dll	GetNamedPipeClientComputerNameA
++kernel32.dll	GetNamedPipeClientComputerNameW
++kernel32.dll	GetNamedPipeClientProcessId
++kernel32.dll	GetNamedPipeClientSessionId
+ kernel32.dll	GetNamedPipeHandleStateA
+ kernel32.dll	GetNamedPipeHandleStateW
+ kernel32.dll	GetNamedPipeInfo
++kernel32.dll	GetNamedPipeServerProcessId
++kernel32.dll	GetNamedPipeServerSessionId
+ kernel32.dll	GetNativeSystemInfo
+ kernel32.dll	GetNextVDMCommand
+-kernel32.dll	GetNlsSectionName
+-kernel32.dll	GetNumaAvailableMemory
+ kernel32.dll	GetNumaAvailableMemoryNode
++kernel32.dll	GetNumaAvailableMemoryNodeEx
+ kernel32.dll	GetNumaHighestNodeNumber
++kernel32.dll	GetNumaNodeNumberFromHandle
+ kernel32.dll	GetNumaNodeProcessorMask
+-kernel32.dll	GetNumaProcessorMap
++kernel32.dll	GetNumaNodeProcessorMaskEx
+ kernel32.dll	GetNumaProcessorNode
++kernel32.dll	GetNumaProcessorNodeEx
++kernel32.dll	GetNumaProximityNode
++kernel32.dll	GetNumaProximityNodeEx
+ kernel32.dll	GetNumberFormatA
++kernel32.dll	GetNumberFormatEx
+ kernel32.dll	GetNumberFormatW
+ kernel32.dll	GetNumberOfConsoleFonts
+ kernel32.dll	GetNumberOfConsoleInputEvents
+ kernel32.dll	GetNumberOfConsoleMouseButtons
+ kernel32.dll	GetOEMCP
+ kernel32.dll	GetOverlappedResult
++kernel32.dll	GetOverlappedResultEx
++kernel32.dll	GetPackageApplicationIds
++kernel32.dll	GetPackageFamilyName
++kernel32.dll	GetPackageFullName
++kernel32.dll	GetPackageId
++kernel32.dll	GetPackageInfo
++kernel32.dll	GetPackagePath
++kernel32.dll	GetPackagePathByFullName
++kernel32.dll	GetPackagesByPackageFamily
++kernel32.dll	GetPhysicallyInstalledSystemMemory
+ kernel32.dll	GetPriorityClass
+ kernel32.dll	GetPrivateProfileIntA
+ kernel32.dll	GetPrivateProfileIntW
+@@ -409,16 +683,25 @@
+ kernel32.dll	GetProcAddress
+ kernel32.dll	GetProcessAffinityMask
+ kernel32.dll	GetProcessDEPPolicy
++kernel32.dll	GetProcessDefaultCpuSets
++kernel32.dll	GetProcessGroupAffinity
+ kernel32.dll	GetProcessHandleCount
+ kernel32.dll	GetProcessHeap
+ kernel32.dll	GetProcessHeaps
+ kernel32.dll	GetProcessId
++kernel32.dll	GetProcessIdOfThread
++kernel32.dll	GetProcessInformation
+ kernel32.dll	GetProcessIoCounters
++kernel32.dll	GetProcessMitigationPolicy
++kernel32.dll	GetProcessPreferredUILanguages
+ kernel32.dll	GetProcessPriorityBoost
+ kernel32.dll	GetProcessShutdownParameters
+ kernel32.dll	GetProcessTimes
+ kernel32.dll	GetProcessVersion
+ kernel32.dll	GetProcessWorkingSetSize
++kernel32.dll	GetProcessWorkingSetSizeEx
++kernel32.dll	GetProcessorSystemCycleTime
++kernel32.dll	GetProductInfo
+ kernel32.dll	GetProfileIntA
+ kernel32.dll	GetProfileIntW
+ kernel32.dll	GetProfileSectionA
+@@ -426,27 +709,38 @@
+ kernel32.dll	GetProfileStringA
+ kernel32.dll	GetProfileStringW
+ kernel32.dll	GetQueuedCompletionStatus
++kernel32.dll	GetQueuedCompletionStatusEx
+ kernel32.dll	GetShortPathNameA
+ kernel32.dll	GetShortPathNameW
++kernel32.dll	GetStagedPackagePathByFullName
+ kernel32.dll	GetStartupInfoA
+ kernel32.dll	GetStartupInfoW
++kernel32.dll	GetStateFolder
+ kernel32.dll	GetStdHandle
++kernel32.dll	GetStringScripts
+ kernel32.dll	GetStringTypeA
+ kernel32.dll	GetStringTypeExA
+ kernel32.dll	GetStringTypeExW
+ kernel32.dll	GetStringTypeW
++kernel32.dll	GetSystemAppDataKey
++kernel32.dll	GetSystemCpuSetInformation
+ kernel32.dll	GetSystemDEPPolicy
+ kernel32.dll	GetSystemDefaultLCID
+ kernel32.dll	GetSystemDefaultLangID
++kernel32.dll	GetSystemDefaultLocaleName
+ kernel32.dll	GetSystemDefaultUILanguage
+ kernel32.dll	GetSystemDirectoryA
+ kernel32.dll	GetSystemDirectoryW
++kernel32.dll	GetSystemFileCacheSize
++kernel32.dll	GetSystemFirmwareTable
+ kernel32.dll	GetSystemInfo
+ kernel32.dll	GetSystemPowerStatus
++kernel32.dll	GetSystemPreferredUILanguages
+ kernel32.dll	GetSystemRegistryQuota
+ kernel32.dll	GetSystemTime
+ kernel32.dll	GetSystemTimeAdjustment
+ kernel32.dll	GetSystemTimeAsFileTime
++kernel32.dll	GetSystemTimePreciseAsFileTime
+ kernel32.dll	GetSystemTimes
+ kernel32.dll	GetSystemWindowsDirectoryA
+ kernel32.dll	GetSystemWindowsDirectoryW
+@@ -460,25 +754,44 @@
+ kernel32.dll	GetTempPathA
+ kernel32.dll	GetTempPathW
+ kernel32.dll	GetThreadContext
++kernel32.dll	GetThreadDescription
++kernel32.dll	GetThreadErrorMode
++kernel32.dll	GetThreadGroupAffinity
+ kernel32.dll	GetThreadIOPendingFlag
++kernel32.dll	GetThreadId
++kernel32.dll	GetThreadIdealProcessorEx
++kernel32.dll	GetThreadInformation
+ kernel32.dll	GetThreadLocale
++kernel32.dll	GetThreadPreferredUILanguages
+ kernel32.dll	GetThreadPriority
+ kernel32.dll	GetThreadPriorityBoost
++kernel32.dll	GetThreadSelectedCpuSets
+ kernel32.dll	GetThreadSelectorEntry
+ kernel32.dll	GetThreadTimes
++kernel32.dll	GetThreadUILanguage
+ kernel32.dll	GetTickCount
++kernel32.dll	GetTickCount64
+ kernel32.dll	GetTimeFormatA
++kernel32.dll	GetTimeFormatAWorker
++kernel32.dll	GetTimeFormatEx
+ kernel32.dll	GetTimeFormatW
++kernel32.dll	GetTimeFormatWWorker
+ kernel32.dll	GetTimeZoneInformation
++kernel32.dll	GetTimeZoneInformationForYear
++kernel32.dll	GetUILanguageInfo
++kernel32.dll	GetUserDefaultGeoName
+ kernel32.dll	GetUserDefaultLCID
+ kernel32.dll	GetUserDefaultLangID
++kernel32.dll	GetUserDefaultLocaleName
+ kernel32.dll	GetUserDefaultUILanguage
+ kernel32.dll	GetUserGeoID
++kernel32.dll	GetUserPreferredUILanguages
+ kernel32.dll	GetVDMCurrentDirectories
+ kernel32.dll	GetVersion
+ kernel32.dll	GetVersionExA
+ kernel32.dll	GetVersionExW
+ kernel32.dll	GetVolumeInformationA
++kernel32.dll	GetVolumeInformationByHandleW
+ kernel32.dll	GetVolumeInformationW
+ kernel32.dll	GetVolumeNameForVolumeMountPointA
+ kernel32.dll	GetVolumeNameForVolumeMountPointW
+@@ -489,7 +802,10 @@
+ kernel32.dll	GetWindowsDirectoryA
+ kernel32.dll	GetWindowsDirectoryW
+ kernel32.dll	GetWriteWatch
++kernel32.dll	GetXStateFeaturesMask
+ kernel32.dll	GlobalAddAtomA
++kernel32.dll	GlobalAddAtomExA
++kernel32.dll	GlobalAddAtomExW
+ kernel32.dll	GlobalAddAtomW
+ kernel32.dll	GlobalAlloc
+ kernel32.dll	GlobalCompact
+@@ -518,26 +834,38 @@
+ kernel32.dll	HeapAlloc
+ kernel32.dll	HeapCompact
+ kernel32.dll	HeapCreate
+-kernel32.dll	HeapCreateTagsW
+ kernel32.dll	HeapDestroy
+-kernel32.dll	HeapExtend
+ kernel32.dll	HeapFree
+ kernel32.dll	HeapLock
+ kernel32.dll	HeapQueryInformation
+-kernel32.dll	HeapQueryTagW
+ kernel32.dll	HeapReAlloc
+ kernel32.dll	HeapSetInformation
+ kernel32.dll	HeapSize
+ kernel32.dll	HeapSummary
+ kernel32.dll	HeapUnlock
+-kernel32.dll	HeapUsage
+ kernel32.dll	HeapValidate
+ kernel32.dll	HeapWalk
++kernel32.dll	IdnToAscii
++kernel32.dll	IdnToNameprepUnicode
++kernel32.dll	IdnToUnicode
+ kernel32.dll	InitAtomTable
++kernel32.dll	InitOnceBeginInitialize
++kernel32.dll	InitOnceComplete
++kernel32.dll	InitOnceExecuteOnce
++kernel32.dll	InitOnceInitialize
++kernel32.dll	InitializeConditionVariable
++kernel32.dll	InitializeContext
+ kernel32.dll	InitializeCriticalSection
+ kernel32.dll	InitializeCriticalSectionAndSpinCount
++kernel32.dll	InitializeCriticalSectionEx
++kernel32.dll	InitializeEnclave
++kernel32.dll	InitializeProcThreadAttributeList
+ kernel32.dll	InitializeSListHead
++kernel32.dll	InitializeSRWLock
++kernel32.dll	InitializeSynchronizationBarrier
++kernel32.dll	InstallELAMCertificateInfo
+ kernel32.dll	InterlockedCompareExchange
++kernel32.dll	InterlockedCompareExchange64
+ kernel32.dll	InterlockedDecrement
+ kernel32.dll	InterlockedExchange
+ kernel32.dll	InterlockedExchangeAdd
+@@ -545,6 +873,8 @@
+ kernel32.dll	InterlockedIncrement
+ kernel32.dll	InterlockedPopEntrySList
+ kernel32.dll	InterlockedPushEntrySList
++kernel32.dll	InterlockedPushListSList
++kernel32.dll	InterlockedPushListSListEx
+ kernel32.dll	InvalidateConsoleDIBits
+ kernel32.dll	IsBadCodePtr
+ kernel32.dll	IsBadHugeReadPtr
+@@ -553,18 +883,61 @@
+ kernel32.dll	IsBadStringPtrA
+ kernel32.dll	IsBadStringPtrW
+ kernel32.dll	IsBadWritePtr
++kernel32.dll	IsCalendarLeapDay
++kernel32.dll	IsCalendarLeapMonth
++kernel32.dll	IsCalendarLeapYear
+ kernel32.dll	IsDBCSLeadByte
+ kernel32.dll	IsDBCSLeadByteEx
+ kernel32.dll	IsDebuggerPresent
++kernel32.dll	IsEnclaveTypeSupported
++kernel32.dll	IsNLSDefinedString
++kernel32.dll	IsNativeVhdBoot
++kernel32.dll	IsNormalizedString
++kernel32.dll	IsProcessCritical
+ kernel32.dll	IsProcessInJob
+ kernel32.dll	IsProcessorFeaturePresent
+ kernel32.dll	IsSystemResumeAutomatic
++kernel32.dll	IsThreadAFiber
++kernel32.dll	IsThreadpoolTimerSet
++kernel32.dll	IsValidCalDateTime
+ kernel32.dll	IsValidCodePage
+ kernel32.dll	IsValidLanguageGroup
+ kernel32.dll	IsValidLocale
+-kernel32.dll	IsValidUILanguage
++kernel32.dll	IsValidLocaleName
++kernel32.dll	IsValidNLSVersion
++kernel32.dll	IsWow64GuestMachineSupported
+ kernel32.dll	IsWow64Process
++kernel32.dll	IsWow64Process2
++kernel32.dll	K32EmptyWorkingSet
++kernel32.dll	K32EnumDeviceDrivers
++kernel32.dll	K32EnumPageFilesA
++kernel32.dll	K32EnumPageFilesW
++kernel32.dll	K32EnumProcessModules
++kernel32.dll	K32EnumProcessModulesEx
++kernel32.dll	K32EnumProcesses
++kernel32.dll	K32GetDeviceDriverBaseNameA
++kernel32.dll	K32GetDeviceDriverBaseNameW
++kernel32.dll	K32GetDeviceDriverFileNameA
++kernel32.dll	K32GetDeviceDriverFileNameW
++kernel32.dll	K32GetMappedFileNameA
++kernel32.dll	K32GetMappedFileNameW
++kernel32.dll	K32GetModuleBaseNameA
++kernel32.dll	K32GetModuleBaseNameW
++kernel32.dll	K32GetModuleFileNameExA
++kernel32.dll	K32GetModuleFileNameExW
++kernel32.dll	K32GetModuleInformation
++kernel32.dll	K32GetPerformanceInfo
++kernel32.dll	K32GetProcessImageFileNameA
++kernel32.dll	K32GetProcessImageFileNameW
++kernel32.dll	K32GetProcessMemoryInfo
++kernel32.dll	K32GetWsChanges
++kernel32.dll	K32GetWsChangesEx
++kernel32.dll	K32InitializeProcessForWsWatch
++kernel32.dll	K32QueryWorkingSet
++kernel32.dll	K32QueryWorkingSetEx
++kernel32.dll	LCIDToLocaleName
+ kernel32.dll	LCMapStringA
++kernel32.dll	LCMapStringEx
+ kernel32.dll	LCMapStringW
+ kernel32.dll	LZClose
+ kernel32.dll	LZCloseFile
+@@ -578,12 +951,18 @@
+ kernel32.dll	LZSeek
+ kernel32.dll	LZStart
+ kernel32.dll	LeaveCriticalSection
++kernel32.dll	LeaveCriticalSectionWhenCallbackReturns
++kernel32.dll	LoadAppInitDlls
++kernel32.dll	LoadEnclaveData
+ kernel32.dll	LoadLibraryA
+ kernel32.dll	LoadLibraryExA
+ kernel32.dll	LoadLibraryExW
+ kernel32.dll	LoadLibraryW
+ kernel32.dll	LoadModule
++kernel32.dll	LoadPackagedLibrary
+ kernel32.dll	LoadResource
++kernel32.dll	LoadStringBaseExW
++kernel32.dll	LoadStringBaseW
+ kernel32.dll	LocalAlloc
+ kernel32.dll	LocalCompact
+ kernel32.dll	LocalFileTimeToFileTime
+@@ -595,6 +974,8 @@
+ kernel32.dll	LocalShrink
+ kernel32.dll	LocalSize
+ kernel32.dll	LocalUnlock
++kernel32.dll	LocaleNameToLCID
++kernel32.dll	LocateXStateFeature
+ kernel32.dll	LockFile
+ kernel32.dll	LockFileEx
+ kernel32.dll	LockResource
+@@ -602,6 +983,8 @@
+ kernel32.dll	MapUserPhysicalPagesScatter
+ kernel32.dll	MapViewOfFile
+ kernel32.dll	MapViewOfFileEx
++kernel32.dll	MapViewOfFileExNuma
++kernel32.dll	MapViewOfFileFromApp
+ kernel32.dll	Module32First
+ kernel32.dll	Module32FirstW
+ kernel32.dll	Module32Next
+@@ -609,39 +992,69 @@
+ kernel32.dll	MoveFileA
+ kernel32.dll	MoveFileExA
+ kernel32.dll	MoveFileExW
++kernel32.dll	MoveFileTransactedA
++kernel32.dll	MoveFileTransactedW
+ kernel32.dll	MoveFileW
+ kernel32.dll	MoveFileWithProgressA
+ kernel32.dll	MoveFileWithProgressW
+ kernel32.dll	MulDiv
+ kernel32.dll	MultiByteToWideChar
+-kernel32.dll	NlsConvertIntegerToString
++kernel32.dll	NeedCurrentDirectoryForExePathA
++kernel32.dll	NeedCurrentDirectoryForExePathW
++kernel32.dll	NlsCheckPolicy
++kernel32.dll	NlsEventDataDescCreate
+ kernel32.dll	NlsGetCacheUpdateCount
+-kernel32.dll	NlsResetProcessLocale
+-kernel32.dll	NumaVirtualQueryNode
++kernel32.dll	NlsUpdateLocale
++kernel32.dll	NlsUpdateSystemLocale
++kernel32.dll	NlsWriteEtwEvent
++kernel32.dll	NormalizeString
++kernel32.dll	NotifyMountMgr
++kernel32.dll	NotifyUILanguageChange
++kernel32.dll	NtVdm64CreateProcessInternalW
++kernel32.dll	OOBEComplete
++kernel32.dll	OfferVirtualMemory
+ kernel32.dll	OpenConsoleW
+-kernel32.dll	OpenDataFile
++kernel32.dll	OpenConsoleWStub
+ kernel32.dll	OpenEventA
+ kernel32.dll	OpenEventW
+ kernel32.dll	OpenFile
++kernel32.dll	OpenFileById
+ kernel32.dll	OpenFileMappingA
+ kernel32.dll	OpenFileMappingW
+ kernel32.dll	OpenJobObjectA
+ kernel32.dll	OpenJobObjectW
+ kernel32.dll	OpenMutexA
+ kernel32.dll	OpenMutexW
++kernel32.dll	OpenPackageInfoByFullName
++kernel32.dll	OpenPrivateNamespaceA
++kernel32.dll	OpenPrivateNamespaceW
+ kernel32.dll	OpenProcess
++kernel32.dll	OpenProcessToken
+ kernel32.dll	OpenProfileUserMapping
+ kernel32.dll	OpenSemaphoreA
+ kernel32.dll	OpenSemaphoreW
++kernel32.dll	OpenState
++kernel32.dll	OpenStateExplicit
+ kernel32.dll	OpenThread
++kernel32.dll	OpenThreadToken
+ kernel32.dll	OpenWaitableTimerA
+ kernel32.dll	OpenWaitableTimerW
+ kernel32.dll	OutputDebugStringA
+ kernel32.dll	OutputDebugStringW
++kernel32.dll	PackageFamilyNameFromFullName
++kernel32.dll	PackageFamilyNameFromId
++kernel32.dll	PackageFullNameFromId
++kernel32.dll	PackageIdFromFullName
++kernel32.dll	PackageNameAndPublisherIdFromFamilyName
++kernel32.dll	ParseApplicationUserModelId
+ kernel32.dll	PeekConsoleInputA
+ kernel32.dll	PeekConsoleInputW
+ kernel32.dll	PeekNamedPipe
+ kernel32.dll	PostQueuedCompletionStatus
++kernel32.dll	PowerClearRequest
++kernel32.dll	PowerCreateRequest
++kernel32.dll	PowerSetRequest
++kernel32.dll	PrefetchVirtualMemory
+ kernel32.dll	PrepareTape
+ kernel32.dll	PrivCopyFileExW
+ kernel32.dll	PrivMoveFileIdentityW
+@@ -650,20 +1063,60 @@
+ kernel32.dll	Process32Next
+ kernel32.dll	Process32NextW
+ kernel32.dll	ProcessIdToSessionId
++kernel32.dll	PssCaptureSnapshot
++kernel32.dll	PssDuplicateSnapshot
++kernel32.dll	PssFreeSnapshot
++kernel32.dll	PssQuerySnapshot
++kernel32.dll	PssWalkMarkerCreate
++kernel32.dll	PssWalkMarkerFree
++kernel32.dll	PssWalkMarkerGetPosition
++kernel32.dll	PssWalkMarkerRewind
++kernel32.dll	PssWalkMarkerSeek
++kernel32.dll	PssWalkMarkerSeekToBeginning
++kernel32.dll	PssWalkMarkerSetPosition
++kernel32.dll	PssWalkMarkerTell
++kernel32.dll	PssWalkSnapshot
+ kernel32.dll	PulseEvent
+ kernel32.dll	PurgeComm
++kernel32.dll	QueryActCtxSettingsW
++kernel32.dll	QueryActCtxSettingsWWorker
+ kernel32.dll	QueryActCtxW
++kernel32.dll	QueryActCtxWWorker
+ kernel32.dll	QueryDepthSList
+ kernel32.dll	QueryDosDeviceA
+ kernel32.dll	QueryDosDeviceW
++kernel32.dll	QueryFullProcessImageNameA
++kernel32.dll	QueryFullProcessImageNameW
++kernel32.dll	QueryIdleProcessorCycleTime
++kernel32.dll	QueryIdleProcessorCycleTimeEx
+ kernel32.dll	QueryInformationJobObject
++kernel32.dll	QueryIoRateControlInformationJobObject
+ kernel32.dll	QueryMemoryResourceNotification
+ kernel32.dll	QueryPerformanceCounter
+ kernel32.dll	QueryPerformanceFrequency
+-kernel32.dll	QueryWin31IniFilesMappedToRegistry
++kernel32.dll	QueryProcessAffinityUpdateMode
++kernel32.dll	QueryProcessCycleTime
++kernel32.dll	QueryProtectedPolicy
++kernel32.dll	QueryThreadCycleTime
++kernel32.dll	QueryThreadProfiling
++kernel32.dll	QueryThreadpoolStackInformation
++kernel32.dll	QueryUnbiasedInterruptTime
+ kernel32.dll	QueueUserAPC
+ kernel32.dll	QueueUserWorkItem
++kernel32.dll	QuirkGetData2Worker
++kernel32.dll	QuirkGetDataWorker
++kernel32.dll	QuirkIsEnabled2Worker
++kernel32.dll	QuirkIsEnabled3Worker
++kernel32.dll	QuirkIsEnabledForPackage2Worker
++kernel32.dll	QuirkIsEnabledForPackage3Worker
++kernel32.dll	QuirkIsEnabledForPackage4Worker
++kernel32.dll	QuirkIsEnabledForPackageWorker
++kernel32.dll	QuirkIsEnabledForProcessWorker
++kernel32.dll	QuirkIsEnabledWorker
+ kernel32.dll	RaiseException
++kernel32.dll	RaiseFailFastException
++kernel32.dll	RaiseInvalid16BitExeError
++kernel32.dll	ReOpenFile
+ kernel32.dll	ReadConsoleA
+ kernel32.dll	ReadConsoleInputA
+ kernel32.dll	ReadConsoleInputExA
+@@ -675,50 +1128,112 @@
+ kernel32.dll	ReadConsoleOutputCharacterW
+ kernel32.dll	ReadConsoleOutputW
+ kernel32.dll	ReadConsoleW
++kernel32.dll	ReadDirectoryChangesExW
+ kernel32.dll	ReadDirectoryChangesW
+ kernel32.dll	ReadFile
+ kernel32.dll	ReadFileEx
+ kernel32.dll	ReadFileScatter
+ kernel32.dll	ReadProcessMemory
++kernel32.dll	ReadThreadProfilingData
++kernel32.dll	ReclaimVirtualMemory
++kernel32.dll	RegCloseKey
++kernel32.dll	RegCopyTreeW
++kernel32.dll	RegCreateKeyExA
++kernel32.dll	RegCreateKeyExW
++kernel32.dll	RegDeleteKeyExA
++kernel32.dll	RegDeleteKeyExW
++kernel32.dll	RegDeleteTreeA
++kernel32.dll	RegDeleteTreeW
++kernel32.dll	RegDeleteValueA
++kernel32.dll	RegDeleteValueW
++kernel32.dll	RegDisablePredefinedCacheEx
++kernel32.dll	RegEnumKeyExA
++kernel32.dll	RegEnumKeyExW
++kernel32.dll	RegEnumValueA
++kernel32.dll	RegEnumValueW
++kernel32.dll	RegFlushKey
++kernel32.dll	RegGetKeySecurity
++kernel32.dll	RegGetValueA
++kernel32.dll	RegGetValueW
++kernel32.dll	RegLoadKeyA
++kernel32.dll	RegLoadKeyW
++kernel32.dll	RegLoadMUIStringA
++kernel32.dll	RegLoadMUIStringW
++kernel32.dll	RegNotifyChangeKeyValue
++kernel32.dll	RegOpenCurrentUser
++kernel32.dll	RegOpenKeyExA
++kernel32.dll	RegOpenKeyExW
++kernel32.dll	RegOpenUserClassesRoot
++kernel32.dll	RegQueryInfoKeyA
++kernel32.dll	RegQueryInfoKeyW
++kernel32.dll	RegQueryValueExA
++kernel32.dll	RegQueryValueExW
++kernel32.dll	RegRestoreKeyA
++kernel32.dll	RegRestoreKeyW
++kernel32.dll	RegSaveKeyExA
++kernel32.dll	RegSaveKeyExW
++kernel32.dll	RegSetKeySecurity
++kernel32.dll	RegSetValueExA
++kernel32.dll	RegSetValueExW
++kernel32.dll	RegUnLoadKeyA
++kernel32.dll	RegUnLoadKeyW
++kernel32.dll	RegisterApplicationRecoveryCallback
++kernel32.dll	RegisterApplicationRestart
++kernel32.dll	RegisterBadMemoryNotification
+ kernel32.dll	RegisterConsoleIME
+ kernel32.dll	RegisterConsoleOS2
+ kernel32.dll	RegisterConsoleVDM
+ kernel32.dll	RegisterWaitForInputIdle
+ kernel32.dll	RegisterWaitForSingleObject
+ kernel32.dll	RegisterWaitForSingleObjectEx
++kernel32.dll	RegisterWaitUntilOOBECompleted
+ kernel32.dll	RegisterWowBaseHandlers
+ kernel32.dll	RegisterWowExec
+ kernel32.dll	ReleaseActCtx
++kernel32.dll	ReleaseActCtxWorker
+ kernel32.dll	ReleaseMutex
++kernel32.dll	ReleaseMutexWhenCallbackReturns
++kernel32.dll	ReleaseSRWLockExclusive
++kernel32.dll	ReleaseSRWLockShared
+ kernel32.dll	ReleaseSemaphore
++kernel32.dll	ReleaseSemaphoreWhenCallbackReturns
+ kernel32.dll	RemoveDirectoryA
++kernel32.dll	RemoveDirectoryTransactedA
++kernel32.dll	RemoveDirectoryTransactedW
+ kernel32.dll	RemoveDirectoryW
++kernel32.dll	RemoveDllDirectory
+ kernel32.dll	RemoveLocalAlternateComputerNameA
+ kernel32.dll	RemoveLocalAlternateComputerNameW
++kernel32.dll	RemoveSecureMemoryCacheCallback
++kernel32.dll	RemoveVectoredContinueHandler
+ kernel32.dll	RemoveVectoredExceptionHandler
+ kernel32.dll	ReplaceFile
+ kernel32.dll	ReplaceFileA
+ kernel32.dll	ReplaceFileW
++kernel32.dll	ReplacePartitionUnit
+ kernel32.dll	RequestDeviceWakeup
+ kernel32.dll	RequestWakeupLatency
+ kernel32.dll	ResetEvent
+ kernel32.dll	ResetWriteWatch
++kernel32.dll	ResolveDelayLoadedAPI
++kernel32.dll	ResolveDelayLoadsFromDll
++kernel32.dll	ResolveLocaleName
+ kernel32.dll	RestoreLastError
+ kernel32.dll	ResumeThread
+ kernel32.dll	RtlCaptureContext
+ kernel32.dll	RtlCaptureStackBackTrace
+ kernel32.dll	RtlFillMemory
+ kernel32.dll	RtlMoveMemory
++kernel32.dll	RtlPcToFileHeader
+ kernel32.dll	RtlUnwind
+ kernel32.dll	RtlZeroMemory
+ kernel32.dll	ScrollConsoleScreenBufferA
+ kernel32.dll	ScrollConsoleScreenBufferW
+ kernel32.dll	SearchPathA
+ kernel32.dll	SearchPathW
+-kernel32.dll	SetCPGlobal
++kernel32.dll	SetCachedSigningLevel
+ kernel32.dll	SetCalendarInfoA
+ kernel32.dll	SetCalendarInfoW
+-kernel32.dll	SetClientTimeZoneInformation
+ kernel32.dll	SetComPlusPackageInstallStatus
+ kernel32.dll	SetCommBreak
+ kernel32.dll	SetCommConfig
+@@ -726,12 +1241,12 @@
+ kernel32.dll	SetCommState
+ kernel32.dll	SetCommTimeouts
+ kernel32.dll	SetComputerNameA
++kernel32.dll	SetComputerNameEx2W
+ kernel32.dll	SetComputerNameExA
+ kernel32.dll	SetComputerNameExW
+ kernel32.dll	SetComputerNameW
+ kernel32.dll	SetConsoleActiveScreenBuffer
+ kernel32.dll	SetConsoleCP
+-kernel32.dll	SetConsoleCommandHistoryMode
+ kernel32.dll	SetConsoleCtrlHandler
+ kernel32.dll	SetConsoleCursor
+ kernel32.dll	SetConsoleCursorInfo
+@@ -740,6 +1255,7 @@
+ kernel32.dll	SetConsoleDisplayMode
+ kernel32.dll	SetConsoleFont
+ kernel32.dll	SetConsoleHardwareState
++kernel32.dll	SetConsoleHistoryInfo
+ kernel32.dll	SetConsoleIcon
+ kernel32.dll	SetConsoleInputExeNameA
+ kernel32.dll	SetConsoleInputExeNameW
+@@ -754,27 +1270,40 @@
+ kernel32.dll	SetConsoleOS2OemFormat
+ kernel32.dll	SetConsoleOutputCP
+ kernel32.dll	SetConsolePalette
++kernel32.dll	SetConsoleScreenBufferInfoEx
+ kernel32.dll	SetConsoleScreenBufferSize
+ kernel32.dll	SetConsoleTextAttribute
+ kernel32.dll	SetConsoleTitleA
+ kernel32.dll	SetConsoleTitleW
+ kernel32.dll	SetConsoleWindowInfo
+ kernel32.dll	SetCriticalSectionSpinCount
++kernel32.dll	SetCurrentConsoleFontEx
+ kernel32.dll	SetCurrentDirectoryA
+ kernel32.dll	SetCurrentDirectoryW
+ kernel32.dll	SetDefaultCommConfigA
+ kernel32.dll	SetDefaultCommConfigW
++kernel32.dll	SetDefaultDllDirectories
+ kernel32.dll	SetDllDirectoryA
+ kernel32.dll	SetDllDirectoryW
++kernel32.dll	SetDynamicTimeZoneInformation
+ kernel32.dll	SetEndOfFile
++kernel32.dll	SetEnvironmentStringsA
++kernel32.dll	SetEnvironmentStringsW
+ kernel32.dll	SetEnvironmentVariableA
+ kernel32.dll	SetEnvironmentVariableW
+ kernel32.dll	SetErrorMode
+ kernel32.dll	SetEvent
++kernel32.dll	SetEventWhenCallbackReturns
+ kernel32.dll	SetFileApisToANSI
+ kernel32.dll	SetFileApisToOEM
+ kernel32.dll	SetFileAttributesA
++kernel32.dll	SetFileAttributesTransactedA
++kernel32.dll	SetFileAttributesTransactedW
+ kernel32.dll	SetFileAttributesW
++kernel32.dll	SetFileBandwidthReservation
++kernel32.dll	SetFileCompletionNotificationModes
++kernel32.dll	SetFileInformationByHandle
++kernel32.dll	SetFileIoOverlappedRange
+ kernel32.dll	SetFilePointer
+ kernel32.dll	SetFilePointerEx
+ kernel32.dll	SetFileShortNameA
+@@ -782,11 +1311,14 @@
+ kernel32.dll	SetFileTime
+ kernel32.dll	SetFileValidData
+ kernel32.dll	SetFirmwareEnvironmentVariableA
++kernel32.dll	SetFirmwareEnvironmentVariableExA
++kernel32.dll	SetFirmwareEnvironmentVariableExW
+ kernel32.dll	SetFirmwareEnvironmentVariableW
+ kernel32.dll	SetHandleContext
+ kernel32.dll	SetHandleCount
+ kernel32.dll	SetHandleInformation
+ kernel32.dll	SetInformationJobObject
++kernel32.dll	SetIoRateControlInformationJobObject
+ kernel32.dll	SetLastConsoleEventActive
+ kernel32.dll	SetLastError
+ kernel32.dll	SetLocalPrimaryComputerNameA
+@@ -796,15 +1328,25 @@
+ kernel32.dll	SetLocaleInfoW
+ kernel32.dll	SetMailslotInfo
+ kernel32.dll	SetMessageWaitingIndicator
++kernel32.dll	SetNamedPipeAttribute
+ kernel32.dll	SetNamedPipeHandleState
+ kernel32.dll	SetPriorityClass
+ kernel32.dll	SetProcessAffinityMask
++kernel32.dll	SetProcessAffinityUpdateMode
+ kernel32.dll	SetProcessDEPPolicy
++kernel32.dll	SetProcessDefaultCpuSets
++kernel32.dll	SetProcessInformation
++kernel32.dll	SetProcessMitigationPolicy
++kernel32.dll	SetProcessPreferredUILanguages
+ kernel32.dll	SetProcessPriorityBoost
+ kernel32.dll	SetProcessShutdownParameters
+ kernel32.dll	SetProcessWorkingSetSize
++kernel32.dll	SetProcessWorkingSetSizeEx
++kernel32.dll	SetProtectedPolicy
+ kernel32.dll	SetSearchPathMode
+ kernel32.dll	SetStdHandle
++kernel32.dll	SetStdHandleEx
++kernel32.dll	SetSystemFileCacheSize
+ kernel32.dll	SetSystemPowerState
+ kernel32.dll	SetSystemTime
+ kernel32.dll	SetSystemTimeAdjustment
+@@ -813,37 +1355,77 @@
+ kernel32.dll	SetTermsrvAppInstallMode
+ kernel32.dll	SetThreadAffinityMask
+ kernel32.dll	SetThreadContext
++kernel32.dll	SetThreadDescription
++kernel32.dll	SetThreadErrorMode
+ kernel32.dll	SetThreadExecutionState
++kernel32.dll	SetThreadGroupAffinity
+ kernel32.dll	SetThreadIdealProcessor
++kernel32.dll	SetThreadIdealProcessorEx
++kernel32.dll	SetThreadInformation
+ kernel32.dll	SetThreadLocale
++kernel32.dll	SetThreadPreferredUILanguages
+ kernel32.dll	SetThreadPriority
+ kernel32.dll	SetThreadPriorityBoost
++kernel32.dll	SetThreadSelectedCpuSets
++kernel32.dll	SetThreadStackGuarantee
++kernel32.dll	SetThreadToken
+ kernel32.dll	SetThreadUILanguage
++kernel32.dll	SetThreadpoolStackInformation
++kernel32.dll	SetThreadpoolThreadMaximum
++kernel32.dll	SetThreadpoolThreadMinimum
++kernel32.dll	SetThreadpoolTimer
++kernel32.dll	SetThreadpoolTimerEx
++kernel32.dll	SetThreadpoolWait
++kernel32.dll	SetThreadpoolWaitEx
+ kernel32.dll	SetTimeZoneInformation
+ kernel32.dll	SetTimerQueueTimer
+ kernel32.dll	SetUnhandledExceptionFilter
+ kernel32.dll	SetUserGeoID
++kernel32.dll	SetUserGeoName
+ kernel32.dll	SetVDMCurrentDirectories
+ kernel32.dll	SetVolumeLabelA
+ kernel32.dll	SetVolumeLabelW
+ kernel32.dll	SetVolumeMountPointA
+ kernel32.dll	SetVolumeMountPointW
++kernel32.dll	SetVolumeMountPointWStub
+ kernel32.dll	SetWaitableTimer
++kernel32.dll	SetWaitableTimerEx
++kernel32.dll	SetXStateFeaturesMask
+ kernel32.dll	SetupComm
+ kernel32.dll	ShowConsoleCursor
+ kernel32.dll	SignalObjectAndWait
+ kernel32.dll	SizeofResource
+ kernel32.dll	Sleep
++kernel32.dll	SleepConditionVariableCS
++kernel32.dll	SleepConditionVariableSRW
+ kernel32.dll	SleepEx
++kernel32.dll	SortCloseHandle
++kernel32.dll	SortGetHandle
++kernel32.dll	StartThreadpoolIo
++kernel32.dll	SubmitThreadpoolWork
+ kernel32.dll	SuspendThread
+ kernel32.dll	SwitchToFiber
+ kernel32.dll	SwitchToThread
+ kernel32.dll	SystemTimeToFileTime
+ kernel32.dll	SystemTimeToTzSpecificLocalTime
++kernel32.dll	SystemTimeToTzSpecificLocalTimeEx
+ kernel32.dll	TerminateJobObject
+ kernel32.dll	TerminateProcess
+ kernel32.dll	TerminateThread
+ kernel32.dll	TermsrvAppInstallMode
++kernel32.dll	TermsrvConvertSysRootToUserDir
++kernel32.dll	TermsrvCreateRegEntry
++kernel32.dll	TermsrvDeleteKey
++kernel32.dll	TermsrvDeleteValue
++kernel32.dll	TermsrvGetPreSetValue
++kernel32.dll	TermsrvGetWindowsDirectoryA
++kernel32.dll	TermsrvGetWindowsDirectoryW
++kernel32.dll	TermsrvOpenRegEntry
++kernel32.dll	TermsrvOpenUserClasses
++kernel32.dll	TermsrvRestoreKey
++kernel32.dll	TermsrvSetKeySecurity
++kernel32.dll	TermsrvSetValueKey
++kernel32.dll	TermsrvSyncUserIniFileExt
+ kernel32.dll	Thread32First
+ kernel32.dll	Thread32Next
+ kernel32.dll	TlsAlloc
+@@ -853,33 +1435,42 @@
+ kernel32.dll	Toolhelp32ReadProcessMemory
+ kernel32.dll	TransactNamedPipe
+ kernel32.dll	TransmitCommChar
+-kernel32.dll	TrimVirtualBuffer
++kernel32.dll	TryAcquireSRWLockExclusive
++kernel32.dll	TryAcquireSRWLockShared
+ kernel32.dll	TryEnterCriticalSection
++kernel32.dll	TrySubmitThreadpoolCallback
+ kernel32.dll	TzSpecificLocalTimeToSystemTime
++kernel32.dll	TzSpecificLocalTimeToSystemTimeEx
+ kernel32.dll	UTRegister
+ kernel32.dll	UTUnRegister
+ kernel32.dll	UnhandledExceptionFilter
+ kernel32.dll	UnlockFile
+ kernel32.dll	UnlockFileEx
+ kernel32.dll	UnmapViewOfFile
++kernel32.dll	UnmapViewOfFileEx
++kernel32.dll	UnregisterApplicationRecoveryCallback
++kernel32.dll	UnregisterApplicationRestart
++kernel32.dll	UnregisterBadMemoryNotification
+ kernel32.dll	UnregisterConsoleIME
+ kernel32.dll	UnregisterWait
+ kernel32.dll	UnregisterWaitEx
++kernel32.dll	UnregisterWaitUntilOOBECompleted
++kernel32.dll	UpdateCalendarDayOfWeek
++kernel32.dll	UpdateProcThreadAttribute
+ kernel32.dll	UpdateResourceA
+ kernel32.dll	UpdateResourceW
+ kernel32.dll	VDMConsoleOperation
+ kernel32.dll	VDMOperationStarted
+-kernel32.dll	ValidateLCType
+-kernel32.dll	ValidateLocale
+ kernel32.dll	VerLanguageNameA
+ kernel32.dll	VerLanguageNameW
+ kernel32.dll	VerSetConditionMask
+ kernel32.dll	VerifyConsoleIoHandle
++kernel32.dll	VerifyScripts
+ kernel32.dll	VerifyVersionInfoA
+ kernel32.dll	VerifyVersionInfoW
+ kernel32.dll	VirtualAlloc
+ kernel32.dll	VirtualAllocEx
+-kernel32.dll	VirtualBufferExceptionHandler
++kernel32.dll	VirtualAllocExNuma
+ kernel32.dll	VirtualFree
+ kernel32.dll	VirtualFreeEx
+ kernel32.dll	VirtualLock
+@@ -891,14 +1482,58 @@
+ kernel32.dll	WTSGetActiveConsoleSessionId
+ kernel32.dll	WaitCommEvent
+ kernel32.dll	WaitForDebugEvent
++kernel32.dll	WaitForDebugEventEx
+ kernel32.dll	WaitForMultipleObjects
+ kernel32.dll	WaitForMultipleObjectsEx
+ kernel32.dll	WaitForSingleObject
+ kernel32.dll	WaitForSingleObjectEx
++kernel32.dll	WaitForThreadpoolIoCallbacks
++kernel32.dll	WaitForThreadpoolTimerCallbacks
++kernel32.dll	WaitForThreadpoolWaitCallbacks
++kernel32.dll	WaitForThreadpoolWorkCallbacks
+ kernel32.dll	WaitNamedPipeA
+ kernel32.dll	WaitNamedPipeW
++kernel32.dll	WakeAllConditionVariable
++kernel32.dll	WakeConditionVariable
++kernel32.dll	WerGetFlags
++kernel32.dll	WerGetFlagsWorker
++kernel32.dll	WerRegisterAdditionalProcess
++kernel32.dll	WerRegisterAppLocalDump
++kernel32.dll	WerRegisterCustomMetadata
++kernel32.dll	WerRegisterExcludedMemoryBlock
++kernel32.dll	WerRegisterFile
++kernel32.dll	WerRegisterFileWorker
++kernel32.dll	WerRegisterMemoryBlock
++kernel32.dll	WerRegisterMemoryBlockWorker
++kernel32.dll	WerRegisterRuntimeExceptionModule
++kernel32.dll	WerRegisterRuntimeExceptionModuleWorker
++kernel32.dll	WerSetFlags
++kernel32.dll	WerSetFlagsWorker
++kernel32.dll	WerUnregisterAdditionalProcess
++kernel32.dll	WerUnregisterAppLocalDump
++kernel32.dll	WerUnregisterCustomMetadata
++kernel32.dll	WerUnregisterExcludedMemoryBlock
++kernel32.dll	WerUnregisterFile
++kernel32.dll	WerUnregisterFileWorker
++kernel32.dll	WerUnregisterMemoryBlock
++kernel32.dll	WerUnregisterMemoryBlockWorker
++kernel32.dll	WerUnregisterRuntimeExceptionModule
++kernel32.dll	WerUnregisterRuntimeExceptionModuleWorker
++kernel32.dll	WerpGetDebugger
++kernel32.dll	WerpInitiateRemoteRecovery
++kernel32.dll	WerpLaunchAeDebug
++kernel32.dll	WerpNotifyLoadStringResourceWorker
++kernel32.dll	WerpNotifyUseStringResourceWorker
+ kernel32.dll	WideCharToMultiByte
+ kernel32.dll	WinExec
++kernel32.dll	Wow64DisableWow64FsRedirection
++kernel32.dll	Wow64EnableWow64FsRedirection
++kernel32.dll	Wow64GetThreadContext
++kernel32.dll	Wow64GetThreadSelectorEntry
++kernel32.dll	Wow64RevertWow64FsRedirection
++kernel32.dll	Wow64SetThreadContext
++kernel32.dll	Wow64SuspendThread
++kernel32.dll	Wow64Transition
+ kernel32.dll	WriteConsoleA
+ kernel32.dll	WriteConsoleInputA
+ kernel32.dll	WriteConsoleInputVDMA
+@@ -926,6 +1561,7 @@
+ kernel32.dll	WriteProfileStringW
+ kernel32.dll	WriteTapemark
+ kernel32.dll	ZombifyActCtx
++kernel32.dll	ZombifyActCtxWorker
+ kernel32.dll	_hread
+ kernel32.dll	_hwrite
+ kernel32.dll	_lclose
+@@ -952,3 +1588,8 @@
+ kernel32.dll	lstrlen
+ kernel32.dll	lstrlenA
+ kernel32.dll	lstrlenW
++kernel32.dll	timeBeginPeriod
++kernel32.dll	timeEndPeriod
++kernel32.dll	timeGetDevCaps
++kernel32.dll	timeGetSystemTime
++kernel32.dll	timeGetTime
