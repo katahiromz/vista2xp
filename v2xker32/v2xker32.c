@@ -25,7 +25,7 @@ static FN_QueryFullProcessImageNameW s_pQueryFullProcessImageNameW;
 BOOL WINAPI
 IsWow64ProcessForXP(HANDLE hProcess, PBOOL Wow64Process)
 {
-    if (s_pIsWow64Process)
+    if (s_pIsWow64Process && DO_FALLBACK)
         return (*s_pIsWow64Process)(hProcess, Wow64Process);
     return FALSE;
 }
@@ -33,7 +33,7 @@ IsWow64ProcessForXP(HANDLE hProcess, PBOOL Wow64Process)
 ULONGLONG WINAPI GetTickCount64ForXP(void)
 {
     LARGE_INTEGER count;
-    if (s_pGetTickCount64)
+    if (s_pGetTickCount64 && DO_FALLBACK)
     {
         return (*s_pGetTickCount64)();
     }
@@ -116,7 +116,7 @@ QueryFullProcessImageNameAForXP(
     CHAR szPath[MAX_PATH];
     BOOL ret;
 
-    if (s_pQueryFullProcessImageNameA)
+    if (s_pQueryFullProcessImageNameA && DO_FALLBACK)
     {
         return (*s_pQueryFullProcessImageNameA)(hProcess, dwFlags, lpExeName, lpdwSize);
     }
@@ -149,7 +149,7 @@ QueryFullProcessImageNameWForXP(
     WCHAR szPath[MAX_PATH];
     BOOL ret;
 
-    if (s_pQueryFullProcessImageNameW)
+    if (s_pQueryFullProcessImageNameW && DO_FALLBACK)
     {
         return (*s_pQueryFullProcessImageNameW)(hProcess, dwFlags, lpExeName, lpdwSize);
     }

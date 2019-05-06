@@ -41,7 +41,7 @@ static FN_ChangeWindowMessageFilterEx s_pChangeWindowMessageFilterEx = NULL;
 BOOL WINAPI
 ChangeWindowMessageFilterForXP(UINT message, DWORD dwFlag)
 {
-    if (s_pChangeWindowMessageFilter)
+    if (s_pChangeWindowMessageFilter && DO_FALLBACK)
         return (*s_pChangeWindowMessageFilter)(message, dwFlag);
 
     /* otherwise do nothing */
@@ -52,10 +52,10 @@ BOOL WINAPI
 ChangeWindowMessageFilterExForXP(HWND hwnd, UINT message, DWORD action,
                                  PCHANGEFILTERSTRUCT pChangeFilterStruct)
 {
-    if (s_pChangeWindowMessageFilterEx)
+    if (s_pChangeWindowMessageFilterEx && DO_FALLBACK)
         return (*s_pChangeWindowMessageFilterEx)(hwnd, message, action, pChangeFilterStruct);
 
-    if (s_pChangeWindowMessageFilter)
+    if (s_pChangeWindowMessageFilter && DO_FALLBACK)
     {
         switch (action)
         {

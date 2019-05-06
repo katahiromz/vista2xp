@@ -80,11 +80,9 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
 {
     MSGBOXPARAMSW params;
     LPWSTR psz0, psz1, pszText;
-    WCHAR szTitle[MAX_PATH];
-    WCHAR szInst[MAX_PATH];
-    WCHAR szContent[MAX_PATH];
+    WCHAR szTitle[MAX_PATH], szInst[MAX_PATH], szContent[MAX_PATH];
 
-    if (s_pTaskDialog)
+    if (s_pTaskDialog && DO_FALLBACK)
     {
         return (*s_pTaskDialog)(hwndOwner, hInstance, pszWindowTitle, pszMainInstruction,
                                 pszContent, dwCommonButtons, pszIcon, pnButton);

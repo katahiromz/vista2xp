@@ -59,6 +59,13 @@ endif()
 
 ##############################################################################
 
+option(DO_FALLBACK "Do fallback" ON)
+if (FALLBACK)
+    add_definitions(-DDO_FALLBACK=1)
+else()
+    add_definitions(-DDO_FALLBACK=0)
+endif()
+
 # use targetver.h
 include_directories(.)
 
