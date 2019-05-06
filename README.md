@@ -25,6 +25,8 @@ It modifies the IAT (Import Address Table) of EXE/DLL files.
 
 - 2019.05.05 ver.0.2
     - First release.
+- 2019.05.06 ver.0.3
+    - Add v2xctl32 and v2xu32.
 
 ## Contact Us
 
