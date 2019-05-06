@@ -107,4 +107,8 @@ add_executable(regtest tests/regtest/regtest.c)
 add_executable(opendlg tests/opendlg/opendlg.cpp)
 target_link_libraries(opendlg uuid)
 
+# savedlg.exe
+add_executable(savedlg tests/savedlg/savedlg.cpp)
+target_link_libraries(savedlg uuid)
+
 ##############################################################################
