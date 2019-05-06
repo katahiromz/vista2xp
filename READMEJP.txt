@@ -37,6 +37,7 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
     - v2xctl32 と v2xu32 を追加。
 - 2019.XX.YY ver.0.4
     - K32* 関数をサポート。
+    - TaskDialog を改良。
 
 ## 警告
 
