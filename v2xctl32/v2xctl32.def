@@ -38,7 +38,7 @@ EXPORTS
     DefSubclassProc = comctl32.DefSubclassProc
     DestroyPropertySheetPage = comctl32.DestroyPropertySheetPage
     DllGetVersion = comctl32.DllGetVersion
-    DllInstall = comctl32.DllInstall
+    ; DllInstall = comctl32.DllInstall
     DrawInsert = comctl32.DrawInsert
     DrawStatusText = comctl32.DrawStatusText
     DrawStatusTextA = comctl32.DrawStatusTextA

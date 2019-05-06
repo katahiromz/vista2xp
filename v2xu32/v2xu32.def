@@ -161,7 +161,7 @@ EXPORTS
     DestroyMenu = user32.DestroyMenu
     DestroyReasons = user32.DestroyReasons
     DestroyWindow = user32.DestroyWindow
-    DeviceEventWorker = user32.DeviceEventWorker
+    ; DeviceEventWorker = user32.DeviceEventWorker
     DialogBoxIndirectParamA = user32.DialogBoxIndirectParamA
     DialogBoxIndirectParamAorW = user32.DialogBoxIndirectParamAorW
     DialogBoxIndirectParamW = user32.DialogBoxIndirectParamW
@@ -403,7 +403,7 @@ EXPORTS
     InSendMessageEx = user32.InSendMessageEx
     InflateRect = user32.InflateRect
     InitializeLpkHooks = user32.InitializeLpkHooks
-    InitializeWin32EntryTable = user32.InitializeWin32EntryTable
+    ; InitializeWin32EntryTable = user32.InitializeWin32EntryTable
     InsertMenuA = user32.InsertMenuA
     InsertMenuItemA = user32.InsertMenuItemA
     InsertMenuItemW = user32.InsertMenuItemW
@@ -440,7 +440,7 @@ EXPORTS
     IsWindowUnicode = user32.IsWindowUnicode
     IsWindowVisible = user32.IsWindowVisible
     IsZoomed = user32.IsZoomed
-    KillSystemTimer = user32.KillSystemTimer
+    ; KillSystemTimer = user32.KillSystemTimer
     KillTimer = user32.KillTimer
     LoadAcceleratorsA = user32.LoadAcceleratorsA
     LoadAcceleratorsW = user32.LoadAcceleratorsW
@@ -528,11 +528,11 @@ EXPORTS
     PrivateExtractIconExW = user32.PrivateExtractIconExW
     PrivateExtractIconsA = user32.PrivateExtractIconsA
     PrivateExtractIconsW = user32.PrivateExtractIconsW
-    PrivateSetDbgTag = user32.PrivateSetDbgTag
-    PrivateSetRipFlags = user32.PrivateSetRipFlags
+    ; PrivateSetDbgTag = user32.PrivateSetDbgTag
+    ; PrivateSetRipFlags = user32.PrivateSetRipFlags
     PtInRect = user32.PtInRect
     QuerySendMessage = user32.QuerySendMessage
-    QueryUserCounters = user32.QueryUserCounters
+    ; QueryUserCounters = user32.QueryUserCounters
     RealChildWindowFromPoint = user32.RealChildWindowFromPoint
     RealGetWindowClass = user32.RealGetWindowClass
     RealGetWindowClassA = user32.RealGetWindowClassA
@@ -595,7 +595,7 @@ EXPORTS
     SetClassWord = user32.SetClassWord
     SetClipboardData = user32.SetClipboardData
     SetClipboardViewer = user32.SetClipboardViewer
-    SetConsoleReserveKeys = user32.SetConsoleReserveKeys
+    ; SetConsoleReserveKeys = user32.SetConsoleReserveKeys
     SetCursor = user32.SetCursor
     SetCursorContents = user32.SetCursorContents
     SetCursorPos = user32.SetCursorPos
@@ -611,7 +611,7 @@ EXPORTS
     SetKeyboardState = user32.SetKeyboardState
     SetLastErrorEx = user32.SetLastErrorEx
     SetLayeredWindowAttributes = user32.SetLayeredWindowAttributes
-    SetLogonNotifyWindow = user32.SetLogonNotifyWindow
+    ; SetLogonNotifyWindow = user32.SetLogonNotifyWindow
     SetMenu = user32.SetMenu
     SetMenuContextHelpId = user32.SetMenuContextHelpId
     SetMenuDefaultItem = user32.SetMenuDefaultItem
@@ -638,7 +638,7 @@ EXPORTS
     SetSysColorsTemp = user32.SetSysColorsTemp
     SetSystemCursor = user32.SetSystemCursor
     SetSystemMenu = user32.SetSystemMenu
-    SetSystemTimer = user32.SetSystemTimer
+    ; SetSystemTimer = user32.SetSystemTimer
     SetTaskmanWindow = user32.SetTaskmanWindow
     SetThreadDesktop = user32.SetThreadDesktop
     SetTimer = user32.SetTimer
@@ -728,7 +728,7 @@ EXPORTS
     WINNLSGetIMEHotkey = user32.WINNLSGetIMEHotkey
     WaitForInputIdle = user32.WaitForInputIdle
     WaitMessage = user32.WaitMessage
-    Win32PoolAllocationStats = user32.Win32PoolAllocationStats
+    ; Win32PoolAllocationStats = user32.Win32PoolAllocationStats
     WinHelpA = user32.WinHelpA
     WinHelpW = user32.WinHelpW
     WindowFromDC = user32.WindowFromDC
