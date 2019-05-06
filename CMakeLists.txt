@@ -60,7 +60,7 @@ endif()
 ##############################################################################
 
 option(DO_FALLBACK "Do fallback" ON)
-if (FALLBACK)
+if (DO_FALLBACK)
     add_definitions(-DDO_FALLBACK=1)
     message(STATUS DO_FALLBACK=1)
 else()
