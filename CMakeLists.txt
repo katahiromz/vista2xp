@@ -103,4 +103,8 @@ target_link_libraries(taskdlg comctl32)
 # regtest.exe
 add_executable(regtest tests/regtest/regtest.c)
 
+# opendlg.exe
+add_executable(opendlg tests/opendlg/opendlg.cpp)
+target_link_libraries(opendlg uuid)
+
 ##############################################################################
