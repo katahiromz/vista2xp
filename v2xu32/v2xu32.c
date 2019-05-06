@@ -38,7 +38,6 @@ static FN_ChangeWindowMessageFilter s_pChangeWindowMessageFilter = NULL;
 typedef BOOL (WINAPI *FN_ChangeWindowMessageFilterEx)(HWND, UINT, DWORD, PCHANGEFILTERSTRUCT);
 static FN_ChangeWindowMessageFilterEx s_pChangeWindowMessageFilterEx = NULL;
 
-
 BOOL WINAPI
 ChangeWindowMessageFilterForXP(UINT message, DWORD dwFlag)
 {
@@ -55,6 +54,19 @@ ChangeWindowMessageFilterExForXP(HWND hwnd, UINT message, DWORD action,
 {
     if (s_pChangeWindowMessageFilterEx)
         return (*s_pChangeWindowMessageFilterEx)(hwnd, message, action, pChangeFilterStruct);
+
+    if (s_pChangeWindowMessageFilter)
+    {
+        switch (action)
+        {
+        case MSGFLT_RESET:
+            return (*s_pChangeWindowMessageFilter)(message, MSGFLT_REMOVE);
+        case MSGFLT_ALLOW:
+            return (*s_pChangeWindowMessageFilter)(message, MSGFLT_ADD);
+        case MSGFLT_DISALLOW:
+            return (*s_pChangeWindowMessageFilter)(message, MSGFLT_REMOVE);
+        }
+    }
 
     /* otherwise do nothing */
     return TRUE;
