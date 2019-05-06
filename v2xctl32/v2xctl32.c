@@ -148,24 +148,28 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
         params.hInstance = NULL;
         params.lpszIcon = IDI_HAND;
         params.dwStyle |= MB_USERICON;
+        MessageBeep(MB_ICONERROR);
     }
     else if (pszIcon == TD_INFORMATION_ICON)
     {
         params.hInstance = NULL;
         params.lpszIcon = IDI_ASTERISK;
         params.dwStyle |= MB_USERICON;
+        MessageBeep(MB_ICONINFORMATION);
     }
     else if (pszIcon == TD_SHIELD_ICON)
     {
         params.hInstance = s_hinstDLL;
         params.lpszIcon = MAKEINTRESOURCEW(100);
         params.dwStyle |= MB_USERICON;
+        MessageBeep(MB_ICONINFORMATION);
     }
     else if (pszIcon == TD_WARNING_ICON)
     {
         params.hInstance = NULL;
         params.lpszIcon = IDI_EXCLAMATION;
         params.dwStyle |= MB_USERICON;
+        MessageBeep(MB_ICONWARNING);
     }
     else
     {
