@@ -13,10 +13,15 @@
 #include <stdio.h>
 #include "resource.h"
 
-HRESULT JustDoIt(HWND hwnd, LPCTSTR pszV2XKRE32, LPCTSTR pszFile);
+HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile);
 
 static HINSTANCE s_hInst;
-static TCHAR s_szV2XKER32[MAX_PATH];
+static TCHAR s_szDLLs[2][MAX_PATH];
+
+LPTSTR GetDllSource(INT i)
+{
+    return s_szDLLs[i];
+}
 
 #ifndef MSGFLT_ADD
     #define MSGFLT_ADD 1
@@ -246,7 +251,7 @@ void OnOK(HWND hwnd)
     for (i = 0; i < nCount; ++i)
     {
         ListBox_GetText(hLst1, i, szPath);
-        if (FAILED(JustDoIt(hwnd, s_szV2XKER32, szPath)))
+        if (FAILED(JustDoIt(hwnd, szPath)))
             return;
     }
 
@@ -288,19 +293,14 @@ DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-INT WINAPI
-WinMain(HINSTANCE   hInstance,
-        HINSTANCE   hPrevInstance,
-        LPSTR       lpCmdLine,
-        INT         nCmdShow)
+BOOL CheckSourceDlls(void)
 {
-    s_hInst = hInstance;
-    InitCommonControls();
+    TCHAR *pch, szPath[MAX_PATH];
 
-    TCHAR szPath[MAX_PATH];
     GetModuleFileName(NULL, szPath, ARRAYSIZE(szPath));
-    LPTSTR pch = PathFindFileName(szPath);
+    pch = PathFindFileName(szPath);
     *pch = 0;
+
     PathAppend(szPath, TEXT("v2xker32.dll"));
     if (!PathFileExists(szPath))
     {
@@ -314,11 +314,49 @@ WinMain(HINSTANCE   hInstance,
             {
                 LoadString(NULL, IDS_LOADV2XKER32, szPath, ARRAYSIZE(szPath));
                 MessageBox(NULL, szPath, NULL, MB_ICONERROR);
-                return -1;
+                return FALSE;
             }
         }
     }
-    StringCbCopy(s_szV2XKER32, sizeof(s_szV2XKER32), szPath);
+    StringCchCopy(GetDllSource(0), MAX_PATH, szPath);
+
+    GetModuleFileName(NULL, szPath, ARRAYSIZE(szPath));
+    pch = PathFindFileName(szPath);
+    *pch = 0;
+
+    PathAppend(szPath, TEXT("v2xctl32.dll"));
+    if (!PathFileExists(szPath))
+    {
+        *pch = 0;
+        PathAppend(szPath, TEXT("..\\v2xctl32.dll"));
+        if (!PathFileExists(szPath))
+        {
+            *pch = 0;
+            PathAppend(szPath, TEXT("..\\..\\v2xctl32.dll"));
+            if (!PathFileExists(szPath))
+            {
+                LoadString(NULL, IDS_LOADV2XCTL32, szPath, ARRAYSIZE(szPath));
+                MessageBox(NULL, szPath, NULL, MB_ICONERROR);
+                return FALSE;
+            }
+        }
+    }
+    StringCchCopy(GetDllSource(1), MAX_PATH, szPath);
+
+    return TRUE;
+}
+
+INT WINAPI
+WinMain(HINSTANCE   hInstance,
+        HINSTANCE   hPrevInstance,
+        LPSTR       lpCmdLine,
+        INT         nCmdShow)
+{
+    s_hInst = hInstance;
+    InitCommonControls();
+
+    if (!CheckSourceDlls())
+        return -1;
 
     DialogBox(hInstance, MAKEINTRESOURCE(1), NULL, DialogProc);
     return 0;

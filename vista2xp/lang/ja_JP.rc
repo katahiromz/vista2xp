@@ -9,7 +9,7 @@ LANGUAGE LANG_JAPANESE, SUBLANG_DEFAULT
 // RT_DIALOG
 
 IDD_MAIN DIALOG 0, 0, 240, 175
-CAPTION "vista2xp ver.0.2 by katahiromz"
+CAPTION "vista2xp ver.0.3 by katahiromz"
 STYLE DS_CENTER | DS_MODALFRAME | WS_POPUPWINDOW | WS_DLGFRAME
 FONT 9, "MS UI Gothic"
 {
@@ -37,6 +37,7 @@ STRINGTABLE
     IDS_LOADV2XKER32, "必要なファイル「v2xker32.dll」が見つかりません。"
     IDS_COMPLETE, "変換が完了しました。"
     IDS_NOTSUP64BIT, "64ビットのプログラムの変換はサポートしていません。"
+    IDS_LOADV2XCTL32, "必要なファイル「v2xctl32.dll」が見つかりません。"
 }
 
 //////////////////////////////////////////////////////////////////////////////
