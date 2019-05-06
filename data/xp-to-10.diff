@@ -1,5 +1,5 @@
---- winxp.dat	2019-05-05 10:17:01.320915300 +0900
-+++ win10.dat	2019-05-05 10:16:54.914890300 +0900
+--- winxp.dat	2019-05-06 09:10:56.749459000 +0900
++++ win10.dat	2019-05-06 09:11:42.127019200 +0900
 @@ -1,14 +1,38 @@
 +kernel32.dll	AcquireSRWLockExclusive
 +kernel32.dll	AcquireSRWLockShared
@@ -1463,7 +1463,7 @@
  kernel32.dll	_hread
  kernel32.dll	_hwrite
  kernel32.dll	_lclose
-@@ -952,3 +1588,8 @@
+@@ -952,9 +1588,16 @@
  kernel32.dll	lstrlen
  kernel32.dll	lstrlenA
  kernel32.dll	lstrlenW
@@ -1472,3 +1472,925 @@
 +kernel32.dll	timeGetDevCaps
 +kernel32.dll	timeGetSystemTime
 +kernel32.dll	timeGetTime
+ user32.dll	ActivateKeyboardLayout
++user32.dll	AddClipboardFormatListener
+ user32.dll	AdjustWindowRect
+ user32.dll	AdjustWindowRectEx
++user32.dll	AdjustWindowRectExForDpi
+ user32.dll	AlignRects
+ user32.dll	AllowForegroundActivation
+ user32.dll	AllowSetForegroundWindow
+@@ -962,6 +1605,7 @@
+ user32.dll	AnyPopup
+ user32.dll	AppendMenuA
+ user32.dll	AppendMenuW
++user32.dll	AreDpiAwarenessContextsEqual
+ user32.dll	ArrangeIconicWindows
+ user32.dll	AttachThreadInput
+ user32.dll	BeginDeferWindowPos
+@@ -975,12 +1619,14 @@
+ user32.dll	BroadcastSystemMessageW
+ user32.dll	BuildReasonArray
+ user32.dll	CalcMenuBar
++user32.dll	CalculatePopupWindowPosition
+ user32.dll	CallMsgFilter
+ user32.dll	CallMsgFilterA
+ user32.dll	CallMsgFilterW
+ user32.dll	CallNextHookEx
+ user32.dll	CallWindowProcA
+ user32.dll	CallWindowProcW
++user32.dll	CancelShutdown
+ user32.dll	CascadeChildWindows
+ user32.dll	CascadeWindows
+ user32.dll	ChangeClipboardChain
+@@ -990,6 +1636,8 @@
+ user32.dll	ChangeDisplaySettingsW
+ user32.dll	ChangeMenuA
+ user32.dll	ChangeMenuW
++user32.dll	ChangeWindowMessageFilter
++user32.dll	ChangeWindowMessageFilterEx
+ user32.dll	CharLowerA
+ user32.dll	CharLowerBuffA
+ user32.dll	CharLowerBuffW
+@@ -1008,10 +1656,14 @@
+ user32.dll	CharUpperBuffA
+ user32.dll	CharUpperBuffW
+ user32.dll	CharUpperW
++user32.dll	CheckDBCSEnabledExt
+ user32.dll	CheckDlgButton
+ user32.dll	CheckMenuItem
+ user32.dll	CheckMenuRadioItem
++user32.dll	CheckProcessForClipboardAccess
++user32.dll	CheckProcessSession
+ user32.dll	CheckRadioButton
++user32.dll	CheckWindowThreadDesktop
+ user32.dll	ChildWindowFromPoint
+ user32.dll	ChildWindowFromPointEx
+ user32.dll	CliImmSetHotKey
+@@ -1020,8 +1672,12 @@
+ user32.dll	ClipCursor
+ user32.dll	CloseClipboard
+ user32.dll	CloseDesktop
++user32.dll	CloseGestureInfoHandle
++user32.dll	CloseTouchInputHandle
+ user32.dll	CloseWindow
+ user32.dll	CloseWindowStation
++user32.dll	ConsoleControl
++user32.dll	ControlMagnification
+ user32.dll	CopyAcceleratorTableA
+ user32.dll	CopyAcceleratorTableW
+ user32.dll	CopyIcon
+@@ -1032,7 +1688,10 @@
+ user32.dll	CreateAcceleratorTableW
+ user32.dll	CreateCaret
+ user32.dll	CreateCursor
++user32.dll	CreateDCompositionHwndTarget
+ user32.dll	CreateDesktopA
++user32.dll	CreateDesktopExA
++user32.dll	CreateDesktopExW
+ user32.dll	CreateDesktopW
+ user32.dll	CreateDialogIndirectParamA
+ user32.dll	CreateDialogIndirectParamAorW
+@@ -1050,10 +1709,17 @@
+ user32.dll	CreateSystemThreads
+ user32.dll	CreateWindowExA
+ user32.dll	CreateWindowExW
++user32.dll	CreateWindowInBand
++user32.dll	CreateWindowInBandEx
++user32.dll	CreateWindowIndirect
+ user32.dll	CreateWindowStationA
+ user32.dll	CreateWindowStationW
+ user32.dll	CsrBroadcastSystemMessageExW
+ user32.dll	CtxInitUser32
++user32.dll	DWMBindCursorToOutputConfig
++user32.dll	DWMCommitInputSystemOutputConfig
++user32.dll	DWMSetCursorOrientation
++user32.dll	DWMSetInputSystemOutputConfig
+ user32.dll	DdeAbandonTransaction
+ user32.dll	DdeAccessData
+ user32.dll	DdeAddData
+@@ -1097,16 +1763,18 @@
+ user32.dll	DefWindowProcA
+ user32.dll	DefWindowProcW
+ user32.dll	DeferWindowPos
++user32.dll	DeferWindowPosAndBand
++user32.dll	DelegateInput
+ user32.dll	DeleteMenu
+ user32.dll	DeregisterShellHookWindow
+ user32.dll	DestroyAcceleratorTable
+ user32.dll	DestroyCaret
+ user32.dll	DestroyCursor
++user32.dll	DestroyDCompositionHwndTarget
+ user32.dll	DestroyIcon
+ user32.dll	DestroyMenu
+ user32.dll	DestroyReasons
+ user32.dll	DestroyWindow
+-user32.dll	DeviceEventWorker
+ user32.dll	DialogBoxIndirectParamA
+ user32.dll	DialogBoxIndirectParamAorW
+ user32.dll	DialogBoxIndirectParamW
+@@ -1115,6 +1783,8 @@
+ user32.dll	DisableProcessWindowsGhosting
+ user32.dll	DispatchMessageA
+ user32.dll	DispatchMessageW
++user32.dll	DisplayConfigGetDeviceInfo
++user32.dll	DisplayConfigSetDeviceInfo
+ user32.dll	DisplayExitWindowsWarnings
+ user32.dll	DlgDirListA
+ user32.dll	DlgDirListComboBoxA
+@@ -1124,6 +1794,8 @@
+ user32.dll	DlgDirSelectComboBoxExW
+ user32.dll	DlgDirSelectExA
+ user32.dll	DlgDirSelectExW
++user32.dll	DoSoundConnect
++user32.dll	DoSoundDisconnect
+ user32.dll	DragDetect
+ user32.dll	DragObject
+ user32.dll	DrawAnimatedRects
+@@ -1144,12 +1816,24 @@
+ user32.dll	DrawTextExA
+ user32.dll	DrawTextExW
+ user32.dll	DrawTextW
++user32.dll	DwmGetDxRgn
++user32.dll	DwmGetDxSharedSurface
++user32.dll	DwmGetRemoteSessionOcclusionEvent
++user32.dll	DwmGetRemoteSessionOcclusionState
++user32.dll	DwmKernelShutdown
++user32.dll	DwmKernelStartup
++user32.dll	DwmLockScreenUpdates
++user32.dll	DwmValidateWindow
+ user32.dll	EditWndProc
+ user32.dll	EmptyClipboard
+ user32.dll	EnableMenuItem
++user32.dll	EnableMouseInPointer
++user32.dll	EnableNonClientDpiScaling
+ user32.dll	EnableScrollBar
++user32.dll	EnableSessionForMMCSS
+ user32.dll	EnableWindow
+ user32.dll	EndDeferWindowPos
++user32.dll	EndDeferWindowPosEx
+ user32.dll	EndDialog
+ user32.dll	EndMenu
+ user32.dll	EndPaint
+@@ -1176,6 +1860,8 @@
+ user32.dll	EnumWindowStationsW
+ user32.dll	EnumWindows
+ user32.dll	EqualRect
++user32.dll	EvaluateProximityToPolygon
++user32.dll	EvaluateProximityToRect
+ user32.dll	ExcludeUpdateRgn
+ user32.dll	ExitWindowsEx
+ user32.dll	FillRect
+@@ -1187,6 +1873,7 @@
+ user32.dll	FlashWindowEx
+ user32.dll	FrameRect
+ user32.dll	FreeDDElParam
++user32.dll	FrostCrashedWindow
+ user32.dll	GetActiveWindow
+ user32.dll	GetAltTabInfo
+ user32.dll	GetAltTabInfoA
+@@ -1195,6 +1882,9 @@
+ user32.dll	GetAppCompatFlags
+ user32.dll	GetAppCompatFlags2
+ user32.dll	GetAsyncKeyState
++user32.dll	GetAutoRotationState
++user32.dll	GetAwarenessFromDpiAwarenessContext
++user32.dll	GetCIMSSM
+ user32.dll	GetCapture
+ user32.dll	GetCaretBlinkTime
+ user32.dll	GetCaretPos
+@@ -1209,6 +1899,7 @@
+ user32.dll	GetClassWord
+ user32.dll	GetClientRect
+ user32.dll	GetClipCursor
++user32.dll	GetClipboardAccessToken
+ user32.dll	GetClipboardData
+ user32.dll	GetClipboardFormatNameA
+ user32.dll	GetClipboardFormatNameW
+@@ -1216,26 +1907,41 @@
+ user32.dll	GetClipboardSequenceNumber
+ user32.dll	GetClipboardViewer
+ user32.dll	GetComboBoxInfo
++user32.dll	GetCurrentInputMessageSource
+ user32.dll	GetCursor
+ user32.dll	GetCursorFrameInfo
+ user32.dll	GetCursorInfo
+ user32.dll	GetCursorPos
+ user32.dll	GetDC
+ user32.dll	GetDCEx
++user32.dll	GetDesktopID
+ user32.dll	GetDesktopWindow
+ user32.dll	GetDialogBaseUnits
++user32.dll	GetDialogControlDpiChangeBehavior
++user32.dll	GetDialogDpiChangeBehavior
++user32.dll	GetDisplayAutoRotationPreferences
++user32.dll	GetDisplayConfigBufferSizes
+ user32.dll	GetDlgCtrlID
+ user32.dll	GetDlgItem
+ user32.dll	GetDlgItemInt
+ user32.dll	GetDlgItemTextA
+ user32.dll	GetDlgItemTextW
+ user32.dll	GetDoubleClickTime
++user32.dll	GetDpiForMonitorInternal
++user32.dll	GetDpiForSystem
++user32.dll	GetDpiForWindow
+ user32.dll	GetFocus
+ user32.dll	GetForegroundWindow
+ user32.dll	GetGUIThreadInfo
++user32.dll	GetGestureConfig
++user32.dll	GetGestureExtraArgs
++user32.dll	GetGestureInfo
+ user32.dll	GetGuiResources
+ user32.dll	GetIconInfo
++user32.dll	GetIconInfoExA
++user32.dll	GetIconInfoExW
+ user32.dll	GetInputDesktop
++user32.dll	GetInputLocaleInfo
+ user32.dll	GetInputState
+ user32.dll	GetInternalWindowPos
+ user32.dll	GetKBCodePage
+@@ -1252,6 +1958,10 @@
+ user32.dll	GetLastInputInfo
+ user32.dll	GetLayeredWindowAttributes
+ user32.dll	GetListBoxInfo
++user32.dll	GetMagnificationDesktopColorEffect
++user32.dll	GetMagnificationDesktopMagnification
++user32.dll	GetMagnificationDesktopSamplingMode
++user32.dll	GetMagnificationLensCtxInformation
+ user32.dll	GetMenu
+ user32.dll	GetMenuBarInfo
+ user32.dll	GetMenuCheckMarkDimensions
+@@ -1278,8 +1988,32 @@
+ user32.dll	GetNextDlgTabItem
+ user32.dll	GetOpenClipboardWindow
+ user32.dll	GetParent
++user32.dll	GetPhysicalCursorPos
++user32.dll	GetPointerCursorId
++user32.dll	GetPointerDevice
++user32.dll	GetPointerDeviceCursors
++user32.dll	GetPointerDeviceProperties
++user32.dll	GetPointerDeviceRects
++user32.dll	GetPointerDevices
++user32.dll	GetPointerFrameArrivalTimes
++user32.dll	GetPointerFrameInfo
++user32.dll	GetPointerFrameInfoHistory
++user32.dll	GetPointerFramePenInfo
++user32.dll	GetPointerFramePenInfoHistory
++user32.dll	GetPointerFrameTouchInfo
++user32.dll	GetPointerFrameTouchInfoHistory
++user32.dll	GetPointerInfo
++user32.dll	GetPointerInfoHistory
++user32.dll	GetPointerInputTransform
++user32.dll	GetPointerPenInfo
++user32.dll	GetPointerPenInfoHistory
++user32.dll	GetPointerTouchInfo
++user32.dll	GetPointerTouchInfoHistory
++user32.dll	GetPointerType
+ user32.dll	GetPriorityClipboardFormat
+ user32.dll	GetProcessDefaultLayout
++user32.dll	GetProcessDpiAwarenessInternal
++user32.dll	GetProcessUIContextInformation
+ user32.dll	GetProcessWindowStation
+ user32.dll	GetProgmanWindow
+ user32.dll	GetPropA
+@@ -1290,36 +2024,51 @@
+ user32.dll	GetRawInputDeviceInfoA
+ user32.dll	GetRawInputDeviceInfoW
+ user32.dll	GetRawInputDeviceList
++user32.dll	GetRawPointerDeviceData
+ user32.dll	GetReasonTitleFromReasonCode
+ user32.dll	GetRegisteredRawInputDevices
+ user32.dll	GetScrollBarInfo
+ user32.dll	GetScrollInfo
+ user32.dll	GetScrollPos
+ user32.dll	GetScrollRange
++user32.dll	GetSendMessageReceiver
+ user32.dll	GetShellWindow
+ user32.dll	GetSubMenu
+ user32.dll	GetSysColor
+ user32.dll	GetSysColorBrush
+ user32.dll	GetSystemMenu
+ user32.dll	GetSystemMetrics
++user32.dll	GetSystemMetricsForDpi
+ user32.dll	GetTabbedTextExtentA
+ user32.dll	GetTabbedTextExtentW
+ user32.dll	GetTaskmanWindow
+ user32.dll	GetThreadDesktop
++user32.dll	GetThreadDpiAwarenessContext
+ user32.dll	GetTitleBarInfo
++user32.dll	GetTopLevelWindow
+ user32.dll	GetTopWindow
++user32.dll	GetTouchInputInfo
++user32.dll	GetUnpredictedMessagePos
+ user32.dll	GetUpdateRect
+ user32.dll	GetUpdateRgn
++user32.dll	GetUpdatedClipboardFormats
+ user32.dll	GetUserObjectInformationA
+ user32.dll	GetUserObjectInformationW
+ user32.dll	GetUserObjectSecurity
+ user32.dll	GetWinStationInfo
+ user32.dll	GetWindow
++user32.dll	GetWindowBand
++user32.dll	GetWindowCompositionAttribute
++user32.dll	GetWindowCompositionInfo
+ user32.dll	GetWindowContextHelpId
+ user32.dll	GetWindowDC
++user32.dll	GetWindowDisplayAffinity
++user32.dll	GetWindowDpiAwarenessContext
++user32.dll	GetWindowFeedbackSetting
+ user32.dll	GetWindowInfo
+ user32.dll	GetWindowLongA
+ user32.dll	GetWindowLongW
++user32.dll	GetWindowMinimizeRect
+ user32.dll	GetWindowModuleFileName
+ user32.dll	GetWindowModuleFileNameA
+ user32.dll	GetWindowModuleFileNameW
+@@ -1327,16 +2076,20 @@
+ user32.dll	GetWindowRect
+ user32.dll	GetWindowRgn
+ user32.dll	GetWindowRgnBox
++user32.dll	GetWindowRgnEx
+ user32.dll	GetWindowTextA
+ user32.dll	GetWindowTextLengthA
+ user32.dll	GetWindowTextLengthW
+ user32.dll	GetWindowTextW
+ user32.dll	GetWindowThreadProcessId
+ user32.dll	GetWindowWord
++user32.dll	GhostWindowFromHungWindow
+ user32.dll	GrayStringA
+ user32.dll	GrayStringW
++user32.dll	HandleDelegatedInput
+ user32.dll	HideCaret
+ user32.dll	HiliteMenuItem
++user32.dll	HungWindowFromGhostWindow
+ user32.dll	IMPGetIMEA
+ user32.dll	IMPGetIMEW
+ user32.dll	IMPQueryIMEA
+@@ -1347,12 +2100,25 @@
+ user32.dll	InSendMessage
+ user32.dll	InSendMessageEx
+ user32.dll	InflateRect
++user32.dll	InheritWindowMonitor
++user32.dll	InitDManipHook
++user32.dll	InitializeGenericHidInjection
++user32.dll	InitializeInputDeviceInjection
+ user32.dll	InitializeLpkHooks
+-user32.dll	InitializeWin32EntryTable
++user32.dll	InitializePointerDeviceInjection
++user32.dll	InitializePointerDeviceInjectionEx
++user32.dll	InitializeTouchInjection
++user32.dll	InjectDeviceInput
++user32.dll	InjectGenericHidInput
++user32.dll	InjectKeyboardInput
++user32.dll	InjectMouseInput
++user32.dll	InjectPointerInput
++user32.dll	InjectTouchInput
+ user32.dll	InsertMenuA
+ user32.dll	InsertMenuItemA
+ user32.dll	InsertMenuItemW
+ user32.dll	InsertMenuW
++user32.dll	InternalGetWindowIcon
+ user32.dll	InternalGetWindowText
+ user32.dll	IntersectRect
+ user32.dll	InvalidateRect
+@@ -1375,17 +2141,30 @@
+ user32.dll	IsGUIThread
+ user32.dll	IsHungAppWindow
+ user32.dll	IsIconic
++user32.dll	IsImmersiveProcess
++user32.dll	IsInDesktopWindowBand
+ user32.dll	IsMenu
++user32.dll	IsMouseInPointerEnabled
++user32.dll	IsProcessDPIAware
++user32.dll	IsQueueAttached
+ user32.dll	IsRectEmpty
++user32.dll	IsSETEnabled
+ user32.dll	IsServerSideWindow
++user32.dll	IsThreadDesktopComposited
++user32.dll	IsThreadMessageQueueAttached
++user32.dll	IsTopLevelWindow
++user32.dll	IsTouchWindow
++user32.dll	IsValidDpiAwarenessContext
+ user32.dll	IsWinEventHookInstalled
+ user32.dll	IsWindow
++user32.dll	IsWindowArranged
+ user32.dll	IsWindowEnabled
+ user32.dll	IsWindowInDestroy
++user32.dll	IsWindowRedirectedForPrint
+ user32.dll	IsWindowUnicode
+ user32.dll	IsWindowVisible
++user32.dll	IsWow64Message
+ user32.dll	IsZoomed
+-user32.dll	KillSystemTimer
+ user32.dll	KillTimer
+ user32.dll	LoadAcceleratorsA
+ user32.dll	LoadAcceleratorsW
+@@ -1414,10 +2193,34 @@
+ user32.dll	LockWindowStation
+ user32.dll	LockWindowUpdate
+ user32.dll	LockWorkStation
++user32.dll	LogicalToPhysicalPoint
++user32.dll	LogicalToPhysicalPointForPerMonitorDPI
+ user32.dll	LookupIconIdFromDirectory
+ user32.dll	LookupIconIdFromDirectoryEx
+ user32.dll	MBToWCSEx
++user32.dll	MBToWCSExt
+ user32.dll	MB_GetString
++user32.dll	MITActivateInputProcessing
++user32.dll	MITBindInputTypeToMonitors
++user32.dll	MITCoreMsgKGetConnectionHandle
++user32.dll	MITCoreMsgKOpenConnectionTo
++user32.dll	MITCoreMsgKSend
++user32.dll	MITDeactivateInputProcessing
++user32.dll	MITDisableMouseIntercept
++user32.dll	MITEnableMouseIntercept
++user32.dll	MITGetCursorUpdateHandle
++user32.dll	MITGetCursorUpdateHandlee
++user32.dll	MITInjectLegacyISMTouchFrame
++user32.dll	MITRegisterManipulationThread
++user32.dll	MITSetForegroundRoutingInfo
++user32.dll	MITSetInputCallbacks
++user32.dll	MITSetManipulationInputTarget
++user32.dll	MITStopAndEndInertia
++user32.dll	MITSynthesizeMouseInput
++user32.dll	MITSynthesizeMouseWheel
++user32.dll	MITSynthesizeTouchInput
++user32.dll	MITUpdateInputGlobals
++user32.dll	MITWaitForMultipleObjectsEx
+ user32.dll	MapDialogRect
+ user32.dll	MapVirtualKeyA
+ user32.dll	MapVirtualKeyExA
+@@ -1444,6 +2247,7 @@
+ user32.dll	MoveWindow
+ user32.dll	MsgWaitForMultipleObjects
+ user32.dll	MsgWaitForMultipleObjectsEx
++user32.dll	NotifyOverlayWindow
+ user32.dll	NotifyWinEvent
+ user32.dll	OemKeyScan
+ user32.dll	OemToCharA
+@@ -1456,13 +2260,18 @@
+ user32.dll	OpenDesktopW
+ user32.dll	OpenIcon
+ user32.dll	OpenInputDesktop
++user32.dll	OpenThreadDesktop
+ user32.dll	OpenWindowStationA
+ user32.dll	OpenWindowStationW
+ user32.dll	PackDDElParam
++user32.dll	PackTouchHitTestingProximityEvaluation
+ user32.dll	PaintDesktop
+ user32.dll	PaintMenuBar
++user32.dll	PaintMonitor
+ user32.dll	PeekMessageA
+ user32.dll	PeekMessageW
++user32.dll	PhysicalToLogicalPoint
++user32.dll	PhysicalToLogicalPointForPerMonitorDPI
+ user32.dll	PostMessageA
+ user32.dll	PostMessageW
+ user32.dll	PostQuitMessage
+@@ -1473,11 +2282,31 @@
+ user32.dll	PrivateExtractIconExW
+ user32.dll	PrivateExtractIconsA
+ user32.dll	PrivateExtractIconsW
+-user32.dll	PrivateSetDbgTag
+-user32.dll	PrivateSetRipFlags
++user32.dll	PrivateRegisterICSProc
+ user32.dll	PtInRect
++user32.dll	QueryBSDRWindow
++user32.dll	QueryDisplayConfig
+ user32.dll	QuerySendMessage
+-user32.dll	QueryUserCounters
++user32.dll	RIMAddInputObserver
++user32.dll	RIMAreSiblingDevices
++user32.dll	RIMDeviceIoControl
++user32.dll	RIMEnableMonitorMappingForDevice
++user32.dll	RIMFreeInputBuffer
++user32.dll	RIMGetDevicePreparsedData
++user32.dll	RIMGetDevicePreparsedDataLockfree
++user32.dll	RIMGetDeviceProperties
++user32.dll	RIMGetDevicePropertiesLockfree
++user32.dll	RIMGetPhysicalDeviceRect
++user32.dll	RIMGetSourceProcessId
++user32.dll	RIMObserveNextInput
++user32.dll	RIMOnPnpNotification
++user32.dll	RIMOnTimerNotification
++user32.dll	RIMReadInput
++user32.dll	RIMRegisterForInput
++user32.dll	RIMRemoveInputObserver
++user32.dll	RIMSetTestModeStatus
++user32.dll	RIMUnregisterForInput
++user32.dll	RIMUpdateInputObserverRegistration
+ user32.dll	RealChildWindowFromPoint
+ user32.dll	RealGetWindowClass
+ user32.dll	RealGetWindowClassA
+@@ -1486,31 +2315,48 @@
+ user32.dll	ReasonCodeNeedsComment
+ user32.dll	RecordShutdownReason
+ user32.dll	RedrawWindow
++user32.dll	RegisterBSDRWindow
+ user32.dll	RegisterClassA
+ user32.dll	RegisterClassExA
+ user32.dll	RegisterClassExW
+ user32.dll	RegisterClassW
+ user32.dll	RegisterClipboardFormatA
+ user32.dll	RegisterClipboardFormatW
++user32.dll	RegisterDManipHook
+ user32.dll	RegisterDeviceNotificationA
+ user32.dll	RegisterDeviceNotificationW
++user32.dll	RegisterErrorReportingDialog
++user32.dll	RegisterFrostWindow
++user32.dll	RegisterGhostWindow
+ user32.dll	RegisterHotKey
+ user32.dll	RegisterLogonProcess
+ user32.dll	RegisterMessagePumpHook
++user32.dll	RegisterPointerDeviceNotifications
++user32.dll	RegisterPointerInputTarget
++user32.dll	RegisterPointerInputTargetEx
++user32.dll	RegisterPowerSettingNotification
+ user32.dll	RegisterRawInputDevices
+ user32.dll	RegisterServicesProcess
++user32.dll	RegisterSessionPort
+ user32.dll	RegisterShellHookWindow
++user32.dll	RegisterSuspendResumeNotification
+ user32.dll	RegisterSystemThread
+ user32.dll	RegisterTasklist
++user32.dll	RegisterTouchHitTestingWindow
++user32.dll	RegisterTouchWindow
+ user32.dll	RegisterUserApiHook
+ user32.dll	RegisterWindowMessageA
+ user32.dll	RegisterWindowMessageW
+ user32.dll	ReleaseCapture
+ user32.dll	ReleaseDC
++user32.dll	ReleaseDwmHitTestWaiters
++user32.dll	RemoveClipboardFormatListener
++user32.dll	RemoveInjectionDevice
+ user32.dll	RemoveMenu
+ user32.dll	RemovePropA
+ user32.dll	RemovePropW
+ user32.dll	ReplyMessage
++user32.dll	ReportInertia
+ user32.dll	ResolveDesktopForWOW
+ user32.dll	ReuseDDElParam
+ user32.dll	ScreenToClient
+@@ -1540,23 +2386,34 @@
+ user32.dll	SetClassWord
+ user32.dll	SetClipboardData
+ user32.dll	SetClipboardViewer
+-user32.dll	SetConsoleReserveKeys
++user32.dll	SetCoalescableTimer
++user32.dll	SetCoreWindow
+ user32.dll	SetCursor
+ user32.dll	SetCursorContents
+ user32.dll	SetCursorPos
+ user32.dll	SetDebugErrorLevel
+ user32.dll	SetDeskWallpaper
++user32.dll	SetDesktopColorTransform
++user32.dll	SetDialogControlDpiChangeBehavior
++user32.dll	SetDialogDpiChangeBehavior
++user32.dll	SetDisplayAutoRotationPreferences
++user32.dll	SetDisplayConfig
+ user32.dll	SetDlgItemInt
+ user32.dll	SetDlgItemTextA
+ user32.dll	SetDlgItemTextW
+ user32.dll	SetDoubleClickTime
++user32.dll	SetFeatureReportResponse
+ user32.dll	SetFocus
+ user32.dll	SetForegroundWindow
++user32.dll	SetGestureConfig
+ user32.dll	SetInternalWindowPos
+ user32.dll	SetKeyboardState
+ user32.dll	SetLastErrorEx
+ user32.dll	SetLayeredWindowAttributes
+-user32.dll	SetLogonNotifyWindow
++user32.dll	SetMagnificationDesktopColorEffect
++user32.dll	SetMagnificationDesktopMagnification
++user32.dll	SetMagnificationDesktopSamplingMode
++user32.dll	SetMagnificationLensCtxInformation
+ user32.dll	SetMenu
+ user32.dll	SetMenuContextHelpId
+ user32.dll	SetMenuDefaultItem
+@@ -1566,8 +2423,14 @@
+ user32.dll	SetMenuItemInfoW
+ user32.dll	SetMessageExtraInfo
+ user32.dll	SetMessageQueue
++user32.dll	SetMirrorRendering
+ user32.dll	SetParent
++user32.dll	SetPhysicalCursorPos
++user32.dll	SetProcessDPIAware
+ user32.dll	SetProcessDefaultLayout
++user32.dll	SetProcessDpiAwarenessContext
++user32.dll	SetProcessDpiAwarenessInternal
++user32.dll	SetProcessRestrictionExemption
+ user32.dll	SetProcessWindowStation
+ user32.dll	SetProgmanWindow
+ user32.dll	SetPropA
+@@ -1583,20 +2446,27 @@
+ user32.dll	SetSysColorsTemp
+ user32.dll	SetSystemCursor
+ user32.dll	SetSystemMenu
+-user32.dll	SetSystemTimer
+ user32.dll	SetTaskmanWindow
+ user32.dll	SetThreadDesktop
++user32.dll	SetThreadDpiAwarenessContext
++user32.dll	SetThreadInputBlocked
+ user32.dll	SetTimer
+ user32.dll	SetUserObjectInformationA
+ user32.dll	SetUserObjectInformationW
+ user32.dll	SetUserObjectSecurity
+ user32.dll	SetWinEventHook
++user32.dll	SetWindowBand
++user32.dll	SetWindowCompositionAttribute
++user32.dll	SetWindowCompositionTransition
+ user32.dll	SetWindowContextHelpId
++user32.dll	SetWindowDisplayAffinity
++user32.dll	SetWindowFeedbackSetting
+ user32.dll	SetWindowLongA
+ user32.dll	SetWindowLongW
+ user32.dll	SetWindowPlacement
+ user32.dll	SetWindowPos
+ user32.dll	SetWindowRgn
++user32.dll	SetWindowRgnEx
+ user32.dll	SetWindowStationUser
+ user32.dll	SetWindowTextA
+ user32.dll	SetWindowTextW
+@@ -1610,14 +2480,23 @@
+ user32.dll	ShowOwnedPopups
+ user32.dll	ShowScrollBar
+ user32.dll	ShowStartGlass
++user32.dll	ShowSystemCursor
+ user32.dll	ShowWindow
+ user32.dll	ShowWindowAsync
++user32.dll	ShutdownBlockReasonCreate
++user32.dll	ShutdownBlockReasonDestroy
++user32.dll	ShutdownBlockReasonQuery
++user32.dll	SignalRedirectionStartComplete
++user32.dll	SkipPointerFrameMessages
+ user32.dll	SoftModalMessageBox
++user32.dll	SoundSentry
+ user32.dll	SubtractRect
+ user32.dll	SwapMouseButton
+ user32.dll	SwitchDesktop
++user32.dll	SwitchDesktopWithFade
+ user32.dll	SwitchToThisWindow
+ user32.dll	SystemParametersInfoA
++user32.dll	SystemParametersInfoForDpi
+ user32.dll	SystemParametersInfoW
+ user32.dll	TabbedTextOutA
+ user32.dll	TabbedTextOutW
+@@ -1636,6 +2515,7 @@
+ user32.dll	TranslateMDISysAccel
+ user32.dll	TranslateMessage
+ user32.dll	TranslateMessageEx
++user32.dll	UndelegateInput
+ user32.dll	UnhookWinEvent
+ user32.dll	UnhookWindowsHook
+ user32.dll	UnhookWindowsHookEx
+@@ -1648,10 +2528,19 @@
+ user32.dll	UnregisterDeviceNotification
+ user32.dll	UnregisterHotKey
+ user32.dll	UnregisterMessagePumpHook
++user32.dll	UnregisterPointerInputTarget
++user32.dll	UnregisterPointerInputTargetEx
++user32.dll	UnregisterPowerSettingNotification
++user32.dll	UnregisterSessionPort
++user32.dll	UnregisterSuspendResumeNotification
++user32.dll	UnregisterTouchWindow
+ user32.dll	UnregisterUserApiHook
++user32.dll	UpdateDefaultDesktopThumbnail
+ user32.dll	UpdateLayeredWindow
++user32.dll	UpdateLayeredWindowIndirect
+ user32.dll	UpdatePerUserSystemParameters
+ user32.dll	UpdateWindow
++user32.dll	UpdateWindowInputSinkHints
+ user32.dll	User32InitializeImmEntryTable
+ user32.dll	UserClientDllInitialize
+ user32.dll	UserHandleGrantAccess
+@@ -1672,18 +2561,145 @@
+ user32.dll	WINNLSGetEnableStatus
+ user32.dll	WINNLSGetIMEHotkey
+ user32.dll	WaitForInputIdle
++user32.dll	WaitForRedirectionStartComplete
+ user32.dll	WaitMessage
+-user32.dll	Win32PoolAllocationStats
+ user32.dll	WinHelpA
+ user32.dll	WinHelpW
+ user32.dll	WindowFromDC
++user32.dll	WindowFromPhysicalPoint
+ user32.dll	WindowFromPoint
++user32.dll	Wow64Transition
++user32.dll	_UserTestTokenForInteractive
++user32.dll	gSharedInfo
++user32.dll	gapfnScSendMessage
+ user32.dll	keybd_event
+ user32.dll	mouse_event
+ user32.dll	wsprintfA
+ user32.dll	wsprintfW
+ user32.dll	wvsprintfA
+ user32.dll	wvsprintfW
++user32.dll	1502
++user32.dll	1550
++user32.dll	1551
++user32.dll	1552
++user32.dll	1554
++user32.dll	2001
++user32.dll	2002
++user32.dll	2005
++user32.dll	2010
++user32.dll	2506
++user32.dll	2507
++user32.dll	2508
++user32.dll	2509
++user32.dll	2510
++user32.dll	2511
++user32.dll	2512
++user32.dll	2513
++user32.dll	2514
++user32.dll	2515
++user32.dll	2516
++user32.dll	2517
++user32.dll	2518
++user32.dll	2519
++user32.dll	2520
++user32.dll	2522
++user32.dll	2523
++user32.dll	2524
++user32.dll	2525
++user32.dll	2526
++user32.dll	2527
++user32.dll	2529
++user32.dll	2530
++user32.dll	2531
++user32.dll	2532
++user32.dll	2533
++user32.dll	2534
++user32.dll	2535
++user32.dll	2536
++user32.dll	2537
++user32.dll	2538
++user32.dll	2539
++user32.dll	2540
++user32.dll	2541
++user32.dll	2542
++user32.dll	2544
++user32.dll	2545
++user32.dll	2546
++user32.dll	2548
++user32.dll	2549
++user32.dll	2550
++user32.dll	2552
++user32.dll	2553
++user32.dll	2554
++user32.dll	2555
++user32.dll	2556
++user32.dll	2557
++user32.dll	2558
++user32.dll	2559
++user32.dll	2560
++user32.dll	2561
++user32.dll	2563
++user32.dll	2564
++user32.dll	2565
++user32.dll	2566
++user32.dll	2567
++user32.dll	2568
++user32.dll	2569
++user32.dll	2570
++user32.dll	2572
++user32.dll	2573
++user32.dll	2574
++user32.dll	2575
++user32.dll	2576
++user32.dll	2577
++user32.dll	2578
++user32.dll	2579
++user32.dll	2581
++user32.dll	2582
++user32.dll	2584
++user32.dll	2585
++user32.dll	2586
++user32.dll	2587
++user32.dll	2588
++user32.dll	2589
++user32.dll	2590
++user32.dll	2591
++user32.dll	2592
++user32.dll	2593
++user32.dll	2594
++user32.dll	2595
++user32.dll	2597
++user32.dll	2598
++user32.dll	2599
++user32.dll	2600
++user32.dll	2608
++user32.dll	2609
++user32.dll	2610
++user32.dll	2611
++user32.dll	2612
++user32.dll	2613
++user32.dll	2614
++user32.dll	2615
++user32.dll	2616
++user32.dll	2617
++user32.dll	2618
++user32.dll	2619
++user32.dll	2620
++user32.dll	2621
++user32.dll	2622
++user32.dll	2700
++user32.dll	2702
++user32.dll	2703
++user32.dll	2704
++user32.dll	2705
++user32.dll	2706
++user32.dll	2707
++user32.dll	2708
++user32.dll	2709
++user32.dll	2710
++user32.dll	2711
++user32.dll	2712
++user32.dll	2713
+ comctl32.dll	AddMRUStringW
+ comctl32.dll	CreateMRUListW
+ comctl32.dll	CreateMappedBitmap
+@@ -1696,27 +2712,37 @@
+ comctl32.dll	CreateToolbar
+ comctl32.dll	CreateToolbarEx
+ comctl32.dll	CreateUpDownControl
++comctl32.dll	DPA_Clone
+ comctl32.dll	DPA_Create
++comctl32.dll	DPA_CreateEx
+ comctl32.dll	DPA_DeleteAllPtrs
+ comctl32.dll	DPA_DeletePtr
+ comctl32.dll	DPA_Destroy
+ comctl32.dll	DPA_DestroyCallback
+ comctl32.dll	DPA_EnumCallback
+ comctl32.dll	DPA_GetPtr
++comctl32.dll	DPA_GetPtrIndex
++comctl32.dll	DPA_Grow
+ comctl32.dll	DPA_InsertPtr
++comctl32.dll	DPA_LoadStream
++comctl32.dll	DPA_Merge
++comctl32.dll	DPA_SaveStream
+ comctl32.dll	DPA_Search
+ comctl32.dll	DPA_SetPtr
+ comctl32.dll	DPA_Sort
+ comctl32.dll	DSA_Create
+ comctl32.dll	DSA_DeleteAllItems
++comctl32.dll	DSA_DeleteItem
+ comctl32.dll	DSA_Destroy
+ comctl32.dll	DSA_DestroyCallback
++comctl32.dll	DSA_EnumCallback
++comctl32.dll	DSA_GetItem
+ comctl32.dll	DSA_GetItemPtr
+ comctl32.dll	DSA_InsertItem
++comctl32.dll	DSA_SetItem
+ comctl32.dll	DefSubclassProc
+ comctl32.dll	DestroyPropertySheetPage
+ comctl32.dll	DllGetVersion
+-comctl32.dll	DllInstall
+ comctl32.dll	DrawInsert
+ comctl32.dll	DrawStatusText
+ comctl32.dll	DrawStatusTextA
+@@ -1785,15 +2811,13 @@
+ comctl32.dll	PropertySheet
+ comctl32.dll	PropertySheetA
+ comctl32.dll	PropertySheetW
++comctl32.dll	RegisterClassNameW
+ comctl32.dll	RemoveWindowSubclass
+ comctl32.dll	SetWindowSubclass
+ comctl32.dll	ShowHideMenuCtl
+ comctl32.dll	Str_SetPtrW
+ comctl32.dll	UninitializeFlatSB
+ comctl32.dll	_TrackMouseEvent
+-comctl32.dll	9
+-comctl32.dll	10
+-comctl32.dll	11
+ comctl32.dll	71
+ comctl32.dll	72
+ comctl32.dll	73
+@@ -1811,13 +2835,6 @@
+ comctl32.dll	233
+ comctl32.dll	234
+ comctl32.dll	235
+-comctl32.dll	322
+-comctl32.dll	325
+-comctl32.dll	326
+-comctl32.dll	330
+-comctl32.dll	331
+-comctl32.dll	333
+-comctl32.dll	340
+ comctl32.dll	341
+ comctl32.dll	342
+ comctl32.dll	350
+@@ -1849,7 +2866,6 @@
+ comctl32.dll	382
+ comctl32.dll	383
+ comctl32.dll	384
+-comctl32.dll	387
+ comctl32.dll	389
+ comctl32.dll	390
+ comctl32.dll	402
+@@ -1863,3 +2879,4 @@
+ comctl32.dll	419
+ comctl32.dll	420
+ comctl32.dll	421
++comctl32.dll	422
