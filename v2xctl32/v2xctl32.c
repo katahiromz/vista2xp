@@ -40,8 +40,8 @@ LPWSTR JoinStrings(LPCWSTR psz1, LPCWSTR psz2)
     psz = (LPWSTR)malloc(cch * sizeof(WCHAR));
     if (psz)
     {
-        StringCbCopyW(psz, cch, psz1);
-        StringCbCatW(psz, cch, psz2);
+        StringCchCopyW(psz, cch, psz1);
+        StringCchCatW(psz, cch, psz2);
     }
     return psz;
 }
