@@ -23,7 +23,14 @@ bool do_kernel32(codereverse::ExeImage& image, size_t i, char *name)
         codereverse::ImportSymbol& symbol = symbols[k];
         if (symbol.Name.wImportByName)
         {
-            if (lstrcmpA(symbol.pszName, "GetTickCount64") == 0 ||
+            if (memcmp(symbol.pszName, "Reg", 3) == 0 ||
+                memcmp(symbol.pszName, "time", 4) == 0 ||
+                lstrcmpA(symbol.pszName, "CreateProcessAsUserA") == 0 ||
+                lstrcmpA(symbol.pszName, "CreateProcessAsUserW") == 0 ||
+                lstrcmpA(symbol.pszName, "OpenProcessToken") == 0 ||
+                lstrcmpA(symbol.pszName, "OpenThreadToken") == 0 ||
+                lstrcmpA(symbol.pszName, "SetThreadToken") == 0 ||
+                lstrcmpA(symbol.pszName, "GetTickCount64") == 0 ||
                 lstrcmpA(symbol.pszName, "QueryFullProcessImageNameA") == 0 ||
                 lstrcmpA(symbol.pszName, "QueryFullProcessImageNameW") == 0 ||
                 lstrcmpA(symbol.pszName, "IsWow64Process") == 0)
