@@ -60,7 +60,7 @@ ChangeWindowMessageFilterExForXP(HWND hwnd, UINT message, DWORD action,
         switch (action)
         {
         case MSGFLT_RESET:
-            return (*s_pChangeWindowMessageFilter)(message, MSGFLT_REMOVE);
+            return (*s_pChangeWindowMessageFilter)(message, MSGFLT_ADD);
         case MSGFLT_ALLOW:
             return (*s_pChangeWindowMessageFilter)(message, MSGFLT_ADD);
         case MSGFLT_DISALLOW:
