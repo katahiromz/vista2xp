@@ -13,6 +13,12 @@ Download: https://katahiromz.web.fc2.com/vista2xp/en
 
 It modifies the IAT (Import Address Table) of EXE/DLL files.
 
+- If any Vista+ kernel32 functions, importing of kernel32.dll will be altered to v2xker32.dll.
+- If any Vista+ comctl32 functions, importing of comctl32.dll will be altered to v2xctl32.dll.
+- If any Vista+ user32 functions, importing of user32.dll will be altered to v2xu32.dll.
+
+You can check the IAT by dumpbin /imports of Visual Studio Command Prompt.
+
 ## How to use?
 
 1. Open vista2xp.exe program file. A dialog box will be open.
