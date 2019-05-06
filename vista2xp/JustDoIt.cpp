@@ -10,6 +10,91 @@
 extern "C"
 LPTSTR GetDllSource(INT i);
 
+bool do_kernel32(codereverse::ExeImage& image, size_t i, char *name)
+{
+    std::vector<codereverse::ImportSymbol> symbols;
+    if (!image.get_import_symbols(i, symbols))
+    {
+        return false;
+    }
+
+    for (size_t k = 0; k < symbols.size(); ++k)
+    {
+        codereverse::ImportSymbol& symbol = symbols[k];
+        if (symbol.Name.wImportByName)
+        {
+            if (lstrcmpA(symbol.pszName, "GetTickCount64") == 0 ||
+                lstrcmpA(symbol.pszName, "QueryFullProcessImageNameA") == 0 ||
+                lstrcmpA(symbol.pszName, "QueryFullProcessImageNameW") == 0 ||
+                lstrcmpA(symbol.pszName, "IsWow64Process") == 0)
+            {
+                if (lstrcmpiA(name, "kernel32") == 0)
+                    StringCbCopyA(const_cast<char *>(name), 9, "v2xker32");
+                else if (lstrcmpiA(name, "kernel32.dll") == 0)
+                    StringCbCopyA(const_cast<char *>(name), 13, "v2xker32.dll");
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool do_comctl32(codereverse::ExeImage& image, size_t i, char *name)
+{
+    std::vector<codereverse::ImportSymbol> symbols;
+    if (!image.get_import_symbols(i, symbols))
+    {
+        return false;
+    }
+
+    for (size_t k = 0; k < symbols.size(); ++k)
+    {
+        codereverse::ImportSymbol& symbol = symbols[k];
+        if (symbol.Name.wImportByName)
+        {
+            if (lstrcmpA(symbol.pszName, "TaskDialog") == 0)
+            {
+                if (lstrcmpiA(name, "comctl32") == 0)
+                    StringCbCopyA(const_cast<char *>(name), 9, "v2xctl32");
+                else if (lstrcmpiA(name, "comctl32.dll") == 0)
+                    StringCbCopyA(const_cast<char *>(name), 13, "v2xctl32.dll");
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool do_user32(codereverse::ExeImage& image, size_t i, char *name)
+{
+    std::vector<codereverse::ImportSymbol> symbols;
+    if (!image.get_import_symbols(i, symbols))
+    {
+        return false;
+    }
+
+    for (size_t k = 0; k < symbols.size(); ++k)
+    {
+        codereverse::ImportSymbol& symbol = symbols[k];
+        if (symbol.Name.wImportByName)
+        {
+            if (lstrcmpA(symbol.pszName, "ChangeWindowMessageFilter") == 0 ||
+                lstrcmpA(symbol.pszName, "ChangeWindowMessageFilterEx") == 0)
+            {
+                if (lstrcmpiA(name, "comctl32") == 0)
+                    StringCbCopyA(const_cast<char *>(name), 7, "v2xu32");
+                else if (lstrcmpiA(name, "comctl32.dll") == 0)
+                    StringCbCopyA(const_cast<char *>(name), 11, "v2xu32.dll");
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 extern "C"
 HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
 {
@@ -48,35 +133,20 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
     bool v2xu32_found = false;
     for (DWORD i = 0; i < names.size(); ++i)
     {
-        if (lstrcmpiA(names[i], "kernel32.dll") == 0)
+        if (lstrcmpiA(names[i], "kernel32.dll") == 0 ||
+            lstrcmpiA(names[i], "kernel32") == 0)
         {
-            v2xker32_found = true;
-            StringCbCopyA(const_cast<char *>(names[i]), 13, "v2xker32.dll");
+            v2xker32_found = do_kernel32(image, i, const_cast<char *>(names[i]));
         }
-        else if (lstrcmpiA(names[i], "kernel32") == 0)
+        else if (lstrcmpiA(names[i], "comctl32.dll") == 0 ||
+                 lstrcmpiA(names[i], "comctl32") == 0)
         {
-            v2xker32_found = true;
-            StringCbCopyA(const_cast<char *>(names[i]), 9, "v2xker32");
+            v2xctl32_found = do_comctl32(image, i, const_cast<char *>(names[i]));
         }
-        else if (lstrcmpiA(names[i], "comctl32.dll") == 0)
+        else if (lstrcmpiA(names[i], "user32.dll") == 0 ||
+                 lstrcmpiA(names[i], "user32") == 0)
         {
-            v2xctl32_found = true;
-            StringCbCopyA(const_cast<char *>(names[i]), 13, "v2xctl32.dll");
-        }
-        else if (lstrcmpiA(names[i], "comctl32") == 0)
-        {
-            v2xctl32_found = true;
-            StringCbCopyA(const_cast<char *>(names[i]), 9, "v2xctl32");
-        }
-        else if (lstrcmpiA(names[i], "user32.dll") == 0)
-        {
-            v2xu32_found = true;
-            StringCbCopyA(const_cast<char *>(names[i]), 13, "v2xu32.dll");
-        }
-        else if (lstrcmpiA(names[i], "user32") == 0)
-        {
-            v2xu32_found = true;
-            StringCbCopyA(const_cast<char *>(names[i]), 9, "v2xu32");
+            v2xu32_found = do_user32(image, i, const_cast<char *>(names[i]));
         }
     }
 
