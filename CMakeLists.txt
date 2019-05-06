@@ -87,4 +87,8 @@ set_target_properties(v2xctl32 PROPERTIES OUTPUT_NAME "v2xctl32")
 add_executable(vista2xp WIN32 vista2xp/vista2xp.c vista2xp/vista2xp_res.rc vista2xp/JustDoIt.cpp)
 target_link_libraries(vista2xp comdlg32 comctl32 shlwapi)
 
+# taskdlg.exe
+add_executable(taskdlg WIN32 tests/taskdlg/taskdlg.c tests/taskdlg/taskdlg_res.rc)
+target_link_libraries(taskdlg comctl32)
+
 ##############################################################################

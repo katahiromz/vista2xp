@@ -40,8 +40,8 @@ LPWSTR JoinStrings(LPCWSTR psz1, LPCWSTR psz2)
     psz = (LPWSTR)malloc(cch * sizeof(WCHAR));
     if (psz)
     {
-        StringCbCopy(psz, cch, psz1);
-        StringCbCat(psz, cch, psz2);
+        StringCbCopyW(psz, cch, psz1);
+        StringCbCatW(psz, cch, psz2);
     }
     return psz;
 }
@@ -81,7 +81,7 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
     MSGBOXPARAMSW params;
     LPWSTR psz0, pszText;
 
-    if (s_pTaskDialog)
+    if (s_pTaskDialog && 0)
     {
         return (*s_pTaskDialog)(hwndOwner, hInstance, pszWindowTitle, pszMainInstruction,
                                 pszContent, dwCommonButtons, pszIcon, pnButton);
@@ -92,7 +92,7 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
 
     *pnButton = 0;
 
-    psz0 = JoinStrings(pszMainInstruction, L"\r\n\r\n");
+    psz0 = JoinStrings(pszMainInstruction, L"\n\n");
     if (!psz0)
         return E_OUTOFMEMORY;
 

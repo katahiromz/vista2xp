@@ -58,22 +58,22 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
             v2xker32_found = true;
             StringCbCopyA(const_cast<char *>(names[i]), 9, "v2xker32");
         }
-        else if (lstrcmpiA(names[i], "v2xctl32.dll") == 0)
+        else if (lstrcmpiA(names[i], "comctl32.dll") == 0)
         {
             v2xctl32_found = true;
             StringCbCopyA(const_cast<char *>(names[i]), 13, "v2xctl32.dll");
         }
-        else if (lstrcmpiA(names[i], "v2xctl32") == 0)
+        else if (lstrcmpiA(names[i], "comctl32") == 0)
         {
             v2xctl32_found = true;
             StringCbCopyA(const_cast<char *>(names[i]), 9, "v2xctl32");
         }
-        else if (lstrcmpiA(names[i], "v2xu32.dll") == 0)
+        else if (lstrcmpiA(names[i], "user32.dll") == 0)
         {
             v2xu32_found = true;
             StringCbCopyA(const_cast<char *>(names[i]), 13, "v2xu32.dll");
         }
-        else if (lstrcmpiA(names[i], "v2xu32") == 0)
+        else if (lstrcmpiA(names[i], "user32") == 0)
         {
             v2xu32_found = true;
             StringCbCopyA(const_cast<char *>(names[i]), 9, "v2xu32");
