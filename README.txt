@@ -34,6 +34,10 @@ You can check the IAT by dumpbin /imports of Visual Studio Command Prompt.
 - 2019.05.06 ver.0.3
     - Add v2xctl32 and v2xu32.
 
+## WARNING!
+
+Please don't convert the system files.
+
 ## Contact Us
 
 Katayama Hirofumi MZ
