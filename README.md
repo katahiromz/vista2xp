@@ -36,7 +36,7 @@ You can check the IAT by `dumpbin /imports` of Visual Studio Command Prompt.
 
 ## How to build?
 
-Use MSYS2, and use cmake in MSYS2. Visual Studio can't build.
+Use MSYS2, and use cmake of MSYS2. Visual Studio can't build.
 
 ## Contact Us
 
