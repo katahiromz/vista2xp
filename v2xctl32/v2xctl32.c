@@ -84,7 +84,7 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
     WCHAR szInst[MAX_PATH];
     WCHAR szContent[MAX_PATH];
 
-    if (s_pTaskDialog && 0)
+    if (s_pTaskDialog)
     {
         return (*s_pTaskDialog)(hwndOwner, hInstance, pszWindowTitle, pszMainInstruction,
                                 pszContent, dwCommonButtons, pszIcon, pnButton);
