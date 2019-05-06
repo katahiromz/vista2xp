@@ -79,7 +79,7 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
                 PCWSTR pszIcon, int *pnButton)
 {
     MSGBOXPARAMSW params;
-    LPWSTR psz0, pszText;
+    LPWSTR psz0, psz1, pszText;
     WCHAR szTitle[MAX_PATH];
     WCHAR szInst[MAX_PATH];
     WCHAR szContent[MAX_PATH];
@@ -98,7 +98,13 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
     if (!pszWindowTitle)
     {
         GetModuleFileNameW(NULL, szTitle, ARRAYSIZE(szTitle));
-        pszWindowTitle = wcsrchr(szTitle, L'\\') + 1;
+        psz0 = wcsrchr(szTitle, L'\\');
+        psz1 = wcsrchr(szTitle, L'/');
+        if (!psz0)
+            psz0 = psz1;
+        if (psz0 < psz1)
+            psz0 = psz1;
+        pszWindowTitle = psz0 + 1;
     }
     else if (HIWORD(pszWindowTitle) == 0)
     {
@@ -126,12 +132,19 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
         pszContent = szContent;
     }
 
-    psz0 = JoinStrings(pszMainInstruction, L"\n\n");
-    if (!psz0)
-        return E_OUTOFMEMORY;
+    if (!pszMainInstruction || !*pszMainInstruction)
+    {
+        pszText = _wcsdup(pszContent);
+    }
+    else
+    {
+        psz0 = JoinStrings(pszMainInstruction, L"\n\n");
+        if (!psz0)
+            return E_OUTOFMEMORY;
 
-    pszText = JoinStrings(psz0, pszContent);
-    free(psz0);
+        pszText = JoinStrings(psz0, pszContent);
+        free(psz0);
+    }
 
     if (!pszText)
         return E_OUTOFMEMORY;
