@@ -162,7 +162,6 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
         params.hInstance = s_hinstDLL;
         params.lpszIcon = MAKEINTRESOURCEW(100);
         params.dwStyle |= MB_USERICON;
-        MessageBeep(MB_ICONINFORMATION);
     }
     else if (pszIcon == TD_WARNING_ICON)
     {
