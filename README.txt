@@ -21,6 +21,11 @@ It modifies the IAT (Import Address Table) of EXE/DLL files.
 4. Files will be converted. Some DLL files will be automatically added if necessary.
 5. If you want to revert, please use the files inside the "Vista2XP-Backup" folder that was created.
 
+## History
+
+- 2019.05.05 ver.0.2
+    - First release.
+
 ## Contact Us
 
 Katayama Hirofumi MZ
