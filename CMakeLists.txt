@@ -111,4 +111,8 @@ target_link_libraries(opendlg uuid)
 add_executable(savedlg tests/savedlg/savedlg.cpp)
 target_link_libraries(savedlg uuid)
 
+# filedlg.exe
+add_executable(filedlg tests/filedlg/filedlg.cpp)
+target_link_libraries(filedlg uuid)
+
 ##############################################################################
