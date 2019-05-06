@@ -11,15 +11,17 @@
 #include <shlwapi.h>
 #include <strsafe.h>
 #include <stdio.h>
+#include <assert.h>
 #include "resource.h"
 
 HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile);
 
 static HINSTANCE s_hInst;
-static TCHAR s_szDLLs[2][MAX_PATH];
+static TCHAR s_szDLLs[3][MAX_PATH];
 
 LPTSTR GetDllSource(INT i)
 {
+    assert(i < 3);
     return s_szDLLs[i];
 }
 
@@ -342,6 +344,29 @@ BOOL CheckSourceDlls(void)
         }
     }
     StringCchCopy(GetDllSource(1), MAX_PATH, szPath);
+
+    GetModuleFileName(NULL, szPath, ARRAYSIZE(szPath));
+    pch = PathFindFileName(szPath);
+    *pch = 0;
+
+    PathAppend(szPath, TEXT("v2xu32.dll"));
+    if (!PathFileExists(szPath))
+    {
+        *pch = 0;
+        PathAppend(szPath, TEXT("..\\v2xu32.dll"));
+        if (!PathFileExists(szPath))
+        {
+            *pch = 0;
+            PathAppend(szPath, TEXT("..\\..\\v2xu32.dll"));
+            if (!PathFileExists(szPath))
+            {
+                LoadString(NULL, IDS_LOADV2XU32, szPath, ARRAYSIZE(szPath));
+                MessageBox(NULL, szPath, NULL, MB_ICONERROR);
+                return FALSE;
+            }
+        }
+    }
+    StringCchCopy(GetDllSource(2), MAX_PATH, szPath);
 
     return TRUE;
 }
