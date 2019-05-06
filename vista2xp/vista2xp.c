@@ -1,6 +1,7 @@
 /* vista2xp.c
 /* This file is public domain software.
    Copyright (C) 2019 Katayama Hirofumi MZ <katayama.hirofumi.mz@gmail.com>. */
+#define _CRT_SECURE_NO_WARNINGS
 #include "targetver.h"
 #include <windows.h>
 #include <windowsx.h>
@@ -99,7 +100,7 @@ void AddFolder(HWND hwnd, LPCTSTR pszDir)
     TCHAR szPath[MAX_PATH], szFullPath[MAX_PATH];
     HANDLE hFind;
     WIN32_FIND_DATA find;
-    DWORD dwCount, dwType;
+    DWORD dwCount;
 
     dwCount = 0;
     StringCbCopy(szPath, sizeof(szPath), pszDir);
@@ -140,8 +141,6 @@ void AddFolder(HWND hwnd, LPCTSTR pszDir)
 
 void AddFile(HWND hwnd, LPCTSTR pszFile)
 {
-    DWORD dwType;
-
     if (PathIsDirectory(pszFile))
     {
         AddFolder(hwnd, pszFile);

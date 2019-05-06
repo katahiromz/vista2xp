@@ -34,6 +34,10 @@ You can check the IAT by `dumpbin /imports` of Visual Studio Command Prompt.
 - 2019.05.06 ver.0.3
     - Add v2xctl32 and v2xu32.
 
+## How to build?
+
+Use MSYS2, and use cmake in MSYS2. Visual Studio can't build.
+
 ## Contact Us
 
 Katayama Hirofumi MZ
