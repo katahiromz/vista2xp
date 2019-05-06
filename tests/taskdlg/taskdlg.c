@@ -24,7 +24,7 @@ int main(void)
                TD_ERROR_ICON, &id);
     printf("id: %d\n", id);
 
-    TaskDialog(NULL, NULL, L"Test #3", L"Warning",
+    TaskDialog(NULL, GetModuleHandleA(NULL), MAKEINTRESOURCEW(102), L"Warning",
                L"This is a test for TaskDialog.",
                TDCBF_RETRY_BUTTON | TDCBF_CANCEL_BUTTON,
                TD_WARNING_ICON, &id);
