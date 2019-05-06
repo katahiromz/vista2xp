@@ -80,6 +80,9 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
 {
     MSGBOXPARAMSW params;
     LPWSTR psz0, pszText;
+    WCHAR szTitle[MAX_PATH];
+    WCHAR szInst[MAX_PATH];
+    WCHAR szContent[MAX_PATH];
 
     if (s_pTaskDialog && 0)
     {
@@ -91,6 +94,37 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
         return E_POINTER;
 
     *pnButton = 0;
+
+    if (!pszWindowTitle)
+    {
+        GetModuleFileNameW(NULL, szTitle, ARRAYSIZE(szTitle));
+        pszWindowTitle = wcsrchr(szTitle, L'\\') + 1;
+    }
+    else if (HIWORD(pszWindowTitle) == 0)
+    {
+        LoadStringW(hInstance, LOWORD(pszWindowTitle), szTitle, ARRAYSIZE(szTitle));
+        pszWindowTitle = szTitle;
+    }
+
+    if (!pszMainInstruction)
+    {
+        pszMainInstruction = L"";
+    }
+    else if (HIWORD(pszMainInstruction) == 0)
+    {
+        LoadStringW(hInstance, LOWORD(pszMainInstruction), szInst, ARRAYSIZE(szInst));
+        pszMainInstruction = szInst;
+    }
+
+    if (!pszContent)
+    {
+        pszContent = L"";
+    }
+    else if (HIWORD(pszContent) == 0)
+    {
+        LoadStringW(hInstance, LOWORD(pszContent), szContent, ARRAYSIZE(szContent));
+        pszContent = szContent;
+    }
 
     psz0 = JoinStrings(pszMainInstruction, L"\n\n");
     if (!psz0)
