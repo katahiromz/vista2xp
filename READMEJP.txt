@@ -35,6 +35,8 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
     - 初公開。
 - 2019.05.06 ver.0.3
     - v2xctl32 と v2xu32 を追加。
+- 2019.XX.YY ver.0.4
+    - K32* 関数をサポート。
 
 ## 警告
 

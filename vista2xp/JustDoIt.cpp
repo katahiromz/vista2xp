@@ -24,6 +24,7 @@ bool do_kernel32(codereverse::ExeImage& image, size_t i, char *name)
         if (symbol.Name.wImportByName)
         {
             if (memcmp(symbol.pszName, "Reg", 3) == 0 ||
+                memcmp(symbol.pszName, "K32", 3) == 0 ||
                 memcmp(symbol.pszName, "time", 4) == 0 ||
                 lstrcmpA(symbol.pszName, "CreateProcessAsUserA") == 0 ||
                 lstrcmpA(symbol.pszName, "CreateProcessAsUserW") == 0 ||
