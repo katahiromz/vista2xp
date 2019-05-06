@@ -11,9 +11,26 @@ int main(void)
 {
     INT id;
     InitCommonControls();
-    TaskDialog(NULL, NULL, L"Title", L"Title 2", L"This is a test for TaskDialog.",
+
+    TaskDialog(NULL, NULL, L"Test #1", L"Sheild", L"This is a test for TaskDialog.",
                TDCBF_YES_BUTTON | TDCBF_NO_BUTTON | TDCBF_CANCEL_BUTTON,
                TD_SHIELD_ICON, &id);
     printf("id: %d\n", id);
+
+    TaskDialog(NULL, NULL, L"Test #2", L"Error", L"This is a test for TaskDialog.",
+               TDCBF_YES_BUTTON | TDCBF_NO_BUTTON,
+               TD_ERROR_ICON, &id);
+    printf("id: %d\n", id);
+
+    TaskDialog(NULL, NULL, L"Test #3", L"Warning", L"This is a test for TaskDialog.",
+               TDCBF_RETRY_BUTTON | TDCBF_CANCEL_BUTTON,
+               TD_WARNING_ICON, &id);
+    printf("id: %d\n", id);
+
+    TaskDialog(NULL, NULL, L"Test #4", L"Information", L"This is a test for TaskDialog.",
+               TDCBF_OK_BUTTON | TDCBF_CANCEL_BUTTON,
+               TD_INFORMATION_ICON, &id);
+    printf("id: %d\n", id);
+
     return 0;
 }

@@ -146,7 +146,7 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
     if (pszIcon == TD_ERROR_ICON)
     {
         params.hInstance = NULL;
-        params.lpszIcon = IDI_EXCLAMATION;
+        params.lpszIcon = IDI_HAND;
         params.dwStyle |= MB_USERICON;
     }
     else if (pszIcon == TD_INFORMATION_ICON)
@@ -164,7 +164,7 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
     else if (pszIcon == TD_WARNING_ICON)
     {
         params.hInstance = NULL;
-        params.lpszIcon = IDI_HAND;
+        params.lpszIcon = IDI_EXCLAMATION;
         params.dwStyle |= MB_USERICON;
     }
     else
