@@ -1,5 +1,5 @@
---- winxp.dat	2019-05-07 07:21:33.578118500 +0900
-+++ win7.dat	2019-05-07 07:21:55.858574500 +0900
+--- winxp.dat	2019-05-07 19:32:18.980564900 +0900
++++ win7.dat	2019-05-07 19:32:48.010779000 +0900
 @@ -1,14 +1,24 @@
 +kernel32.dll	AcquireSRWLockExclusive
 +kernel32.dll	AcquireSRWLockShared
@@ -1845,3 +1845,553 @@
  ole32.dll	UtConvertDvtd16toDvtd32
  ole32.dll	UtConvertDvtd32toDvtd16
  ole32.dll	UtGetDvtd16Info
+@@ -2202,17 +2768,13 @@
+ ole32.dll	WriteFmtUserTypeStg
+ ole32.dll	WriteOleStg
+ ole32.dll	WriteStringStream
+-shell32.dll	Activate_RunDLL
+ shell32.dll	AppCompat_RunDLLW
+-shell32.dll	CDefFolderMenu_Create
++shell32.dll	AssocCreateForClasses
++shell32.dll	AssocGetDetailsOfPropKey
+ shell32.dll	CDefFolderMenu_Create2
+-shell32.dll	CallCPLEntry16
+-shell32.dll	CheckEscapesA
++shell32.dll	CIDLData_CreateFromIDArray
+ shell32.dll	CheckEscapesW
+ shell32.dll	CommandLineToArgvW
+-shell32.dll	Control_FillCache_RunDLL
+-shell32.dll	Control_FillCache_RunDLLA
+-shell32.dll	Control_FillCache_RunDLLW
+ shell32.dll	Control_RunDLL
+ shell32.dll	Control_RunDLLA
+ shell32.dll	Control_RunDLLAsUserW
+@@ -2249,14 +2811,11 @@
+ shell32.dll	ExtractIconEx
+ shell32.dll	ExtractIconExA
+ shell32.dll	ExtractIconExW
+-shell32.dll	ExtractIconResInfoA
+-shell32.dll	ExtractIconResInfoW
+ shell32.dll	ExtractIconW
+-shell32.dll	ExtractVersionResource16W
+-shell32.dll	FindExeDlgProc
+ shell32.dll	FindExecutableA
+ shell32.dll	FindExecutableW
+ shell32.dll	FreeIconList
++shell32.dll	GetCurrentProcessExplicitAppUserModelID
+ shell32.dll	GetFileNameFromBrowse
+ shell32.dll	ILAppendID
+ shell32.dll	ILClone
+@@ -2272,9 +2831,10 @@
+ shell32.dll	ILGetSize
+ shell32.dll	ILIsEqual
+ shell32.dll	ILIsParent
+-shell32.dll	ILLoadFromStream
++shell32.dll	ILLoadFromStreamEx
+ shell32.dll	ILRemoveLastID
+ shell32.dll	ILSaveToStream
++shell32.dll	InitNetworkAddressControl
+ shell32.dll	InternalExtractIconListA
+ shell32.dll	InternalExtractIconListW
+ shell32.dll	IsLFNDrive
+@@ -2282,6 +2842,7 @@
+ shell32.dll	IsLFNDriveW
+ shell32.dll	IsNetDrive
+ shell32.dll	IsUserAnAdmin
++shell32.dll	LaunchMSHelp_RunDLLW
+ shell32.dll	OpenAs_RunDLL
+ shell32.dll	OpenAs_RunDLLA
+ shell32.dll	OpenAs_RunDLLW
+@@ -2295,7 +2856,6 @@
+ shell32.dll	PathIsSlowA
+ shell32.dll	PathIsSlowW
+ shell32.dll	PathMakeUniqueName
+-shell32.dll	PathProcessCommand
+ shell32.dll	PathQualify
+ shell32.dll	PathResolve
+ shell32.dll	PathYetAnotherMakeUniqueName
+@@ -2304,6 +2864,7 @@
+ shell32.dll	PifMgr_GetProperties
+ shell32.dll	PifMgr_OpenProperties
+ shell32.dll	PifMgr_SetProperties
++shell32.dll	PrepareDiscForBurnRunDllW
+ shell32.dll	PrintersGetCommand_RunDLL
+ shell32.dll	PrintersGetCommand_RunDLLA
+ shell32.dll	PrintersGetCommand_RunDLLW
+@@ -2316,11 +2877,17 @@
+ shell32.dll	RegenerateUserEnvironment
+ shell32.dll	RestartDialog
+ shell32.dll	RestartDialogEx
++shell32.dll	RunAsNewUser_RunDLLW
++shell32.dll	SHAddDefaultPropertiesByExt
+ shell32.dll	SHAddFromPropSheetExtArray
+ shell32.dll	SHAddToRecentDocs
+ shell32.dll	SHAlloc
+-shell32.dll	SHAllocShared
+ shell32.dll	SHAppBarMessage
++shell32.dll	SHAssocEnumHandlers
++shell32.dll	SHAssocEnumHandlersForProtocolByApplication
++shell32.dll	SHBindToFolderIDListParent
++shell32.dll	SHBindToFolderIDListParentEx
++shell32.dll	SHBindToObject
+ shell32.dll	SHBindToParent
+ shell32.dll	SHBrowseForFolder
+ shell32.dll	SHBrowseForFolderA
+@@ -2331,13 +2898,24 @@
+ shell32.dll	SHChangeNotify
+ shell32.dll	SHChangeNotifyDeregister
+ shell32.dll	SHChangeNotifyRegister
++shell32.dll	SHChangeNotifyRegisterThread
+ shell32.dll	SHChangeNotifySuspendResume
+ shell32.dll	SHCloneSpecialIDList
+ shell32.dll	SHCoCreateInstance
++shell32.dll	SHCreateAssociationRegistration
++shell32.dll	SHCreateDataObject
++shell32.dll	SHCreateDefaultContextMenu
++shell32.dll	SHCreateDefaultExtractIcon
++shell32.dll	SHCreateDefaultPropertiesOp
+ shell32.dll	SHCreateDirectory
+ shell32.dll	SHCreateDirectoryExA
+ shell32.dll	SHCreateDirectoryExW
+ shell32.dll	SHCreateFileExtractIconW
++shell32.dll	SHCreateItemFromIDList
++shell32.dll	SHCreateItemFromParsingName
++shell32.dll	SHCreateItemFromRelativeName
++shell32.dll	SHCreateItemInKnownFolder
++shell32.dll	SHCreateItemWithParent
+ shell32.dll	SHCreateLocalServerRunDll
+ shell32.dll	SHCreateProcessAsUserW
+ shell32.dll	SHCreatePropSheetExtArray
+@@ -2345,6 +2923,10 @@
+ shell32.dll	SHCreateShellFolderView
+ shell32.dll	SHCreateShellFolderViewEx
+ shell32.dll	SHCreateShellItem
++shell32.dll	SHCreateShellItemArray
++shell32.dll	SHCreateShellItemArrayFromDataObject
++shell32.dll	SHCreateShellItemArrayFromIDLists
++shell32.dll	SHCreateShellItemArrayFromShellItem
+ shell32.dll	SHCreateStdEnumFmtEtc
+ shell32.dll	SHDefExtractIconA
+ shell32.dll	SHDefExtractIconW
+@@ -2354,18 +2936,17 @@
+ shell32.dll	SHEmptyRecycleBinW
+ shell32.dll	SHEnableServiceObject
+ shell32.dll	SHEnumerateUnreadMailAccountsW
++shell32.dll	SHEvaluateSystemCommandTemplate
+ shell32.dll	SHExtractIconsW
+ shell32.dll	SHFileOperation
+ shell32.dll	SHFileOperationA
+ shell32.dll	SHFileOperationW
+ shell32.dll	SHFindFiles
+ shell32.dll	SHFind_InitMenuPopup
+-shell32.dll	SHFlushClipboard
+ shell32.dll	SHFlushSFCache
+ shell32.dll	SHFormatDrive
+ shell32.dll	SHFree
+ shell32.dll	SHFreeNameMappings
+-shell32.dll	SHFreeShared
+ shell32.dll	SHGetAttributesFromDataObject
+ shell32.dll	SHGetDataFromIDListA
+ shell32.dll	SHGetDataFromIDListW
+@@ -2373,6 +2954,7 @@
+ shell32.dll	SHGetDiskFreeSpaceA
+ shell32.dll	SHGetDiskFreeSpaceExA
+ shell32.dll	SHGetDiskFreeSpaceExW
++shell32.dll	SHGetDriveMedia
+ shell32.dll	SHGetFileInfo
+ shell32.dll	SHGetFileInfoA
+ shell32.dll	SHGetFileInfoW
+@@ -2380,26 +2962,40 @@
+ shell32.dll	SHGetFolderPathA
+ shell32.dll	SHGetFolderPathAndSubDirA
+ shell32.dll	SHGetFolderPathAndSubDirW
++shell32.dll	SHGetFolderPathEx
+ shell32.dll	SHGetFolderPathW
++shell32.dll	SHGetIDListFromObject
+ shell32.dll	SHGetIconOverlayIndexA
+ shell32.dll	SHGetIconOverlayIndexW
+ shell32.dll	SHGetImageList
+ shell32.dll	SHGetInstanceExplorer
++shell32.dll	SHGetItemFromDataObject
++shell32.dll	SHGetItemFromObject
++shell32.dll	SHGetKnownFolderIDList
++shell32.dll	SHGetKnownFolderItem
++shell32.dll	SHGetKnownFolderPath
++shell32.dll	SHGetLocalizedName
+ shell32.dll	SHGetMalloc
++shell32.dll	SHGetNameFromIDList
+ shell32.dll	SHGetNewLinkInfo
+ shell32.dll	SHGetNewLinkInfoA
+ shell32.dll	SHGetNewLinkInfoW
+ shell32.dll	SHGetPathFromIDList
+ shell32.dll	SHGetPathFromIDListA
++shell32.dll	SHGetPathFromIDListEx
+ shell32.dll	SHGetPathFromIDListW
++shell32.dll	SHGetPropertyStoreForWindow
++shell32.dll	SHGetPropertyStoreFromIDList
++shell32.dll	SHGetPropertyStoreFromParsingName
+ shell32.dll	SHGetRealIDL
+-shell32.dll	SHGetSetFolderCustomSettingsW
++shell32.dll	SHGetSetFolderCustomSettings
+ shell32.dll	SHGetSetSettings
+ shell32.dll	SHGetSettings
+-shell32.dll	SHGetShellStyleHInstance
+ shell32.dll	SHGetSpecialFolderLocation
+ shell32.dll	SHGetSpecialFolderPathA
+ shell32.dll	SHGetSpecialFolderPathW
++shell32.dll	SHGetStockIconInfo
++shell32.dll	SHGetTemporaryPropertyForItem
+ shell32.dll	SHGetUnreadMailCountW
+ shell32.dll	SHHandleUpdateImage
+ shell32.dll	SHHelpShortcuts_RunDLL
+@@ -2412,14 +3008,12 @@
+ shell32.dll	SHLimitInputEdit
+ shell32.dll	SHLoadInProc
+ shell32.dll	SHLoadNonloadedIconOverlayIdentifiers
+-shell32.dll	SHLoadOLE
+-shell32.dll	SHLockShared
+-shell32.dll	SHMapIDListToImageListIndexAsync
+ shell32.dll	SHMapPIDLToSystemImageListIndex
+ shell32.dll	SHMultiFileProperties
+ shell32.dll	SHObjectProperties
+ shell32.dll	SHOpenFolderAndSelectItems
+ shell32.dll	SHOpenPropSheetW
++shell32.dll	SHOpenWithDialog
+ shell32.dll	SHParseDisplayName
+ shell32.dll	SHPathPrepareForWriteA
+ shell32.dll	SHPathPrepareForWriteW
+@@ -2428,38 +3022,33 @@
+ shell32.dll	SHPropStgWriteMultiple
+ shell32.dll	SHQueryRecycleBinA
+ shell32.dll	SHQueryRecycleBinW
++shell32.dll	SHQueryUserNotificationState
++shell32.dll	SHRemoveLocalizedName
+ shell32.dll	SHReplaceFromPropSheetExtArray
++shell32.dll	SHResolveLibrary
+ shell32.dll	SHRestricted
+-shell32.dll	SHRunControlPanel
++shell32.dll	SHSetDefaultProperties
++shell32.dll	SHSetFolderPathA
++shell32.dll	SHSetFolderPathW
+ shell32.dll	SHSetInstanceExplorer
++shell32.dll	SHSetKnownFolderPath
+ shell32.dll	SHSetLocalizedName
++shell32.dll	SHSetTemporaryPropertyForItem
+ shell32.dll	SHSetUnreadMailCountW
+ shell32.dll	SHShellFolderView_Message
++shell32.dll	SHShowManageLibraryUI
+ shell32.dll	SHSimpleIDListFromPath
+ shell32.dll	SHStartNetConnectionDialogW
+ shell32.dll	SHTestTokenMembership
+-shell32.dll	SHUnlockShared
+ shell32.dll	SHUpdateImageA
+ shell32.dll	SHUpdateImageW
+ shell32.dll	SHUpdateRecycleBinIcon
+ shell32.dll	SHValidateUNC
++shell32.dll	SetCurrentProcessExplicitAppUserModelID
+ shell32.dll	SheChangeDirA
+-shell32.dll	SheChangeDirExA
+ shell32.dll	SheChangeDirExW
+-shell32.dll	SheChangeDirW
+-shell32.dll	SheConvertPathW
+-shell32.dll	SheFullPathA
+-shell32.dll	SheFullPathW
+-shell32.dll	SheGetCurDrive
+ shell32.dll	SheGetDirA
+-shell32.dll	SheGetDirExW
+-shell32.dll	SheGetDirW
+-shell32.dll	SheGetPathOffsetW
+-shell32.dll	SheRemoveQuotesA
+-shell32.dll	SheRemoveQuotesW
+ shell32.dll	SheSetCurDrive
+-shell32.dll	SheShortenPathA
+-shell32.dll	SheShortenPathW
+ shell32.dll	ShellAboutA
+ shell32.dll	ShellAboutW
+ shell32.dll	ShellExec_RunDLL
+@@ -2474,12 +3063,16 @@
+ shell32.dll	ShellMessageBoxA
+ shell32.dll	ShellMessageBoxW
+ shell32.dll	Shell_GetCachedImageIndex
++shell32.dll	Shell_GetCachedImageIndexA
++shell32.dll	Shell_GetCachedImageIndexW
+ shell32.dll	Shell_GetImageLists
+ shell32.dll	Shell_MergeMenus
+ shell32.dll	Shell_NotifyIcon
+ shell32.dll	Shell_NotifyIconA
++shell32.dll	Shell_NotifyIconGetRect
+ shell32.dll	Shell_NotifyIconW
+ shell32.dll	SignalFileOpen
++shell32.dll	StgMakeUniqueName
+ shell32.dll	StrChrA
+ shell32.dll	StrChrIA
+ shell32.dll	StrChrIW
+@@ -2488,14 +3081,10 @@
+ shell32.dll	StrCmpNIA
+ shell32.dll	StrCmpNIW
+ shell32.dll	StrCmpNW
+-shell32.dll	StrCpyNA
+-shell32.dll	StrCpyNW
+ shell32.dll	StrNCmpA
+ shell32.dll	StrNCmpIA
+ shell32.dll	StrNCmpIW
+ shell32.dll	StrNCmpW
+-shell32.dll	StrNCpyA
+-shell32.dll	StrNCpyW
+ shell32.dll	StrRChrA
+ shell32.dll	StrRChrIA
+ shell32.dll	StrRChrIW
+@@ -2509,6 +3098,7 @@
+ shell32.dll	StrStrIW
+ shell32.dll	StrStrW
+ shell32.dll	WOWShellExecute
++shell32.dll	WaitForExplorerRestartW
+ shell32.dll	Win32DeleteFile
+ shell32.dll	WriteCabinetState
+ shell32.dll	5
+@@ -2517,6 +3107,7 @@
+ shell32.dll	12
+ shell32.dll	15
+ shell32.dll	20
++shell32.dll	26
+ shell32.dll	29
+ shell32.dll	30
+ shell32.dll	31
+@@ -2529,6 +3120,7 @@
+ shell32.dll	38
+ shell32.dll	39
+ shell32.dll	40
++shell32.dll	44
+ shell32.dll	45
+ shell32.dll	46
+ shell32.dll	48
+@@ -2549,7 +3141,6 @@
+ shell32.dll	78
+ shell32.dll	79
+ shell32.dll	82
+-shell32.dll	83
+ shell32.dll	84
+ shell32.dll	86
+ shell32.dll	87
+@@ -2560,19 +3151,47 @@
+ shell32.dll	96
+ shell32.dll	97
+ shell32.dll	99
++shell32.dll	101
++shell32.dll	104
++shell32.dll	105
++shell32.dll	106
++shell32.dll	107
++shell32.dll	108
++shell32.dll	109
++shell32.dll	110
++shell32.dll	111
++shell32.dll	112
++shell32.dll	113
++shell32.dll	114
++shell32.dll	115
++shell32.dll	116
++shell32.dll	117
++shell32.dll	118
++shell32.dll	120
++shell32.dll	121
+ shell32.dll	122
+ shell32.dll	123
++shell32.dll	124
+ shell32.dll	126
+ shell32.dll	127
+ shell32.dll	128
+ shell32.dll	130
++shell32.dll	140
++shell32.dll	141
++shell32.dll	142
++shell32.dll	143
++shell32.dll	144
+ shell32.dll	145
+ shell32.dll	146
++shell32.dll	148
++shell32.dll	151
+ shell32.dll	156
+ shell32.dll	158
+ shell32.dll	159
+ shell32.dll	160
++shell32.dll	161
+ shell32.dll	163
++shell32.dll	166
+ shell32.dll	172
+ shell32.dll	175
+ shell32.dll	177
+@@ -2598,9 +3217,18 @@
+ shell32.dll	213
+ shell32.dll	214
+ shell32.dll	215
++shell32.dll	216
++shell32.dll	217
++shell32.dll	218
++shell32.dll	219
++shell32.dll	220
++shell32.dll	221
++shell32.dll	222
++shell32.dll	223
++shell32.dll	224
++shell32.dll	225
++shell32.dll	227
+ shell32.dll	230
+-shell32.dll	231
+-shell32.dll	232
+ shell32.dll	233
+ shell32.dll	234
+ shell32.dll	235
+@@ -2622,6 +3250,17 @@
+ shell32.dll	257
+ shell32.dll	258
+ shell32.dll	259
++shell32.dll	260
++shell32.dll	261
++shell32.dll	262
++shell32.dll	264
++shell32.dll	265
++shell32.dll	266
++shell32.dll	270
++shell32.dll	520
++shell32.dll	521
++shell32.dll	522
++shell32.dll	523
+ shell32.dll	525
+ shell32.dll	640
+ shell32.dll	641
+@@ -2630,12 +3269,14 @@
+ shell32.dll	648
+ shell32.dll	650
+ shell32.dll	651
++shell32.dll	653
+ shell32.dll	660
+ shell32.dll	681
+ shell32.dll	683
+ shell32.dll	684
+ shell32.dll	690
+ shell32.dll	691
++shell32.dll	700
+ shell32.dll	702
+ shell32.dll	703
+ shell32.dll	704
+@@ -2661,9 +3302,119 @@
+ shell32.dll	744
+ shell32.dll	745
+ shell32.dll	748
++shell32.dll	749
+ shell32.dll	751
+ shell32.dll	752
+ shell32.dll	753
+ shell32.dll	754
+ shell32.dll	755
+ shell32.dll	756
++shell32.dll	757
++shell32.dll	758
++shell32.dll	759
++shell32.dll	760
++shell32.dll	761
++shell32.dll	762
++shell32.dll	763
++shell32.dll	764
++shell32.dll	766
++shell32.dll	767
++shell32.dll	777
++shell32.dll	778
++shell32.dll	781
++shell32.dll	786
++shell32.dll	787
++shell32.dll	788
++shell32.dll	789
++shell32.dll	790
++shell32.dll	791
++shell32.dll	810
++shell32.dll	811
++shell32.dll	812
++shell32.dll	813
++shell32.dll	814
++shell32.dll	815
++shell32.dll	816
++shell32.dll	817
++shell32.dll	818
++shell32.dll	819
++shell32.dll	820
++shell32.dll	821
++shell32.dll	822
++shell32.dll	823
++shell32.dll	824
++shell32.dll	825
++shell32.dll	826
++shell32.dll	827
++shell32.dll	828
++shell32.dll	829
++shell32.dll	830
++shell32.dll	831
++shell32.dll	832
++shell32.dll	833
++shell32.dll	834
++shell32.dll	835
++shell32.dll	836
++shell32.dll	837
++shell32.dll	838
++shell32.dll	839
++shell32.dll	840
++shell32.dll	841
++shell32.dll	842
++shell32.dll	843
++shell32.dll	844
++shell32.dll	845
++shell32.dll	847
++shell32.dll	848
++shell32.dll	849
++shell32.dll	850
++shell32.dll	851
++shell32.dll	852
++shell32.dll	854
++shell32.dll	856
++shell32.dll	857
++shell32.dll	858
++shell32.dll	859
++shell32.dll	860
++shell32.dll	861
++shell32.dll	862
++shell32.dll	863
++shell32.dll	864
++shell32.dll	865
++shell32.dll	866
++shell32.dll	867
++shell32.dll	868
++shell32.dll	869
++shell32.dll	870
++shell32.dll	871
++shell32.dll	872
++shell32.dll	873
++shell32.dll	874
++shell32.dll	875
++shell32.dll	876
++shell32.dll	877
++shell32.dll	878
++shell32.dll	880
++shell32.dll	881
++shell32.dll	882
++shell32.dll	883
++shell32.dll	884
++shell32.dll	885
++shell32.dll	886
++shell32.dll	887
++shell32.dll	888
++shell32.dll	889
++shell32.dll	890
++shell32.dll	891
++shell32.dll	892
++shell32.dll	893
++shell32.dll	894
++shell32.dll	895
++shell32.dll	896
++shell32.dll	897
++shell32.dll	898
++shell32.dll	899
++shell32.dll	900
++shell32.dll	901
++shell32.dll	902
++shell32.dll	903
