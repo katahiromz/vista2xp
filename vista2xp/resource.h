@@ -19,6 +19,7 @@
 #define IDS_NOTSUP64BIT                     107
 #define IDS_LOADV2XCTL32                    108
 #define IDS_LOADV2XU32                      109
+#define IDS_LOADV2XOL                       110
 
 #ifdef APSTUDIO_INVOKED
     #ifndef APSTUDIO_READONLY_SYMBOLS

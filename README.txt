@@ -36,6 +36,7 @@ You can check the IAT by dumpbin /imports of Visual Studio Command Prompt.
 - 2019.XX.YY ver.0.4
     - Support K32* functions.
     - Improve TaskDialog.
+    - Add v2xol (ole32) and CoCreateInstanceForXP.
 
 ## WARNING!
 

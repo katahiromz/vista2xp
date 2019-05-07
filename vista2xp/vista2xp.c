@@ -18,11 +18,11 @@
 HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile);
 
 static HINSTANCE s_hInst;
-static TCHAR s_szDLLs[3][MAX_PATH];
+static TCHAR s_szDLLs[4][MAX_PATH];
 
 LPTSTR GetDllSource(INT i)
 {
-    assert(i < 3);
+    assert(i < 4);
     return s_szDLLs[i];
 }
 
@@ -366,6 +366,29 @@ BOOL CheckSourceDlls(void)
         }
     }
     StringCchCopy(GetDllSource(2), MAX_PATH, szPath);
+
+    GetModuleFileName(NULL, szPath, ARRAYSIZE(szPath));
+    pch = PathFindFileName(szPath);
+    *pch = 0;
+
+    PathAppend(szPath, TEXT("v2xol.dll"));
+    if (!PathFileExists(szPath))
+    {
+        *pch = 0;
+        PathAppend(szPath, TEXT("..\\v2xol.dll"));
+        if (!PathFileExists(szPath))
+        {
+            *pch = 0;
+            PathAppend(szPath, TEXT("..\\..\\v2xol.dll"));
+            if (!PathFileExists(szPath))
+            {
+                LoadString(NULL, IDS_LOADV2XOL, szPath, ARRAYSIZE(szPath));
+                MessageBox(NULL, szPath, NULL, MB_ICONERROR);
+                return FALSE;
+            }
+        }
+    }
+    StringCchCopy(GetDllSource(3), MAX_PATH, szPath);
 
     return TRUE;
 }

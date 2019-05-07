@@ -39,6 +39,7 @@ STRINGTABLE
     IDS_NOTSUP64BIT, "Conversion of 64-bit programs is not supported yet."
     IDS_LOADV2XCTL32, "Unable to find a required file ""v2xctl32.dll""."
     IDS_LOADV2XU32, "Unable to find a required file ""v2xu32.dll""."
+    IDS_LOADV2XOL, "Unable to find a required file ""v2xol.dll""."
 }
 
 //////////////////////////////////////////////////////////////////////////////

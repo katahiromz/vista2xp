@@ -11,7 +11,8 @@
 
 #include <windows.h>
 #include <shobjidl.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cassert>
 
 int main(void)
 {
@@ -47,53 +48,48 @@ int main(void)
     }
 
     hr = pFileSave->SetFileTypes(0, NULL);
-    printf("Line %d: %08X\n", __LINE__, hr);
+    assert(hr == 0x80070057);
     hr = pFileSave->SetFileTypes(0, filterSpec);
-    printf("Line %d: %08X\n", __LINE__, hr);
+    assert(hr == S_OK);
     hr = pFileSave->SetFileTypes(ARRAYSIZE(filterSpec), NULL);
-    printf("Line %d: %08X\n", __LINE__, hr);
-
+    assert(hr == 0x80070057);
     hr = pFileSave->SetFileTypes(ARRAYSIZE(filterSpec), filterSpec);
-    if (FAILED(hr))
-    {
-        printf("Line %d: FAILED:%08X\n", __LINE__, hr);
-        goto cleanup;
-    }
+    assert(hr == S_OK);
 
     hr = pFileSave->GetOptions(NULL);
-    printf("Line %d: %08X\n", __LINE__, hr);
+    assert(hr == 0x80070057);
 
     hr = pFileSave->GetOptions(&fos);
-    printf("Line %d: %08X: %08X\n", __LINE__, hr, fos);
+    assert(hr == S_OK);
+    assert(fos == 0x0000880A);
 
     hr = pFileSave->GetFileName(NULL);
-    printf("Line %d: %08X\n", __LINE__, hr);
+    assert(hr == 0x80070057);
 
     hr = pFileSave->GetFileName(&pszFileName);
-    printf("Line %d: %08X: '%ls'\n", __LINE__, hr, pszFileName);
+    assert(hr == 0x80004005);
+    assert(pszFileName == NULL);
     CoTaskMemFree(pszFileName);
 
+    hr = pFileSave->SetFileName(L"C:\\Test.txt");
+    assert(hr == S_OK);
+
     hr = pFileSave->GetFileTypeIndex(NULL);
-    printf("Line %d: %08X\n", __LINE__, hr);
+    assert(hr == 0x80070057);
 
     hr = pFileSave->GetFileTypeIndex(&iIndex);
-    printf("Line %d: %08X: %u\n", __LINE__, hr, iIndex);
+    assert(hr == S_OK);
+    assert(iIndex == 0);
 
     hr = pFileSave->GetCurrentSelection(NULL);
-    printf("Line %d: %08X\n", __LINE__, hr);
+    assert(hr == 0x80070057);
 
     hr = pFileSave->GetCurrentSelection(&psi);
-    printf("Line %d: %08X: %p\n", __LINE__, hr, psi);
-    if (psi)
-    {
-        hr = psi->GetDisplayName(SIGDN_FILESYSPATH, &pszFileName);
-        psi->Release();
-        printf("Line %d: %08X: '%ls'\n", __LINE__, hr, pszFileName);
-        CoTaskMemFree(pszFileName);
-    }
+    assert(hr == 0x80004005);
+    assert(psi == NULL);
 
     hr = pFileSave->SetDefaultExtension(NULL);
-    printf("Line %d: %08X\n", __LINE__, hr);
+    assert(hr == S_OK);
 
     hr = pFileSave->SetDefaultExtension(L"txt");
     if (FAILED(hr))

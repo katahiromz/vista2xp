@@ -38,8 +38,8 @@ if (WIN32)
         set(CMAKE_CXX_FLAGS "-static -s")
     elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         # using GCC
-        set(CMAKE_C_FLAGS "-static -static-libgcc -static-libstdc++ -s")
-        set(CMAKE_CXX_FLAGS "-static -static-libgcc -static-libstdc++ -s")
+        set(CMAKE_C_FLAGS "-static -static-libgcc -static-libstdc++")
+        set(CMAKE_CXX_FLAGS "-static -static-libgcc -static-libstdc++")
     elseif (MSVC)
         # replace "/MD" with "/MT" (building without runtime DLLs)
         set(CompilerFlags
@@ -91,6 +91,12 @@ add_library(v2xctl32 SHARED v2xctl32/v2xctl32.c v2xctl32/v2xctl32.def v2xctl32/v
 target_link_libraries(v2xctl32 user32 comctl32)
 set_target_properties(v2xctl32 PROPERTIES PREFIX "")
 set_target_properties(v2xctl32 PROPERTIES OUTPUT_NAME "v2xctl32")
+
+# v2xol.dll
+add_library(v2xol SHARED v2xol/v2xol.cpp v2xol/FileDialog.cpp v2xol/v2xol.def)
+target_link_libraries(v2xol user32 shlwapi comctl32 shell32)
+set_target_properties(v2xol PROPERTIES PREFIX "")
+set_target_properties(v2xol PROPERTIES OUTPUT_NAME "v2xol")
 
 # vista2xp.exe
 add_executable(vista2xp WIN32 vista2xp/vista2xp.c vista2xp/vista2xp_res.rc vista2xp/JustDoIt.cpp)

@@ -38,6 +38,7 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
 - 2019.XX.YY ver.0.4
     - K32* 関数をサポート。
     - TaskDialog を改良。
+    - v2xol (ole32) と CoCreateInstanceForXP を追加。
 
 ## 警告
 

@@ -103,6 +103,33 @@ bool do_user32(codereverse::ExeImage& image, size_t i, char *name)
     return false;
 }
 
+bool do_ole32(codereverse::ExeImage& image, size_t i, char *name)
+{
+    std::vector<codereverse::ImportSymbol> symbols;
+    if (!image.get_import_symbols(i, symbols))
+    {
+        return false;
+    }
+
+    for (size_t k = 0; k < symbols.size(); ++k)
+    {
+        codereverse::ImportSymbol& symbol = symbols[k];
+        if (symbol.Name.wImportByName)
+        {
+            if (lstrcmpA(symbol.pszName, "CoCreateInstance") == 0)
+            {
+                if (lstrcmpiA(name, "ole32") == 0)
+                    StringCbCopyA(const_cast<char *>(name), 6, "v2xol");
+                else if (lstrcmpiA(name, "ole32.dll") == 0)
+                    StringCbCopyA(const_cast<char *>(name), 10, "v2xol.dll");
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 extern "C"
 HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
 {
@@ -139,6 +166,7 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
     bool v2xker32_found = false;
     bool v2xctl32_found = false;
     bool v2xu32_found = false;
+    bool v2xol_found = false;
     for (DWORD i = 0; i < names.size(); ++i)
     {
         if (lstrcmpiA(names[i], "kernel32.dll") == 0 ||
@@ -155,6 +183,11 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
                  lstrcmpiA(names[i], "user32") == 0)
         {
             v2xu32_found = do_user32(image, i, const_cast<char *>(names[i]));
+        }
+        else if (lstrcmpiA(names[i], "ole32.dll") == 0 ||
+                 lstrcmpiA(names[i], "ole32") == 0)
+        {
+            v2xol_found = do_ole32(image, i, const_cast<char *>(names[i]));
         }
     }
 
@@ -221,7 +254,26 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
             return E_FAIL;
     }
 
-    if (v2xker32_found || v2xctl32_found || v2xu32_found)
+    if (v2xol_found)
+    {
+        // cut off file title
+        *pch = 0;
+
+        // create backup
+        PathAppend(szPath, TEXT("Vista2XP-Backup"));
+        CreateDirectory(szPath, NULL);
+        PathAppend(szPath, pszTitle);
+        CopyFile(pszFile, szPath, TRUE);
+
+        // cut off file title
+        *pch = 0;
+
+        PathAppend(szPath, TEXT("v2xol.dll"));
+        if (!PathFileExists(szPath) && !CopyFile(GetDllSource(3), szPath, FALSE))
+            return E_FAIL;
+    }
+
+    if (v2xker32_found || v2xctl32_found || v2xu32_found || v2xol_found)
     {
         if (!image.do_reverse_map() || !image.save(pszFile))
         {
