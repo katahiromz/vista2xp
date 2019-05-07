@@ -1,5 +1,5 @@
---- winxp.dat	2019-05-06 09:10:56.749459000 +0900
-+++ win7.dat	2019-05-06 09:11:22.658389900 +0900
+--- winxp.dat	2019-05-07 07:21:33.578118500 +0900
++++ win7.dat	2019-05-07 07:21:55.858574500 +0900
 @@ -1,14 +1,24 @@
 +kernel32.dll	AcquireSRWLockExclusive
 +kernel32.dll	AcquireSRWLockShared
@@ -1691,3 +1691,157 @@
  comctl32.dll	389
  comctl32.dll	390
  comctl32.dll	402
+@@ -1884,6 +2395,7 @@
+ ole32.dll	CoCreateObjectInContext
+ ole32.dll	CoDeactivateObject
+ ole32.dll	CoDisableCallCancellation
++ole32.dll	CoDisconnectContext
+ ole32.dll	CoDisconnectObject
+ ole32.dll	CoDosDateTimeToFileTime
+ ole32.dll	CoEnableCallCancellation
+@@ -1893,8 +2405,11 @@
+ ole32.dll	CoFreeLibrary
+ ole32.dll	CoFreeUnusedLibraries
+ ole32.dll	CoFreeUnusedLibrariesEx
++ole32.dll	CoGetActivationState
+ ole32.dll	CoGetApartmentID
++ole32.dll	CoGetApartmentType
+ ole32.dll	CoGetCallContext
++ole32.dll	CoGetCallState
+ ole32.dll	CoGetCallerTID
+ ole32.dll	CoGetCancelObject
+ ole32.dll	CoGetClassObject
+@@ -1911,12 +2426,12 @@
+ ole32.dll	CoGetInterfaceAndReleaseStream
+ ole32.dll	CoGetMalloc
+ ole32.dll	CoGetMarshalSizeMax
++ole32.dll	CoGetModuleType
+ ole32.dll	CoGetObject
+ ole32.dll	CoGetObjectContext
+ ole32.dll	CoGetPSClsid
+ ole32.dll	CoGetProcessIdentifier
+ ole32.dll	CoGetStandardMarshal
+-ole32.dll	CoGetState
+ ole32.dll	CoGetStdMarshalEx
+ ole32.dll	CoGetSystemSecurityPermissions
+ ole32.dll	CoGetTreatAsClass
+@@ -1971,29 +2486,14 @@
+ ole32.dll	CoUnloadingWOW
+ ole32.dll	CoUnmarshalHresult
+ ole32.dll	CoUnmarshalInterface
++ole32.dll	CoVrfCheckThreadState
++ole32.dll	CoVrfGetThreadState
++ole32.dll	CoVrfReleaseThreadState
+ ole32.dll	CoWaitForMultipleHandles
+-ole32.dll	ComPs_CStdStubBuffer_AddRef
+-ole32.dll	ComPs_CStdStubBuffer_Connect
+-ole32.dll	ComPs_CStdStubBuffer_CountRefs
+-ole32.dll	ComPs_CStdStubBuffer_DebugServerQueryInterface
+-ole32.dll	ComPs_CStdStubBuffer_DebugServerRelease
+-ole32.dll	ComPs_CStdStubBuffer_Disconnect
+-ole32.dll	ComPs_CStdStubBuffer_Invoke
+-ole32.dll	ComPs_CStdStubBuffer_IsIIDSupported
+-ole32.dll	ComPs_CStdStubBuffer_QueryInterface
+-ole32.dll	ComPs_IUnknown_AddRef_Proxy
+-ole32.dll	ComPs_IUnknown_QueryInterface_Proxy
+-ole32.dll	ComPs_IUnknown_Release_Proxy
+-ole32.dll	ComPs_NdrCStdStubBuffer2_Release
+-ole32.dll	ComPs_NdrCStdStubBuffer_Release
+-ole32.dll	ComPs_NdrClientCall2
+-ole32.dll	ComPs_NdrClientCall2_va
+ ole32.dll	ComPs_NdrDllCanUnloadNow
+ ole32.dll	ComPs_NdrDllGetClassObject
+ ole32.dll	ComPs_NdrDllRegisterProxy
+ ole32.dll	ComPs_NdrDllUnregisterProxy
+-ole32.dll	ComPs_NdrStubCall2
+-ole32.dll	ComPs_NdrStubForwardingFunction
+ ole32.dll	CreateAntiMoniker
+ ole32.dll	CreateBindCtx
+ ole32.dll	CreateClassMoniker
+@@ -2070,6 +2570,10 @@
+ ole32.dll	HPALETTE_UserMarshal
+ ole32.dll	HPALETTE_UserSize
+ ole32.dll	HPALETTE_UserUnmarshal
++ole32.dll	HRGN_UserFree
++ole32.dll	HRGN_UserMarshal
++ole32.dll	HRGN_UserSize
++ole32.dll	HRGN_UserUnmarshal
+ ole32.dll	HWND_UserFree
+ ole32.dll	HWND_UserMarshal
+ ole32.dll	HWND_UserSize
+@@ -2085,6 +2589,67 @@
+ ole32.dll	MkParseDisplayName
+ ole32.dll	MonikerCommonPrefixWith
+ ole32.dll	MonikerRelativePathTo
++ole32.dll	NdrOleInitializeExtension
++ole32.dll	NdrProxyForwardingFunction10
++ole32.dll	NdrProxyForwardingFunction11
++ole32.dll	NdrProxyForwardingFunction12
++ole32.dll	NdrProxyForwardingFunction13
++ole32.dll	NdrProxyForwardingFunction14
++ole32.dll	NdrProxyForwardingFunction15
++ole32.dll	NdrProxyForwardingFunction16
++ole32.dll	NdrProxyForwardingFunction17
++ole32.dll	NdrProxyForwardingFunction18
++ole32.dll	NdrProxyForwardingFunction19
++ole32.dll	NdrProxyForwardingFunction20
++ole32.dll	NdrProxyForwardingFunction21
++ole32.dll	NdrProxyForwardingFunction22
++ole32.dll	NdrProxyForwardingFunction23
++ole32.dll	NdrProxyForwardingFunction24
++ole32.dll	NdrProxyForwardingFunction25
++ole32.dll	NdrProxyForwardingFunction26
++ole32.dll	NdrProxyForwardingFunction27
++ole32.dll	NdrProxyForwardingFunction28
++ole32.dll	NdrProxyForwardingFunction29
++ole32.dll	NdrProxyForwardingFunction3
++ole32.dll	NdrProxyForwardingFunction30
++ole32.dll	NdrProxyForwardingFunction31
++ole32.dll	NdrProxyForwardingFunction32
++ole32.dll	NdrProxyForwardingFunction4
++ole32.dll	NdrProxyForwardingFunction5
++ole32.dll	NdrProxyForwardingFunction6
++ole32.dll	NdrProxyForwardingFunction7
++ole32.dll	NdrProxyForwardingFunction8
++ole32.dll	NdrProxyForwardingFunction9
++ole32.dll	ObjectStublessClient10
++ole32.dll	ObjectStublessClient11
++ole32.dll	ObjectStublessClient12
++ole32.dll	ObjectStublessClient13
++ole32.dll	ObjectStublessClient14
++ole32.dll	ObjectStublessClient15
++ole32.dll	ObjectStublessClient16
++ole32.dll	ObjectStublessClient17
++ole32.dll	ObjectStublessClient18
++ole32.dll	ObjectStublessClient19
++ole32.dll	ObjectStublessClient20
++ole32.dll	ObjectStublessClient21
++ole32.dll	ObjectStublessClient22
++ole32.dll	ObjectStublessClient23
++ole32.dll	ObjectStublessClient24
++ole32.dll	ObjectStublessClient25
++ole32.dll	ObjectStublessClient26
++ole32.dll	ObjectStublessClient27
++ole32.dll	ObjectStublessClient28
++ole32.dll	ObjectStublessClient29
++ole32.dll	ObjectStublessClient3
++ole32.dll	ObjectStublessClient30
++ole32.dll	ObjectStublessClient31
++ole32.dll	ObjectStublessClient32
++ole32.dll	ObjectStublessClient4
++ole32.dll	ObjectStublessClient5
++ole32.dll	ObjectStublessClient6
++ole32.dll	ObjectStublessClient7
++ole32.dll	ObjectStublessClient8
++ole32.dll	ObjectStublessClient9
+ ole32.dll	OleBuildVersion
+ ole32.dll	OleConvertIStorageToOLESTREAM
+ ole32.dll	OleConvertIStorageToOLESTREAMEx
+@@ -2189,6 +2754,7 @@
+ ole32.dll	StringFromGUID2
+ ole32.dll	StringFromIID
+ ole32.dll	UpdateDCOMSettings
++ole32.dll	UpdateProcessTracing
+ ole32.dll	UtConvertDvtd16toDvtd32
+ ole32.dll	UtConvertDvtd32toDvtd16
+ ole32.dll	UtGetDvtd16Info
