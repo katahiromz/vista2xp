@@ -26,10 +26,44 @@ int main(void)
     IFileOpenDialog *pFileOpen = NULL;
     IShellItem *pItem = NULL;
     PWSTR pszFilePath = NULL;
+    FILEOPENDIALOGOPTIONS fos = 0xFFFFFFFF;
+    LPWSTR pszFileName = NULL;
+    UINT iIndex = -3;
+    IShellItem *psi = NULL;
 
     hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL, 
                           IID_IFileOpenDialog,
                           reinterpret_cast<void**>(&pFileOpen));
+    if (FAILED(hr))
+    {
+        printf("Line %d: FAILED:%08X\n", __LINE__, hr);
+        goto cleanup;
+    }
+
+    hr = pFileOpen->GetOptions(&fos);
+    printf("Line %d: %08X: %08X\n", __LINE__, hr, fos);
+
+    hr = pFileOpen->GetFileName(&pszFileName);
+    printf("Line %d: %08X: '%ls'\n", __LINE__, hr, pszFileName);
+    CoTaskMemFree(pszFileName);
+
+    hr = pFileOpen->GetFileTypeIndex(&iIndex);
+    printf("Line %d: %08X: %u\n", __LINE__, hr, iIndex);
+
+    hr = pFileOpen->GetCurrentSelection(&psi);
+    printf("Line %d: %08X: %p\n", __LINE__, hr, psi);
+    if (psi)
+    {
+        hr = psi->GetDisplayName(SIGDN_FILESYSPATH, &pszFileName);
+        psi->Release();
+        printf("Line %d: %08X: '%ls'\n", __LINE__, hr, pszFileName);
+        CoTaskMemFree(pszFileName);
+    }
+
+    hr = pFileOpen->SetDefaultExtension(NULL);
+    printf("Line %d: %08X\n", __LINE__, hr);
+
+    hr = pFileOpen->SetDefaultExtension(L"txt");
     if (FAILED(hr))
     {
         printf("Line %d: FAILED:%08X\n", __LINE__, hr);

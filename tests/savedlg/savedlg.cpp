@@ -26,7 +26,10 @@ int main(void)
     IFileSaveDialog *pFileSave = NULL;
     IShellItem *pItem = NULL;
     PWSTR pszFilePath = NULL;
-    DWORD dwFlags;
+    FILEOPENDIALOGOPTIONS fos = 0xFFFFFFFF;
+    LPWSTR pszFileName = NULL;
+    UINT iIndex = -3;
+    IShellItem *psi = NULL;
 
     static const COMDLG_FILTERSPEC filterSpec[] =
     {
@@ -43,6 +46,13 @@ int main(void)
         goto cleanup;
     }
 
+    hr = pFileSave->SetFileTypes(0, NULL);
+    printf("Line %d: %08X\n", __LINE__, hr);
+    hr = pFileSave->SetFileTypes(0, filterSpec);
+    printf("Line %d: %08X\n", __LINE__, hr);
+    hr = pFileSave->SetFileTypes(ARRAYSIZE(filterSpec), NULL);
+    printf("Line %d: %08X\n", __LINE__, hr);
+
     hr = pFileSave->SetFileTypes(ARRAYSIZE(filterSpec), filterSpec);
     if (FAILED(hr))
     {
@@ -50,13 +60,40 @@ int main(void)
         goto cleanup;
     }
 
-    dwFlags = pFileSave->GetOptions(&dwFlags);
-    hr = pFileSave->SetOptions(dwFlags | FOS_FORCEFILESYSTEM);
-    if (FAILED(hr))
+    hr = pFileSave->GetOptions(NULL);
+    printf("Line %d: %08X\n", __LINE__, hr);
+
+    hr = pFileSave->GetOptions(&fos);
+    printf("Line %d: %08X: %08X\n", __LINE__, hr, fos);
+
+    hr = pFileSave->GetFileName(NULL);
+    printf("Line %d: %08X\n", __LINE__, hr);
+
+    hr = pFileSave->GetFileName(&pszFileName);
+    printf("Line %d: %08X: '%ls'\n", __LINE__, hr, pszFileName);
+    CoTaskMemFree(pszFileName);
+
+    hr = pFileSave->GetFileTypeIndex(NULL);
+    printf("Line %d: %08X\n", __LINE__, hr);
+
+    hr = pFileSave->GetFileTypeIndex(&iIndex);
+    printf("Line %d: %08X: %u\n", __LINE__, hr, iIndex);
+
+    hr = pFileSave->GetCurrentSelection(NULL);
+    printf("Line %d: %08X\n", __LINE__, hr);
+
+    hr = pFileSave->GetCurrentSelection(&psi);
+    printf("Line %d: %08X: %p\n", __LINE__, hr, psi);
+    if (psi)
     {
-        printf("Line %d: FAILED:%08X\n", __LINE__, hr);
-        goto cleanup;
+        hr = psi->GetDisplayName(SIGDN_FILESYSPATH, &pszFileName);
+        psi->Release();
+        printf("Line %d: %08X: '%ls'\n", __LINE__, hr, pszFileName);
+        CoTaskMemFree(pszFileName);
     }
+
+    hr = pFileSave->SetDefaultExtension(NULL);
+    printf("Line %d: %08X\n", __LINE__, hr);
 
     hr = pFileSave->SetDefaultExtension(L"txt");
     if (FAILED(hr))
