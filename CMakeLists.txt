@@ -102,19 +102,7 @@ set_target_properties(v2xol PROPERTIES OUTPUT_NAME "v2xol")
 add_executable(vista2xp WIN32 vista2xp/vista2xp.c vista2xp/vista2xp_res.rc vista2xp/JustDoIt.cpp)
 target_link_libraries(vista2xp comdlg32 comctl32 shlwapi)
 
-# taskdlg.exe
-add_executable(taskdlg tests/taskdlg/taskdlg.c tests/taskdlg/taskdlg_res.rc)
-target_link_libraries(taskdlg comctl32)
-
-# regtest.exe
-add_executable(regtest tests/regtest/regtest.c)
-
-# opendlg.exe
-add_executable(opendlg tests/opendlg/opendlg.cpp)
-target_link_libraries(opendlg uuid)
-
-# savedlg.exe
-add_executable(savedlg tests/savedlg/savedlg.cpp)
-target_link_libraries(savedlg uuid)
+# test programs
+subdirs(tests)
 
 ##############################################################################
