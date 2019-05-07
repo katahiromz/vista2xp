@@ -1,3 +1,7 @@
+/* FileDialog_inl.hpp --- v2xol.dll for vista2xp */
+/* This file is public domain software.
+   Copyright (C) 2019 Katayama Hirofumi MZ <katayama.hirofumi.mz@gmail.com>. */
+
 /*static*/ THIS_CLASS *THIS_CLASS::CreateInstance()
 {
     return new(std::nothrow) THIS_CLASS();

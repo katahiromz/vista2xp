@@ -1,3 +1,6 @@
+/* FileDialog.cpp --- v2xol.dll for vista2xp */
+/* This file is public domain software.
+   Copyright (C) 2019 Katayama Hirofumi MZ <katayama.hirofumi.mz@gmail.com>. */
 #include "targetver.h"
 #include <initguid.h>
 #include <windows.h>
