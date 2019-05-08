@@ -93,7 +93,7 @@ set_target_properties(v2xctl32 PROPERTIES PREFIX "")
 set_target_properties(v2xctl32 PROPERTIES OUTPUT_NAME "v2xctl32")
 
 # v2xol.dll
-add_library(v2xol SHARED v2xol/v2xol.cpp v2xol/FileDialog.cpp v2xol/v2xol.def)
+add_library(v2xol SHARED v2xol/v2xol.cpp v2xol/FileDialog.cpp v2xol/ShellItemArray.cpp v2xol/v2xol.def)
 target_link_libraries(v2xol user32 shlwapi comctl32 shell32)
 set_target_properties(v2xol PROPERTIES PREFIX "")
 set_target_properties(v2xol PROPERTIES OUTPUT_NAME "v2xol")

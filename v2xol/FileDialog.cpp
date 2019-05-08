@@ -10,6 +10,7 @@
 #include <strsafe.h>
 #include <new>
 #include "FileDialog.hpp"
+#include "ShellItemArray.hpp"
 
 #define DOGIF_ONLY_IF_ONE 0x8
 
@@ -92,7 +93,7 @@ protected:
     LPITEMIDLIST m_pidlDefFolder;
     BOOL m_bDoSave;
     FILEOPENDIALOGOPTIONS m_options;
-    LPWSTR m_pszFile;
+    LPWSTR m_pszFiles;
     LPWSTR m_pszTitle;
     LPWSTR m_pszzFilter;
     IFileDialogEvents *m_pEvents;
@@ -182,7 +183,7 @@ protected:
     LPITEMIDLIST m_pidlDefFolder;
     BOOL m_bDoSave;
     FILEOPENDIALOGOPTIONS m_options;
-    LPWSTR m_pszFile;
+    LPWSTR m_pszFiles;
     LPWSTR m_pszTitle;
     LPWSTR m_pszzFilter;
     IFileDialogEvents *m_pEvents;
@@ -224,7 +225,7 @@ IFileSaveDialog *createFileSaveDialog(void)
 
 #undef THIS_CLASS
 #define THIS_CLASS MFileOpenDialog
-#include "FileDialog_inl.hpp"
+#include "FileDialog_common.hpp"
 
 THIS_CLASS::THIS_CLASS() :
     m_nRefCount(1),
@@ -233,7 +234,7 @@ THIS_CLASS::THIS_CLASS() :
     m_pidlDefFolder(NULL),
     m_bDoSave(FALSE),
     m_options(0),
-    m_pszFile(NULL),
+    m_pszFiles(NULL),
     m_pszTitle(NULL),
     m_pszzFilter(NULL),
     m_pEvents(NULL),
@@ -277,7 +278,34 @@ STDMETHODIMP THIS_CLASS::QueryInterface(REFIID riid, void **ppvObj)
 
 STDMETHODIMP THIS_CLASS::GetResults(IShellItemArray **ppenum)
 {
-    return E_NOTIMPL;
+    if (!ppenum || !(m_options & FOS_ALLOWMULTISELECT))
+        return E_INVALIDARG;
+
+    if (!m_pszFiles || !*m_pszFiles)
+        return E_FAIL;
+
+    MShellItemArray *pArray = MShellItemArray::CreateInstance();
+    if (!pArray)
+        return E_OUTOFMEMORY;
+
+    for (LPWSTR pch = m_pszFiles; *pch; pch += lstrlenW(pch) + 1)
+    {
+        LPITEMIDLIST pidl = ILCreateFromPathW(pch);
+        IShellItem *psi = NULL;
+        ::SHCreateShellItem(NULL, NULL, pidl, &psi);
+        CoTaskMemFree(pidl);
+
+        if (!psi)
+        {
+            pArray->Release();
+            return E_OUTOFMEMORY;
+        }
+
+        pArray->AddItem(psi);
+        psi->Release();
+    }
+
+    return S_OK;
 }
 
 STDMETHODIMP THIS_CLASS::GetSelectedItems(IShellItemArray **ppsai)
@@ -290,7 +318,7 @@ STDMETHODIMP THIS_CLASS::GetSelectedItems(IShellItemArray **ppsai)
 
 #undef THIS_CLASS
 #define THIS_CLASS MFileSaveDialog
-#include "FileDialog_inl.hpp"
+#include "FileDialog_common.hpp"
 
 THIS_CLASS::THIS_CLASS() :
     m_nRefCount(1),
@@ -299,7 +327,7 @@ THIS_CLASS::THIS_CLASS() :
     m_pidlDefFolder(NULL),
     m_bDoSave(FALSE),
     m_options(0),
-    m_pszFile(NULL),
+    m_pszFiles(NULL),
     m_pszTitle(NULL),
     m_pszzFilter(NULL),
     m_pEvents(NULL),

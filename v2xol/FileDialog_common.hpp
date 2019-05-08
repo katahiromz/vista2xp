@@ -19,10 +19,10 @@ THIS_CLASS::~THIS_CLASS()
         CoTaskMemFree(m_pidlDefFolder);
         m_pidlDefFolder = NULL;
     }
-    if (m_pszFile)
+    if (m_pszFiles)
     {
-        CoTaskMemFree(m_pszFile);
-        m_pszFile = NULL;
+        CoTaskMemFree(m_pszFiles);
+        m_pszFiles = NULL;
     }
     if (m_pszTitle)
     {
@@ -310,10 +310,13 @@ BOOL THIS_CLASS::VerifyFileType()
     if (!(m_options & FOS_STRICTFILETYPES))
         return TRUE;
 
-    if (!m_pszFile || !*m_pszFile)
+    if (m_options & FOS_ALLOWMULTISELECT)
+        return TRUE;    // FIXME
+
+    if (!*m_szFile)
         return TRUE;
 
-    LPWSTR pchExt1 = PathFindExtension(m_pszFile);
+    LPWSTR pchExt1 = PathFindExtension(m_szFile);
     if (pchExt1 && *pchExt1 == L'.')
         ++pchExt1;
 
@@ -415,18 +418,18 @@ STDMETHODIMP THIS_CLASS::Show(HWND hwndOwner)
         m_ofn.hwndOwner = hwndOwner;
         if (m_options & FOS_ALLOWMULTISELECT)
         {
-            if (m_pszFile)
+            if (m_pszFiles)
             {
-                CoTaskMemFree(m_pszFile);
-                m_pszFile = NULL;
+                CoTaskMemFree(m_pszFiles);
+                m_pszFiles = NULL;
             }
 
             m_ofn.nMaxFile = 16 * 1024;
-            m_pszFile = (LPWSTR)CoTaskMemAlloc(m_ofn.nMaxFile * sizeof(WCHAR));
-            if (!m_pszFile)
+            m_pszFiles = (LPWSTR)CoTaskMemAlloc(m_ofn.nMaxFile * sizeof(WCHAR));
+            if (!m_pszFiles)
                 return E_OUTOFMEMORY;
 
-            StringCchCopyW(m_pszFile, m_ofn.nMaxFile, m_szFile);
+            StringCchCopyW(m_pszFiles, m_ofn.nMaxFile, m_szFile);
         }
         else
         {
@@ -791,7 +794,27 @@ STDMETHODIMP THIS_CLASS::SetFileNameLabel(LPCWSTR pszLabel)
 
 STDMETHODIMP THIS_CLASS::GetResult(IShellItem **ppsi)
 {
-    return ::SHCreateShellItem(NULL, NULL, m_pidlSelected, ppsi);
+    HRESULT hr;
+    LPITEMIDLIST pidl;
+
+    if (IsFolderDialog())
+    {
+        return ::SHCreateShellItem(NULL, NULL, m_pidlSelected, ppsi);
+    }
+    else
+    {
+        if (m_pszFiles)
+        {
+            pidl = ILCreateFromPathW(m_pszFiles);
+        }
+        else
+        {
+            pidl = ILCreateFromPathW(m_szFile);
+        }
+        hr = ::SHCreateShellItem(NULL, NULL, pidl, ppsi);
+        CoTaskMemFree(pidl);
+        return hr;
+    }
 }
 
 STDMETHODIMP THIS_CLASS::AddPlace(IShellItem *psi, FDAP fdap)
