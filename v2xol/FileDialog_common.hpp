@@ -148,12 +148,12 @@ THIS_CLASS::BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpDat
         if (pFD)
         {
             pFD->m_hwnd = hwnd;
-            ::SendMessage(hwnd, BFFM_SETSELECTION, FALSE, (LPARAM)pFD->m_pidlSelected);
+            ::SendMessage(hwnd, BFFM_SETSELECTION, TRUE, (LPARAM)pFD->m_szFile);
         }
         break;
 
     case BFFM_SELCHANGED:
-        if (pFD->m_pidlSelected)
+        if (pFD->m_pidlSelected && pFD->m_pidlSelected != (LPITEMIDLIST)lParam)
         {
             CoTaskMemFree(pFD->m_pidlSelected);
             pFD->m_pidlSelected = NULL;
@@ -402,11 +402,6 @@ STDMETHODIMP THIS_CLASS::Show(HWND hwndOwner)
     if (IsFolderDialog())
     {
         m_bi.hwndOwner = hwndOwner;
-        if (m_pidlSelected)
-        {
-            m_bi.pidlRoot = m_pidlSelected;
-            m_pidlSelected = NULL;
-        }
         m_pidlSelected = SHBrowseForFolder(&m_bi);
         if (m_pidlSelected)
         {

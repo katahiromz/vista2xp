@@ -16,3 +16,7 @@ target_link_libraries(savedlg uuid)
 # multifile.exe
 add_executable(multifile multifile/multifile.cpp)
 target_link_libraries(multifile uuid)
+
+# folder.exe
+add_executable(folder folder/folder.cpp)
+target_link_libraries(folder uuid)
