@@ -392,7 +392,17 @@ STDMETHODIMP THIS_CLASS::QueryInterface(REFIID riid, void **ppvObj)
 
 STDMETHODIMP THIS_CLASS::SetSaveAsItem(IShellItem *psi)
 {
-    return E_NOTIMPL;
+    if (!psi)
+        return E_INVALIDARG;
+
+    LPITEMIDLIST pidl = NULL;
+    SHGetIDListFromObjectForXP(psi, &pidl);
+
+    WCHAR szPath[MAX_PATH];
+    SHGetPathFromIDListW(pidl, szPath);
+    SetFileName(szPath);
+
+    return S_OK;
 }
 
 STDMETHODIMP THIS_CLASS::SetProperties(IPropertyStore *pStore)
