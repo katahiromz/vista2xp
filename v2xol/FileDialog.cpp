@@ -93,7 +93,7 @@ protected:
     LPITEMIDLIST m_pidlDefFolder;
     BOOL m_bDoSave;
     FILEOPENDIALOGOPTIONS m_options;
-    LPWSTR m_pszFiles;
+    LPWSTR m_pszzFiles;
     LPWSTR m_pszTitle;
     LPWSTR m_pszzFilter;
     IFileDialogEvents *m_pEvents;
@@ -183,7 +183,7 @@ protected:
     LPITEMIDLIST m_pidlDefFolder;
     BOOL m_bDoSave;
     FILEOPENDIALOGOPTIONS m_options;
-    LPWSTR m_pszFiles;
+    LPWSTR m_pszzFiles;
     LPWSTR m_pszTitle;
     LPWSTR m_pszzFilter;
     IFileDialogEvents *m_pEvents;
@@ -234,7 +234,7 @@ THIS_CLASS::THIS_CLASS() :
     m_pidlDefFolder(NULL),
     m_bDoSave(FALSE),
     m_options(0),
-    m_pszFiles(NULL),
+    m_pszzFiles(NULL),
     m_pszTitle(NULL),
     m_pszzFilter(NULL),
     m_pEvents(NULL),
@@ -281,16 +281,32 @@ STDMETHODIMP THIS_CLASS::GetResults(IShellItemArray **ppenum)
     if (!ppenum || !(m_options & FOS_ALLOWMULTISELECT))
         return E_INVALIDARG;
 
-    if (!m_pszFiles || !*m_pszFiles)
+    if (!m_pszzFiles || !*m_pszzFiles)
         return E_FAIL;
 
     MShellItemArray *pArray = MShellItemArray::CreateInstance();
     if (!pArray)
-        return E_OUTOFMEMORY;
-
-    for (LPWSTR pch = m_pszFiles; *pch; pch += lstrlenW(pch) + 1)
     {
-        LPITEMIDLIST pidl = ILCreateFromPathW(pch);
+        return E_OUTOFMEMORY;
+    }
+
+    WCHAR szPath[MAX_PATH];
+    LPWSTR pchTitle = NULL;
+    for (LPWSTR pch = m_pszzFiles; pch && *pch; pch += lstrlenW(pch) + 1)
+    {
+        if (pch == m_pszzFiles)
+        {
+            StringCbCopyW(szPath, sizeof(szPath), pch);
+            pchTitle = szPath + lstrlenW(szPath);
+            continue;
+        }
+        else
+        {
+            *pchTitle = 0;
+            PathAppendW(szPath, pch);
+        }
+
+        LPITEMIDLIST pidl = ILCreateFromPathW(szPath);
         IShellItem *psi = NULL;
         ::SHCreateShellItem(NULL, NULL, pidl, &psi);
         CoTaskMemFree(pidl);
@@ -304,6 +320,8 @@ STDMETHODIMP THIS_CLASS::GetResults(IShellItemArray **ppenum)
         pArray->AddItem(psi);
         psi->Release();
     }
+
+    *ppenum = pArray;
 
     return S_OK;
 }
@@ -327,7 +345,7 @@ THIS_CLASS::THIS_CLASS() :
     m_pidlDefFolder(NULL),
     m_bDoSave(FALSE),
     m_options(0),
-    m_pszFiles(NULL),
+    m_pszzFiles(NULL),
     m_pszTitle(NULL),
     m_pszzFilter(NULL),
     m_pEvents(NULL),

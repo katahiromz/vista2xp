@@ -19,10 +19,10 @@ THIS_CLASS::~THIS_CLASS()
         CoTaskMemFree(m_pidlDefFolder);
         m_pidlDefFolder = NULL;
     }
-    if (m_pszFiles)
+    if (m_pszzFiles)
     {
-        CoTaskMemFree(m_pszFiles);
-        m_pszFiles = NULL;
+        CoTaskMemFree(m_pszzFiles);
+        m_pszzFiles = NULL;
     }
     if (m_pszTitle)
     {
@@ -418,18 +418,19 @@ STDMETHODIMP THIS_CLASS::Show(HWND hwndOwner)
         m_ofn.hwndOwner = hwndOwner;
         if (m_options & FOS_ALLOWMULTISELECT)
         {
-            if (m_pszFiles)
+            if (m_pszzFiles)
             {
-                CoTaskMemFree(m_pszFiles);
-                m_pszFiles = NULL;
+                CoTaskMemFree(m_pszzFiles);
+                m_pszzFiles = NULL;
             }
 
             m_ofn.nMaxFile = 16 * 1024;
-            m_pszFiles = (LPWSTR)CoTaskMemAlloc(m_ofn.nMaxFile * sizeof(WCHAR));
-            if (!m_pszFiles)
+            m_pszzFiles = (LPWSTR)CoTaskMemAlloc(m_ofn.nMaxFile * sizeof(WCHAR));
+            if (!m_pszzFiles)
                 return E_OUTOFMEMORY;
 
-            StringCchCopyW(m_pszFiles, m_ofn.nMaxFile, m_szFile);
+            StringCchCopyW(m_pszzFiles, m_ofn.nMaxFile, m_szFile);
+            m_ofn.lpstrFile = m_pszzFiles;
         }
         else
         {
@@ -803,9 +804,9 @@ STDMETHODIMP THIS_CLASS::GetResult(IShellItem **ppsi)
     }
     else
     {
-        if (m_pszFiles)
+        if (m_pszzFiles)
         {
-            pidl = ILCreateFromPathW(m_pszFiles);
+            pidl = ILCreateFromPathW(m_pszzFiles);
         }
         else
         {
