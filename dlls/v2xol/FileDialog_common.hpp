@@ -828,7 +828,7 @@ STDMETHODIMP THIS_CLASS::SetFileNameLabel(LPCWSTR pszLabel)
 STDMETHODIMP THIS_CLASS::GetResult(IShellItem **ppsi)
 {
     HRESULT hr;
-    LPITEMIDLIST pidl;
+    LPITEMIDLIST pidl = NULL;
 
     if (IsFolderDialog())
     {
@@ -838,13 +838,29 @@ STDMETHODIMP THIS_CLASS::GetResult(IShellItem **ppsi)
     {
         if (m_pszzFiles)
         {
-            pidl = ILCreateFromPathW(m_pszzFiles);
+            if (m_pszzFiles[0])
+            {
+                pidl = ILCreateFromPathW(m_pszzFiles);
+            }
         }
         else
         {
-            pidl = ILCreateFromPathW(m_szFile);
+            if (m_szFile[0])
+            {
+                if (!PathFileExistsW(m_szFile))
+                {
+                    HANDLE hFile;
+                    hFile = CreateFileW(m_szFile, GENERIC_WRITE, FILE_SHARE_WRITE, NULL,
+                                        OPEN_ALWAYS, 0, NULL);
+                    CloseHandle(hFile);
+                }
+                pidl = ILCreateFromPathW(m_szFile);
+            }
         }
-        hr = SHCreateShellItemForXP0(NULL, NULL, pidl, ppsi);
+        if (pidl)
+            hr = SHCreateShellItemForXP0(NULL, NULL, pidl, ppsi);
+        else
+            hr = E_FAIL;
         CoTaskMemFree(pidl);
         return hr;
     }
