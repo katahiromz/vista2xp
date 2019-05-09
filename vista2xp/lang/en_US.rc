@@ -40,6 +40,7 @@ STRINGTABLE
     IDS_LOADV2XCTL32, "Unable to find a required file ""v2xctl32.dll""."
     IDS_LOADV2XU32, "Unable to find a required file ""v2xu32.dll""."
     IDS_LOADV2XOL, "Unable to find a required file ""v2xol.dll""."
+    IDS_LOADV2XSH32, "Unable to find a required file ""v2xsh32.dll""."
 }
 
 //////////////////////////////////////////////////////////////////////////////

@@ -24,10 +24,34 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile);
 static HINSTANCE s_hInst;
 static TCHAR s_szDLLs[4][MAX_PATH];
 
+static const LPCTSTR s_aapszNames[][3] =
+{
+    { TEXT("v2xker32.dll"), TEXT("..\\v2xker32.dll"), TEXT("..\\..\\v2xker32.dll") },
+    { TEXT("v2xctl32.dll"), TEXT("..\\v2xctl32.dll"), TEXT("..\\..\\v2xctl32.dll") },
+    { TEXT("v2xu32.dll"), TEXT("..\\v2xu32.dll"), TEXT("..\\..\\v2xu32.dll") },
+    { TEXT("v2xol.dll"), TEXT("..\\v2xol.dll"), TEXT("..\\..\\v2xol.dll") },
+    { TEXT("v2xsh32.dll"), TEXT("..\\v2xsh32.dll"), TEXT("..\\..\\v2xsh32.dll") },
+};
+
+static const INT s_aids[] =
+{
+    IDS_LOADV2XKER32,
+    IDS_LOADV2XCTL32,
+    IDS_LOADV2XU32,
+    IDS_LOADV2XOL,
+    IDS_LOADV2XSH32,
+};
+
 LPTSTR GetDllSource(INT i)
 {
-    assert(i < 4);
+    assert(i < 5);
     return s_szDLLs[i];
+}
+
+LPCTSTR GetDllNames(INT i)
+{
+    assert(i < 5);
+    return s_aapszNames[i][0];
 }
 
 #ifndef MSGFLT_ADD
@@ -302,97 +326,31 @@ BOOL CheckSourceDlls(void)
 {
     TCHAR *pch, szPath[MAX_PATH];
 
-    GetModuleFileName(NULL, szPath, ARRAYSIZE(szPath));
-    pch = PathFindFileName(szPath);
-    *pch = 0;
-
-    PathAppend(szPath, TEXT("v2xker32.dll"));
-    if (!PathFileExists(szPath))
+    for (size_t i = 0; i < ARRAYSIZE(s_aapszNames); ++i)
     {
+        GetModuleFileName(NULL, szPath, ARRAYSIZE(szPath));
+        pch = PathFindFileName(szPath);
         *pch = 0;
-        PathAppend(szPath, TEXT("..\\v2xker32.dll"));
+
+        PathAppend(szPath, s_aapszNames[i][0]);
         if (!PathFileExists(szPath))
         {
             *pch = 0;
-            PathAppend(szPath, TEXT("..\\..\\v2xker32.dll"));
+            PathAppend(szPath, s_aapszNames[i][1]);
             if (!PathFileExists(szPath))
             {
-                LoadString(NULL, IDS_LOADV2XKER32, szPath, ARRAYSIZE(szPath));
-                MessageBox(NULL, szPath, NULL, MB_ICONERROR);
-                return FALSE;
+                *pch = 0;
+                PathAppend(szPath, s_aapszNames[i][2]);
+                if (!PathFileExists(szPath))
+                {
+                    LoadString(NULL, s_aids[i], szPath, ARRAYSIZE(szPath));
+                    MessageBox(NULL, szPath, NULL, MB_ICONERROR);
+                    return FALSE;
+                }
             }
         }
+        StringCchCopy(GetDllSource(i), MAX_PATH, szPath);
     }
-    StringCchCopy(GetDllSource(0), MAX_PATH, szPath);
-
-    GetModuleFileName(NULL, szPath, ARRAYSIZE(szPath));
-    pch = PathFindFileName(szPath);
-    *pch = 0;
-
-    PathAppend(szPath, TEXT("v2xctl32.dll"));
-    if (!PathFileExists(szPath))
-    {
-        *pch = 0;
-        PathAppend(szPath, TEXT("..\\v2xctl32.dll"));
-        if (!PathFileExists(szPath))
-        {
-            *pch = 0;
-            PathAppend(szPath, TEXT("..\\..\\v2xctl32.dll"));
-            if (!PathFileExists(szPath))
-            {
-                LoadString(NULL, IDS_LOADV2XCTL32, szPath, ARRAYSIZE(szPath));
-                MessageBox(NULL, szPath, NULL, MB_ICONERROR);
-                return FALSE;
-            }
-        }
-    }
-    StringCchCopy(GetDllSource(1), MAX_PATH, szPath);
-
-    GetModuleFileName(NULL, szPath, ARRAYSIZE(szPath));
-    pch = PathFindFileName(szPath);
-    *pch = 0;
-
-    PathAppend(szPath, TEXT("v2xu32.dll"));
-    if (!PathFileExists(szPath))
-    {
-        *pch = 0;
-        PathAppend(szPath, TEXT("..\\v2xu32.dll"));
-        if (!PathFileExists(szPath))
-        {
-            *pch = 0;
-            PathAppend(szPath, TEXT("..\\..\\v2xu32.dll"));
-            if (!PathFileExists(szPath))
-            {
-                LoadString(NULL, IDS_LOADV2XU32, szPath, ARRAYSIZE(szPath));
-                MessageBox(NULL, szPath, NULL, MB_ICONERROR);
-                return FALSE;
-            }
-        }
-    }
-    StringCchCopy(GetDllSource(2), MAX_PATH, szPath);
-
-    GetModuleFileName(NULL, szPath, ARRAYSIZE(szPath));
-    pch = PathFindFileName(szPath);
-    *pch = 0;
-
-    PathAppend(szPath, TEXT("v2xol.dll"));
-    if (!PathFileExists(szPath))
-    {
-        *pch = 0;
-        PathAppend(szPath, TEXT("..\\v2xol.dll"));
-        if (!PathFileExists(szPath))
-        {
-            *pch = 0;
-            PathAppend(szPath, TEXT("..\\..\\v2xol.dll"));
-            if (!PathFileExists(szPath))
-            {
-                LoadString(NULL, IDS_LOADV2XOL, szPath, ARRAYSIZE(szPath));
-                MessageBox(NULL, szPath, NULL, MB_ICONERROR);
-                return FALSE;
-            }
-        }
-    }
-    StringCchCopy(GetDllSource(3), MAX_PATH, szPath);
 
     return TRUE;
 }
