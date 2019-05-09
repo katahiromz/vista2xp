@@ -40,6 +40,8 @@ You can check the IAT by dumpbin /imports of Visual Studio Command Prompt.
     - Improve TaskDialog.
     - Add v2xol (ole32).
     - Add v2xsh32 (shell32).
+- 2019.XX.YY ver.0.5
+    - Make [Cancel] button [Exit].
 
 ## WARNING!
 
