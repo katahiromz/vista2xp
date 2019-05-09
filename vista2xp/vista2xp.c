@@ -361,7 +361,7 @@ WinMain(HINSTANCE   hInstance,
         LPSTR       lpCmdLine,
         INT         nCmdShow)
 {
-    s_hInst = hInstance;
+    s_hInst = GetModuleHandleA(NULL);
     InitCommonControls();
 
     if (!CheckSourceDlls())
