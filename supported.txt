@@ -97,3 +97,11 @@ kernel32.K32QueryWorkingSet
 comctl32.TaskDialog
 user32.ChangeWindowMessageFilter
 user32.ChangeWindowMessageFilterEx
+shell32.SHCreateShellItemArray
+shell32.SHCreateShellItemArrayFromDataObject
+shell32.SHCreateShellItemArrayFromIDLists
+shell32.SHCreateShellItemArrayFromShellItem
+shell32.SHCreateItemWithParent
+shell32.SHCreateItemFromIDList
+shell32.SHCreateShellItem
+shell32.SHGetNameFromIDList
