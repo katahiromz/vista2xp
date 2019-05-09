@@ -202,7 +202,7 @@ void OnPsh1(HWND hwnd)
     OPENFILENAME ofn;
     TCHAR szText[128], szPath[MAX_PATH] = TEXT("");
 
-    LoadString(s_hInst, IDS_FILETITLE, szText, ARRAYSIZE(szText));
+    LoadString(NULL, IDS_FILETITLE, szText, ARRAYSIZE(szText));
 
     ZeroMemory(&ofn, sizeof(ofn));
     ofn.lStructSize = OPENFILENAME_SIZE_VERSION_400;
@@ -227,7 +227,7 @@ void OnPsh2(HWND hwnd)
     BROWSEINFO bi;
     LPITEMIDLIST pidl;
 
-    LoadString(s_hInst, IDS_FOLDERTITLE, szText, ARRAYSIZE(szText));
+    LoadString(NULL, IDS_FOLDERTITLE, szText, ARRAYSIZE(szText));
 
     ZeroMemory(&bi, sizeof(bi));
     bi.hwndOwner = hwnd;
@@ -271,7 +271,7 @@ void OnOK(HWND hwnd)
     nCount = (INT)SendDlgItemMessage(hwnd, lst1, LB_GETCOUNT, 0, 0);
     if (nCount == LB_ERR || nCount == 0)
     {
-        LoadString(s_hInst, IDS_NOITEMS, szText, ARRAYSIZE(szText));
+        LoadString(NULL, IDS_NOITEMS, szText, ARRAYSIZE(szText));
         MessageBox(hwnd, szText, NULL, MB_ICONERROR);
         return;
     }
@@ -284,7 +284,7 @@ void OnOK(HWND hwnd)
             return;
     }
 
-    LoadString(s_hInst, IDS_COMPLETE, szText, ARRAYSIZE(szText));
+    LoadString(NULL, IDS_COMPLETE, szText, ARRAYSIZE(szText));
     MessageBox(hwnd, szText, TEXT("vista2xp"), MB_ICONINFORMATION);
 }
 
