@@ -3,11 +3,18 @@
    Copyright (C) 2019 Katayama Hirofumi MZ <katayama.hirofumi.mz@gmail.com>. */
 
 #include "targetver.h"
+#include <initguid.h>
 #include "ShellItemArray.hpp"
 #include <shlobj.h>
 #include <new>
 #include <shlwapi.h>
 #include <strsafe.h>
+
+DEFINE_GUID(IID_IUnknown, 0x00000000, 0x0000, 0x0000, 0xc0,0x00, 0x00,0x00,0x00,0x00,0x00,0x46);
+DEFINE_GUID(BHID_SFObject, 0x3981e224, 0xf559, 0x11d3, 0x8e, 0x3a, 0x00, 0xc0, 0x4f, 0x68, 0x37, 0xd5);
+DEFINE_GUID(BHID_SFUIObject, 0x3981e225, 0xf559, 0x11d3, 0x8e, 0x3a, 0x00, 0xc0, 0x4f, 0x68, 0x37, 0xd5);
+DEFINE_GUID(BHID_SFViewObject, 0x3981e226, 0xf559, 0x11d3, 0x8e, 0x3a, 0x00, 0xc0, 0x4f, 0x68, 0x37, 0xd5);
+DEFINE_GUID(BHID_DataObject, 0xb8c0bd9f, 0xed24, 0x455c, 0x83, 0xe6, 0xd5, 0x39, 0xc, 0x4f, 0xe8, 0xc4);
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -116,9 +123,7 @@ SHGetNameFromIDListForXP0(PCIDLIST_ABSOLUTE pidl, SIGDN sigdnName, PWSTR *ppszNa
         case SIGDN_PARENTRELATIVEFORADDRESSBAR: /* SIGDN_INFOLDER | SHGDN_FORADDRESSBAR */
         case SIGDN_PARENTRELATIVE:              /* SIGDN_INFOLDER */
             disp_name.uType = STRRET_WSTR;
-            ret = psfparent->GetDisplayNameOf(child_pidl,
-                                              sigdnName & 0xffff,
-                                              &disp_name);
+            ret = psfparent->GetDisplayNameOf(child_pidl, (sigdnName & 0xffff), &disp_name);
             if (SUCCEEDED(ret))
                 ret = StrRetToStrW(&disp_name, pidl, ppszName);
             break;
@@ -252,11 +257,11 @@ HRESULT MShellItem::get_shellfolder(IBindCtx *pbc, REFIID riid, void **ppvOut)
 
 STDMETHODIMP MShellItem::QueryInterface(REFIID riid, void **ppvObject)
 {
-    if (riid == IID_IUnknown || riid == IID_IShellItem)
+    if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IShellItem))
     {
         *ppvObject = static_cast<IShellItem *>(this);
     }
-    else if (riid == IID_IPersistIDList)
+    else if (IsEqualIID(riid, IID_IPersistIDList))
     {
         *ppvObject = static_cast<IPersistIDList *>(this);
     }
@@ -291,11 +296,11 @@ STDMETHODIMP
 MShellItem::BindToHandler(IBindCtx *pbc, REFGUID rbhid, REFIID riid, void **ppvOut)
 {
     HRESULT hr;
-    if (rbhid == BHID_SFObject)
+    if (IsEqualIID(rbhid, BHID_SFObject))
     {
         return get_shellfolder(pbc, riid, ppvOut);
     }
-    else if (rbhid == BHID_SFUIObject)
+    else if (IsEqualIID(rbhid, BHID_SFUIObject))
     {
         IShellFolder *pShellFolder = NULL;
         if (_ILIsDesktop(m_pidl))
@@ -311,11 +316,11 @@ MShellItem::BindToHandler(IBindCtx *pbc, REFGUID rbhid, REFIID riid, void **ppvO
         pShellFolder->Release();
         return hr;
     }
-    else if (rbhid == BHID_DataObject)
+    else if (IsEqualIID(rbhid, BHID_DataObject))
     {
         return BindToHandler(pbc, BHID_SFUIObject, IID_IDataObject, ppvOut);
     }
-    else if (rbhid == BHID_SFViewObject)
+    else if (IsEqualIID(rbhid, BHID_SFViewObject))
     {
         IShellFolder *psf = NULL;
         hr = get_shellfolder(NULL, IID_IShellFolder, (void **)&psf);
@@ -494,7 +499,7 @@ MEnumShellItems::CreateInstance(IShellItemArray *array)
 
 STDMETHODIMP MEnumShellItems::QueryInterface(REFIID riid, void **ppvObject)
 {
-    if (riid == IID_IUnknown || riid == IID_IEnumShellItems)
+    if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IEnumShellItems))
     {
         *ppvObject = static_cast<IEnumShellItems *>(this);
     }
@@ -585,7 +590,7 @@ STDMETHODIMP MEnumShellItems::Clone(IEnumShellItems **ppenum)
     if (!m_pArray)
         return E_FAIL;
 
-    MEnumShellItems *pEnum = CreateInstance(m_pArray);
+    MEnumShellItems *pEnum = MEnumShellItems::CreateInstance(m_pArray);
     if (!pEnum)
         return E_OUTOFMEMORY;
 
@@ -640,7 +645,7 @@ HRESULT MShellItemArray::AddItem(IShellItem *pItem)
 
 STDMETHODIMP MShellItemArray::QueryInterface(REFIID riid, void **ppvObject)
 {
-    if (riid == IID_IUnknown || riid == IID_IShellItemArray)
+    if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IShellItemArray))
     {
         *ppvObject = static_cast<IShellItemArray *>(this);
     }

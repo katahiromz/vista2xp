@@ -260,8 +260,10 @@ THIS_CLASS::THIS_CLASS() :
 
 STDMETHODIMP THIS_CLASS::QueryInterface(REFIID riid, void **ppvObj)
 {
-    if (riid == IID_IUnknown || riid == IID_IFileDialog_ ||
-        riid == IID_IModalWindow || riid == IID_IFileOpenDialog_)
+    if (IsEqualIID(riid, IID_IUnknown) ||
+        IsEqualIID(riid, IID_IFileDialog_) ||
+        IsEqualIID(riid, IID_IModalWindow) ||
+        IsEqualIID(riid, IID_IFileOpenDialog_))
     {
         *ppvObj = static_cast<IFileOpenDialog *>(this);
     }
@@ -374,8 +376,10 @@ THIS_CLASS::THIS_CLASS() :
 
 STDMETHODIMP THIS_CLASS::QueryInterface(REFIID riid, void **ppvObj)
 {
-    if (riid == IID_IUnknown || riid == IID_IFileDialog_ ||
-        riid == IID_IModalWindow || riid == IID_IFileSaveDialog_)
+    if (IsEqualIID(riid, IID_IUnknown) ||
+        IsEqualIID(riid, IID_IFileDialog_) ||
+        IsEqualIID(riid, IID_IModalWindow) ||
+        IsEqualIID(riid, IID_IFileSaveDialog_))
     {
         *ppvObj = static_cast<IFileSaveDialog *>(this);
     }

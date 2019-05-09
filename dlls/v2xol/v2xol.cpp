@@ -26,7 +26,8 @@ CoCreateInstanceForXP(REFCLSID rclsid, LPUNKNOWN pUnkOuter,
     if (!s_pCoCreateInstance)
         return E_UNEXPECTED;
 
-    if (rclsid == CLSID_FileOpenDialog || rclsid == CLSID_FileSaveDialog)
+    if (IsEqualIID(rclsid, CLSID_FileOpenDialog) ||
+        IsEqualIID(rclsid, CLSID_FileSaveDialog))
     {
         if (DO_FALLBACK)
         {
@@ -38,7 +39,7 @@ CoCreateInstanceForXP(REFCLSID rclsid, LPUNKNOWN pUnkOuter,
         if (pUnkOuter)
             return CLASS_E_NOAGGREGATION;
 
-        if (rclsid == CLSID_FileOpenDialog)
+        if (IsEqualIID(rclsid, CLSID_FileOpenDialog))
         {
             IFileOpenDialog *pObj = createFileOpenDialog();
             if (!pObj)
@@ -48,7 +49,7 @@ CoCreateInstanceForXP(REFCLSID rclsid, LPUNKNOWN pUnkOuter,
             return hr;
         }
 
-        if (rclsid == CLSID_FileSaveDialog)
+        if (IsEqualIID(rclsid, CLSID_FileSaveDialog))
         {
             IFileSaveDialog *pObj = createFileSaveDialog();
             if (!pObj)
