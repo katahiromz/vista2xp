@@ -2,6 +2,36 @@
 /* This file is public domain software.
    Copyright (C) 2019 Katayama Hirofumi MZ <katayama.hirofumi.mz@gmail.com>. */
 
+THIS_CLASS::THIS_CLASS() :
+    m_nRefCount(1),
+    m_hwnd(NULL),
+    m_pidlSelected(NULL),
+    m_pidlDefFolder(NULL),
+    m_bDoSave(FALSE),
+    m_options(0),
+    m_pszzFiles(NULL),
+    m_pszTitle(NULL),
+    m_pszzFilter(NULL),
+    m_pEvents(NULL),
+    m_dwCookie(0)
+{
+    ZeroMemory(&m_ofn, sizeof(m_ofn));
+    m_ofn.lStructSize = sizeof(m_ofn);
+    m_ofn.Flags = OFN_EXPLORER | OFN_ENABLESIZING | OFN_ENABLEHOOK;
+    m_ofn.lpfnHook = OFNHookProc;
+    m_ofn.lCustData = (LPARAM)this;
+
+    ZeroMemory(&m_bi, sizeof(m_bi));
+    m_bi.ulFlags |= BIF_EDITBOX | BIF_USENEWUI | BIF_NEWDIALOGSTYLE | BIF_STATUSTEXT;
+    m_bi.lpfn = BrowseCallbackProc;
+    m_bi.lParam = (LPARAM)this;
+
+    m_szFile[0] = 0;
+    m_szDefExt[0] = 0;
+
+    Init();
+}
+
 /*static*/ THIS_CLASS *THIS_CLASS::CreateInstance()
 {
     return new(std::nothrow) THIS_CLASS();
