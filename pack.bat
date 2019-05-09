@@ -7,3 +7,5 @@ copy build\vista2xp.exe %DIST%
 copy build\v2xker32.dll %DIST%
 copy build\v2xctl32.dll %DIST%
 copy build\v2xu32.dll %DIST%
+copy build\v2xol.dll %DIST%
+copy build\v2xsh32.dll %DIST%
