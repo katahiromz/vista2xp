@@ -3,6 +3,14 @@
 
 EXPORTS
     ; v2xsh32
+    SHCreateShellItemArray = SHCreateShellItemArrayForXP
+    SHCreateShellItemArrayFromDataObject = SHCreateShellItemArrayFromDataObjectForXP
+    SHCreateShellItemArrayFromIDLists = SHCreateShellItemArrayFromIDListsForXP
+    SHCreateShellItemArrayFromShellItem = SHCreateShellItemArrayFromShellItemForXP
+    SHCreateItemWithParent = SHCreateItemWithParentForXP
+    SHCreateItemFromIDList = SHCreateItemFromIDListForXP
+    SHCreateShellItem = SHCreateShellItemForXP
+    SHGetNameFromIDList = SHGetNameFromIDListForXP
 
     ; v2xsh32 --> shell32
     ; Activate_RunDLL = shell32.Activate_RunDLL
@@ -147,7 +155,6 @@ EXPORTS
     SHCreateQueryCancelAutoPlayMoniker = shell32.SHCreateQueryCancelAutoPlayMoniker
     SHCreateShellFolderView = shell32.SHCreateShellFolderView
     SHCreateShellFolderViewEx = shell32.SHCreateShellFolderViewEx
-    SHCreateShellItem = shell32.SHCreateShellItem
     SHCreateStdEnumFmtEtc = shell32.SHCreateStdEnumFmtEtc
     SHDefExtractIconA = shell32.SHDefExtractIconA
     SHDefExtractIconW = shell32.SHDefExtractIconW

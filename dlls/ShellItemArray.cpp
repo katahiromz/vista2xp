@@ -3,7 +3,380 @@
    Copyright (C) 2019 Katayama Hirofumi MZ <katayama.hirofumi.mz@gmail.com>. */
 
 #include "ShellItemArray.hpp"
+#include <shlobj.h>
 #include <algorithm> // for std::min
+
+///////////////////////////////////////////////////////////////////////////////
+
+BOOL _ILIsDesktop(LPCITEMIDLIST pidl)
+{
+    return !pidl || !pidl->mkid.cb;
+}
+
+HRESULT STDAPICALLTYPE
+SHGetNameFromIDListForXP0(PCIDLIST_ABSOLUTE pidl, SIGDN sigdnName, PWSTR *ppszName)
+{
+    IShellFolder *psfparent;
+    LPCITEMIDLIST child_pidl;
+    STRRET disp_name;
+    HRESULT ret;
+
+    *ppszName = NULL;
+    ret = SHBindToParent(pidl, IID_IShellFolder, (void**)&psfparent, &child_pidl);
+    if(SUCCEEDED(ret))
+    {
+        switch (sigdnName)
+        {
+        case SIGDN_NORMALDISPLAY:               /* SHGDN_NORMAL */
+        case SIGDN_PARENTRELATIVEPARSING:       /* SHGDN_INFOLDER | SHGDN_FORPARSING */
+        case SIGDN_PARENTRELATIVEEDITING:       /* SHGDN_INFOLDER | SHGDN_FOREDITING */
+        case SIGDN_DESKTOPABSOLUTEPARSING:      /* SHGDN_FORPARSING */
+        case SIGDN_DESKTOPABSOLUTEEDITING:      /* SHGDN_FOREDITING | SHGDN_FORADDRESSBAR*/
+        case SIGDN_PARENTRELATIVEFORADDRESSBAR: /* SIGDN_INFOLDER | SHGDN_FORADDRESSBAR */
+        case SIGDN_PARENTRELATIVE:              /* SIGDN_INFOLDER */
+            disp_name.uType = STRRET_WSTR;
+            ret = psfparent->GetDisplayNameOf(child_pidl,
+                                              sigdnName & 0xffff,
+                                              &disp_name);
+            if (SUCCEEDED(ret))
+                ret = StrRetToStrW(&disp_name, pidl, ppszName);
+            break;
+
+        case SIGDN_FILESYSPATH:
+            *ppszName = (LPWSTR)CoTaskMemAlloc(sizeof(WCHAR) * MAX_PATH);
+            if (SHGetPathFromIDListW(pidl, *ppszName))
+            {
+                ret = S_OK;
+            }
+            else
+            {
+                CoTaskMemFree(*ppszName);
+                ret = E_INVALIDARG;
+            }
+            break;
+
+        case SIGDN_URL:
+        default:
+            ret = E_FAIL;
+            break;
+        }
+
+        psfparent->Release();
+    }
+    return ret;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+/*static*/ MShellItem *MShellItem::CreateInstance()
+{
+    return new(std::nothrow) MShellItem();
+}
+
+/*static*/ MShellItem *MShellItem::CreateInstance(LPITEMIDLIST pidl)
+{
+    return new(std::nothrow) MShellItem(pidl);
+}
+
+MShellItem::MShellItem() : m_nRefCount(1), m_pidl(NULL)
+{
+}
+
+MShellItem::MShellItem(LPITEMIDLIST pidl) : m_nRefCount(1), m_pidl(NULL)
+{
+    SetIDList(pidl);
+}
+
+MShellItem::~MShellItem()
+{
+    CoTaskMemFree(m_pidl);
+}
+
+HRESULT MShellItem::get_parent_pidl(LPITEMIDLIST *parent_pidl)
+{
+    *parent_pidl = ILClone(m_pidl);
+    if (*parent_pidl)
+    {
+        if (ILRemoveLastID(*parent_pidl))
+            return S_OK;
+        else
+        {
+            ILFree(*parent_pidl);
+            *parent_pidl = NULL;
+            return E_INVALIDARG;
+        }
+    }
+    else
+    {
+        *parent_pidl = NULL;
+        return E_OUTOFMEMORY;
+    }
+}
+
+HRESULT MShellItem::get_parent_shellfolder(IShellFolder **ppsf)
+{
+    HRESULT hr;
+    LPITEMIDLIST parent_pidl;
+    IShellFolder *desktop = NULL;
+
+    hr = get_parent_pidl(&parent_pidl);
+    if (SUCCEEDED(hr))
+    {
+        hr = SHGetDesktopFolder(&desktop);
+        if (SUCCEEDED(hr))
+            hr = desktop->BindToObject(parent_pidl, NULL, IID_IShellFolder, (void **)ppsf);
+
+        ILFree(parent_pidl);
+        desktop->Release();
+    }
+
+    return hr;
+}
+
+HRESULT MShellItem::get_shellfolder(IBindCtx *pbc, REFIID riid, void **ppvOut)
+{
+    IShellFolder *psf = NULL;
+    IShellFolder *psfDesktop = NULL;
+    HRESULT hr;
+
+    hr = SHGetDesktopFolder(&psfDesktop);
+    if (FAILED(hr))
+        return hr;
+
+    if (_ILIsDesktop(m_pidl))
+    {
+        psf = psfDesktop;
+        psf->AddRef();
+    }
+    else
+    {
+        hr = psfDesktop->BindToObject(m_pidl, pbc, IID_IShellFolder, (void **)&psf);
+        if (FAILED(hr))
+        {
+            psfDesktop->Release();
+            return hr;
+        }
+    }
+
+    hr = psf->QueryInterface(riid, ppvOut);
+
+    psf->Release();
+    psfDesktop->Release();
+    return hr;
+}
+
+// IUnknown interface
+
+STDMETHODIMP MShellItem::QueryInterface(REFIID riid, void **ppvObject)
+{
+    if (riid == IID_IUnknown || riid == IID_IShellItem)
+    {
+        *ppvObject = static_cast<IShellItem *>(this);
+    }
+    else if (riid == IID_IPersistIDList)
+    {
+        *ppvObject = static_cast<IPersistIDList *>(this);
+    }
+    else
+    {
+        return E_NOINTERFACE;
+    }
+
+    AddRef();
+    return S_OK;
+}
+
+STDMETHODIMP_(ULONG) MShellItem::AddRef()
+{
+    m_nRefCount++;
+    return m_nRefCount;
+}
+
+STDMETHODIMP_(ULONG) MShellItem::Release()
+{
+    --m_nRefCount;
+    if (m_nRefCount != 0)
+        return m_nRefCount;
+
+    delete this;
+    return 0;
+}
+
+// IShellItem interface
+
+STDMETHODIMP
+MShellItem::BindToHandler(IBindCtx *pbc, REFGUID rbhid, REFIID riid, void **ppvOut)
+{
+    HRESULT hr;
+    if (rbhid == BHID_SFObject)
+    {
+        return get_shellfolder(pbc, riid, ppvOut);
+    }
+    else if (rbhid == BHID_SFUIObject)
+    {
+        IShellFolder *pShellFolder = NULL;
+        if (_ILIsDesktop(m_pidl))
+            hr = SHGetDesktopFolder(&pShellFolder);
+        else
+            hr = get_parent_shellfolder(&pShellFolder);
+
+        if (FAILED(hr))
+            return hr;
+
+        LPCITEMIDLIST pidl = ILFindLastID(m_pidl);
+        hr = pShellFolder->GetUIObjectOf(NULL, 1, &pidl, riid, NULL, ppvOut);
+        pShellFolder->Release();
+        return hr;
+    }
+    else if (rbhid == BHID_DataObject)
+    {
+        return BindToHandler(pbc, BHID_SFUIObject, IID_IDataObject, ppvOut);
+    }
+    else if (rbhid == BHID_SFViewObject)
+    {
+        IShellFolder *psf = NULL;
+        hr = get_shellfolder(NULL, IID_IShellFolder, (void **)&psf);
+        if (FAILED(hr))
+            return hr;
+
+        hr = psf->CreateViewObject(NULL, riid, ppvOut);
+        psf->Release();
+        return hr;
+    }
+
+    return MK_E_NOOBJECT;
+}
+
+STDMETHODIMP MShellItem::GetParent(IShellItem **ppsi)
+{
+    HRESULT hr;
+    LPITEMIDLIST parent_pidl;
+
+    if (!ppsi)
+        return E_INVALIDARG;
+
+    *ppsi = NULL;
+
+    hr = get_parent_pidl(&parent_pidl);
+    if (SUCCEEDED(hr))
+    {
+        *ppsi = MShellItem::CreateInstance(parent_pidl);
+        ILFree(parent_pidl);
+    }
+
+    if (!ppsi)
+        return E_OUTOFMEMORY;
+
+    return S_OK;
+}
+
+STDMETHODIMP MShellItem::GetDisplayName(SIGDN sigdnName, LPWSTR *ppszName)
+{
+    return SHGetNameFromIDListForXP0(m_pidl, sigdnName, ppszName);
+}
+
+STDMETHODIMP MShellItem::GetAttributes(SFGAOF sfgaoMask, SFGAOF *psfgaoAttribs)
+{
+    IShellFolder *parent_folder = NULL;
+    LPCITEMIDLIST child_pidl;
+    HRESULT hr;
+
+    if (_ILIsDesktop(m_pidl))
+        hr = SHGetDesktopFolder(&parent_folder);
+    else
+        hr = get_parent_shellfolder(&parent_folder);
+    if (FAILED(hr))
+        return hr;
+
+    child_pidl = ILFindLastID(m_pidl);
+    *psfgaoAttribs = sfgaoMask;
+    hr = parent_folder->GetAttributesOf(1, &child_pidl, psfgaoAttribs);
+    *psfgaoAttribs &= sfgaoMask;
+
+    parent_folder->Release();
+
+    if (FAILED(hr))
+        return hr;
+
+    return (sfgaoMask == *psfgaoAttribs) ? S_OK : S_FALSE;
+}
+
+STDMETHODIMP MShellItem::Compare(IShellItem *oth, SICHINTF hint, int *piOrder)
+{
+    HRESULT hr;
+    IPersistIDList *pIDList = NULL;
+    IShellFolder *psfDesktop = NULL;
+    LPITEMIDLIST pidl;
+
+    if (piOrder == NULL || oth == NULL)
+        return E_POINTER;
+
+    hr = oth->QueryInterface(IID_IPersistIDList, (void **)&pIDList);
+    if (SUCCEEDED(hr))
+    {
+        hr = pIDList->GetIDList(&pidl);
+        if (SUCCEEDED(hr))
+        {
+            hr = SHGetDesktopFolder(&psfDesktop);
+            if (SUCCEEDED(hr))
+            {
+                hr = psfDesktop->CompareIDs(hint, m_pidl, pidl);
+                *piOrder = (int)(short)SCODE_CODE(hr);
+            }
+            ILFree(pidl);
+        }
+    }
+
+    if (SUCCEEDED(hr))
+    {
+        if (*piOrder)
+            hr = S_FALSE;
+        else
+            hr = S_OK;
+
+    }
+
+    if (pIDList)
+        pIDList->Release();
+    if (psfDesktop)
+        psfDesktop->Release();
+
+    return hr;
+}
+
+// IPersistIDList interface
+
+STDMETHODIMP MShellItem::GetClassID(CLSID *pClassID)
+{
+    *pClassID = CLSID_ShellItem;
+    return S_OK;
+}
+
+STDMETHODIMP MShellItem::SetIDList(LPCITEMIDLIST pidl)
+{
+    LPITEMIDLIST new_pidl;
+
+    new_pidl = ILClone(pidl);
+    if (new_pidl)
+    {
+        ILFree(m_pidl);
+        m_pidl = new_pidl;
+        return S_OK;
+    }
+    return E_OUTOFMEMORY;
+}
+
+STDMETHODIMP MShellItem::GetIDList(LPITEMIDLIST *ppidl)
+{
+    if (!ppidl)
+        return E_INVALIDARG;
+
+    *ppidl = ILClone(m_pidl);
+    if (*ppidl)
+        return S_OK;
+    else
+        return E_OUTOFMEMORY;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
