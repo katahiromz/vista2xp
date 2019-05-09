@@ -1,4 +1,4 @@
-include_directories(.)
+include_directories(AFTER .)
 
 # v2xker32.dll
 add_library(v2xker32 SHARED v2xker32/v2xker32.c v2xker32/v2xker32.def)

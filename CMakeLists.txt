@@ -69,7 +69,16 @@ else()
 endif()
 
 # use targetver.h
-include_directories(.)
+include_directories(include)
+
+# support TDM-GCC-32
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    execute_process(COMMAND gcc -dumpversion OUTPUT_VARIABLE GCC_VERSION)
+    message(STATUS "GCC_VERSION = ${GCC_VERSION}")
+    if ("${GCC_VERSION}" STRLESS "7.0.0")
+        include_directories(tdm_gcc_include)
+    endif()
+endif()
 
 # Unicode support
 add_definitions(-DUNICODE -D_UNICODE)

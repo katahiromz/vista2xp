@@ -14,7 +14,8 @@
 
 #define DOGIF_ONLY_IF_ONE 0x8
 
-DEFINE_GUID(IID_IModalWindow, 0xb4db1657, 0x70d7, 0x485e, 0x8e,0x3e, 0x6f,0xcb,0x5a,0x5c,0x18,0x02);
+extern const GUID IID_IUnknown_;
+DEFINE_GUID(IID_IModalWindow_, 0xb4db1657, 0x70d7, 0x485e, 0x8e,0x3e, 0x6f,0xcb,0x5a,0x5c,0x18,0x02);
 DEFINE_GUID(IID_IFileDialog_, 0x42f85136, 0xdb7e, 0x439c, 0x85,0xf1, 0xe4,0x07,0x5d,0x13,0x5f,0xc8);
 DEFINE_GUID(IID_IFileDialogEvents_, 0x973510db, 0x7d7f, 0x452b, 0x89,0x75, 0x74,0xa8,0x58,0x28,0xd3,0x54);
 DEFINE_GUID(IID_IFileOpenDialog_, 0xd57c7288, 0xd4ad, 0x4768, 0xbe,0x02, 0x9d,0x96,0x95,0x32,0xd9,0x60);
@@ -264,9 +265,9 @@ THIS_CLASS::THIS_CLASS() :
 
 STDMETHODIMP THIS_CLASS::QueryInterface(REFIID riid, void **ppvObj)
 {
-    if (IsEqualIID(riid, IID_IUnknown) ||
+    if (IsEqualIID(riid, IID_IUnknown_) ||
         IsEqualIID(riid, IID_IFileDialog_) ||
-        IsEqualIID(riid, IID_IModalWindow) ||
+        IsEqualIID(riid, IID_IModalWindow_) ||
         IsEqualIID(riid, IID_IFileOpenDialog_))
     {
         *ppvObj = static_cast<IFileOpenDialog *>(this);
@@ -380,9 +381,9 @@ THIS_CLASS::THIS_CLASS() :
 
 STDMETHODIMP THIS_CLASS::QueryInterface(REFIID riid, void **ppvObj)
 {
-    if (IsEqualIID(riid, IID_IUnknown) ||
+    if (IsEqualIID(riid, IID_IUnknown_) ||
         IsEqualIID(riid, IID_IFileDialog_) ||
-        IsEqualIID(riid, IID_IModalWindow) ||
+        IsEqualIID(riid, IID_IModalWindow_) ||
         IsEqualIID(riid, IID_IFileSaveDialog_))
     {
         *ppvObj = static_cast<IFileSaveDialog *>(this);
