@@ -9,7 +9,7 @@ LANGUAGE LANG_JAPANESE, SUBLANG_DEFAULT
 // RT_DIALOG
 
 IDD_MAIN DIALOG 0, 0, 240, 175
-CAPTION "vista2xp ver.0.4 by katahiromz"
+CAPTION "vista2xp ver.0.5 by katahiromz"
 STYLE DS_CENTER | DS_MODALFRAME | WS_POPUPWINDOW | WS_DLGFRAME
 FONT 9, "MS UI Gothic"
 {
@@ -21,7 +21,7 @@ FONT 9, "MS UI Gothic"
     PUSHBUTTON "フォルダの追加(&F)...", psh2, 90, 130, 80, 14
     PUSHBUTTON "削除(&D)", psh3, 175, 130, 60, 14
     DEFPUSHBUTTON "変換(&C)", IDOK, 110, 155, 60, 14
-    PUSHBUTTON "キャンセル", IDCANCEL, 175, 155, 60, 14
+    PUSHBUTTON "終了", IDCANCEL, 175, 155, 60, 14
 }
 
 //////////////////////////////////////////////////////////////////////////////
