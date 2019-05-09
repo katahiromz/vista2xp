@@ -16,6 +16,8 @@ It modifies the IAT (Import Address Table) of EXE/DLL files.
 - If any Vista+ `kernel32` functions, importing of `kernel32.dll` will be altered to `v2xker32.dll`.
 - If any Vista+ `comctl32` functions, importing of `comctl32.dll` will be altered to `v2xctl32.dll`.
 - If any Vista+ `user32` functions, importing of `user32.dll` will be altered to `v2xu32.dll`.
+- If any Vista+ `ole32` functions, importing of `ole32.dll` will be altered to `v2xol.dll`.
+- If any Vista+ `shell32` functions, importing of `shell32.dll` will be altered to `v2xsh32.dll`.
 
 You can check the IAT by `dumpbin /imports` of Visual Studio Command Prompt.
 
@@ -36,7 +38,8 @@ You can check the IAT by `dumpbin /imports` of Visual Studio Command Prompt.
 - 2019.XX.YY ver.0.4
     - Support `K32*` functions.
     - Improve TaskDialog.
-    - Add `v2xol` (`ole32`) and `CoCreateInstanceForXP`.
+    - Add `v2xol` (`ole32`).
+    - Add `v2xsh32` (`shell32`).
 
 ## How to build?
 

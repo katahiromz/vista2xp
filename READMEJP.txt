@@ -18,6 +18,8 @@
 - Vista以降の kernel32 関数があれば、kernel32.dll のインポートは v2xker32.dll に変わります。
 - Vista以降の comctl32 関数があれば、comctl32.dll のインポートは v2xctl32.dll に変わります。
 - Vista以降の user32 関数があれば、user32.dll のインポートは v2xu32.dll に変わります。
+- Vista以降の ole32 関数があれば、ole32.dll のインポートは v2xol.dll に変わります。
+- Vista以降の shell32 関数があれば、shell32.dll のインポートは v2xsh32.dll に変わります。
 
 Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェックできます。
 
@@ -38,7 +40,8 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
 - 2019.XX.YY ver.0.4
     - K32* 関数をサポート。
     - TaskDialog を改良。
-    - v2xol (ole32) と CoCreateInstanceForXP を追加。
+    - v2xol (ole32) を追加。
+    - v2xsh32 (shell32) を追加。
 
 ## 警告
 
