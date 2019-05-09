@@ -7,6 +7,10 @@
 #include <strsafe.h>
 #include "resource.h"
 
+#ifndef ARRAYSIZE
+    #define ARRAYSIZE(array) (sizeof(array) / sizeof(array[0]))
+#endif
+
 extern "C"
 LPTSTR GetDllSource(INT i);
 

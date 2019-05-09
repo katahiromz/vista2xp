@@ -2,18 +2,18 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #ifndef EXE_IMAGE_HPP
-#define EXE_IMAGE_HPP   19      // Version 19
+#define EXE_IMAGE_HPP   20      // Version 20
 
 #ifndef _CRT_SECURE_NO_WARNINGS
     #define _CRT_SECURE_NO_WARNINGS
 #endif
+
 #if !defined(_WIN32) || (defined(_WONVER) && _WONVER == 0)
     #include "wonnt.h"          // Wonders API
-    #include "pdelayload.h"     // for ImgDelayDescr
 #else
-    #include <windows.h>        // Windows API
-    #include <delayimp.h>       // for ImgDelayDescr
+    #include <windows.h>
 #endif
+#include "pdelayload.h"         // for ImgDelayDescr
 
 #include <vector>               // for std::vector
 #include <sstream>              // for std::stringstream

@@ -15,6 +15,10 @@
 #include <assert.h>
 #include "resource.h"
 
+#ifndef ARRAYSIZE
+    #define ARRAYSIZE(array) (sizeof(array) / sizeof(array[0]))
+#endif
+
 HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile);
 
 static HINSTANCE s_hInst;

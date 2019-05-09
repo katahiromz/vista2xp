@@ -38,8 +38,8 @@ if (WIN32)
         set(CMAKE_CXX_FLAGS "-static -s")
     elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         # using GCC
-        set(CMAKE_C_FLAGS "-static -static-libgcc -static-libstdc++")
-        set(CMAKE_CXX_FLAGS "-static -static-libgcc -static-libstdc++")
+        set(CMAKE_C_FLAGS "-static -static-libgcc -static-libstdc++ -s")
+        set(CMAKE_CXX_FLAGS "-static -static-libgcc -static-libstdc++ -s")
     elseif (MSVC)
         # replace "/MD" with "/MT" (building without runtime DLLs)
         set(CompilerFlags

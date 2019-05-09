@@ -15,6 +15,9 @@
 
 int main(void)
 {
+#if defined(__GNUC__) && (__GNUC__ < 7)
+    printf("TaskDialog is not supported\n");
+#else
     INT id;
     InitCommonControls();
 
@@ -41,6 +44,7 @@ int main(void)
                TDCBF_OK_BUTTON | TDCBF_CANCEL_BUTTON,
                TD_INFORMATION_ICON, &id);
     printf("id: %d\n", id);
+#endif
 
     return 0;
 }

@@ -7,6 +7,10 @@
 #include <strsafe.h>
 #include <psapi.h>
 
+#ifndef ARRAYSIZE
+    #define ARRAYSIZE(array) (sizeof(array) / sizeof(array[0]))
+#endif
+
 static HINSTANCE s_hinstDLL;
 static HINSTANCE s_hKernel32;
 static BOOL s_bUseQPC;

@@ -8,6 +8,10 @@
 #include <objbase.h>
 #include <shobjidl.h>
 
+#ifndef ARRAYSIZE
+    #define ARRAYSIZE(array) (sizeof(array) / sizeof(array[0]))
+#endif
+
 interface IFileDialog;
     interface IFileOpenDialog;
     interface IFileSaveDialog;

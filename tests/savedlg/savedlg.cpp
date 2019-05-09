@@ -14,6 +14,10 @@
 #include <cstdio>
 #include <cassert>
 
+#ifndef ARRAYSIZE
+    #define ARRAYSIZE(array) (sizeof(array) / sizeof(array[0]))
+#endif
+
 int main(void)
 {
     int ret = -1;
