@@ -847,14 +847,18 @@ STDMETHODIMP THIS_CLASS::GetResult(IShellItem **ppsi)
         {
             if (m_szFile[0])
             {
+                HANDLE hFile = INVALID_HANDLE_VALUE;
                 if (!PathFileExistsW(m_szFile))
                 {
-                    HANDLE hFile;
                     hFile = CreateFileW(m_szFile, GENERIC_WRITE, FILE_SHARE_WRITE, NULL,
                                         OPEN_ALWAYS, 0, NULL);
                     CloseHandle(hFile);
                 }
                 pidl = ILCreateFromPathW(m_szFile);
+                if (hFile != INVALID_HANDLE_VALUE)
+                {
+                    DeleteFileW(m_szFile);
+                }
             }
         }
         if (pidl)
