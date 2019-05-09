@@ -32,7 +32,8 @@ static FN_SHCreateItemFromIDList s_pSHCreateItemFromIDList;
 static FN_SHCreateShellItem s_pSHCreateShellItem;
 static FN_SHGetNameFromIDList s_pSHGetNameFromIDList;
 
-// TODO: SHGetItemFromDataObject, SHCreateShellItem
+// TODO: SHGetItemFromDataObject, SHGetItemFromObject, SHGetIDListFromObject, SHBindToObject, SHCreateDataObject
+// TODO: SHOpenWithDialog
 
 extern "C"
 HRESULT STDAPICALLTYPE
