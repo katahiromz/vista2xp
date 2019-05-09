@@ -46,75 +46,7 @@ SHCreateShellItemForXP(
     if (s_pSHCreateShellItem && DO_FALLBACK)
         return (*s_pSHCreateShellItem)(pidlParent, psfParent, pidl, ppsi);
 
-    if (!ppsi || !pidl)
-        return E_INVALIDARG;
-
-    *ppsi = NULL;
-    LPITEMIDLIST new_pidl;
-    HRESULT hr;
-    if (pidlParent || psfParent)
-    {
-        LPITEMIDLIST temp_parent = NULL;
-        if (!pidlParent)
-        {
-            IPersistFolder2 *ppf2Parent = NULL;
-            hr = psfParent->QueryInterface(IID_IPersistFolder2, (void **)&ppf2Parent);
-            if (FAILED(hr))
-            {
-                return E_NOINTERFACE;
-            }
-
-            hr = ppf2Parent->GetCurFolder(&temp_parent);
-            if (FAILED(hr))
-            {
-                ppf2Parent->Release();
-                return E_NOINTERFACE;
-            }
-
-            pidlParent = temp_parent;
-            ppf2Parent->Release();
-        }
-
-        new_pidl = ILCombine(pidlParent, pidl);
-        ILFree(temp_parent);
-
-        if (!new_pidl)
-            return E_OUTOFMEMORY;
-    }
-    else
-    {
-        new_pidl = ILClone(pidl);
-        if (!new_pidl)
-            return E_OUTOFMEMORY;
-    }
-
-    IShellItem *pItem = MShellItem::CreateInstance();
-    if (pItem)
-    {
-        IPersistIDList *pIDList = NULL;
-        hr = pItem->QueryInterface(IID_IPersistIDList, (void **)&pIDList);
-        if (SUCCEEDED(hr))
-        {
-            hr = pIDList->SetIDList(new_pidl);
-            pIDList->Release();
-        }
-    }
-    else
-    {
-        hr = E_OUTOFMEMORY;
-    }
-    ILFree(new_pidl);
-
-    if (SUCCEEDED(hr))
-    {
-        *ppsi = pItem;
-    }
-    else
-    {
-        pItem->Release();
-    }
-
-    return hr;
+    return SHCreateShellItemForXP0(pidlParent, psfParent, pidl, ppsi);
 }
 
 extern "C"

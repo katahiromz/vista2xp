@@ -97,7 +97,7 @@ THIS_CLASS::OFNHookProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
             {
                 LPITEMIDLIST pidl = ILCreateFromPathW(pNotify->pszFile);
                 IShellItem *psi = NULL;
-                ::SHCreateShellItem(NULL, NULL, pidl, &psi);
+                SHCreateShellItemForXP0(NULL, NULL, pidl, &psi);
                 CoTaskMemFree(pidl);
                 if (psi)
                 {
@@ -639,7 +639,7 @@ STDMETHODIMP THIS_CLASS::GetFolder(IShellItem **ppsi)
     LPITEMIDLIST pidl = GetFolderIDList();
     if (pidl)
     {
-        HRESULT hr = SHCreateShellItem(NULL, NULL, pidl, ppsi);
+        HRESULT hr = SHCreateShellItemForXP0(NULL, NULL, pidl, ppsi);
         CoTaskMemFree(pidl);
         return hr;
     }
@@ -656,7 +656,7 @@ STDMETHODIMP THIS_CLASS::GetCurrentSelection(IShellItem **ppsi)
     HRESULT hr;
     if (IsFolderDialog())
     {
-        hr = SHCreateShellItem(NULL, NULL, m_pidlSelected, ppsi);
+        hr = SHCreateShellItemForXP0(NULL, NULL, m_pidlSelected, ppsi);
     }
     else
     {
@@ -666,7 +666,7 @@ STDMETHODIMP THIS_CLASS::GetCurrentSelection(IShellItem **ppsi)
             return E_OUTOFMEMORY;
 
         ::SendMessage(GetParent(m_hwnd), CDM_GETFOLDERIDLIST, size, (LPARAM)pidl);
-        hr = SHCreateShellItem(NULL, NULL, pidl, ppsi);
+        hr = SHCreateShellItemForXP0(NULL, NULL, pidl, ppsi);
         CoTaskMemFree(pidl);
     }
 
@@ -795,7 +795,7 @@ STDMETHODIMP THIS_CLASS::GetResult(IShellItem **ppsi)
 
     if (IsFolderDialog())
     {
-        return ::SHCreateShellItem(NULL, NULL, m_pidlSelected, ppsi);
+        return SHCreateShellItemForXP0(NULL, NULL, m_pidlSelected, ppsi);
     }
     else
     {
@@ -807,7 +807,7 @@ STDMETHODIMP THIS_CLASS::GetResult(IShellItem **ppsi)
         {
             pidl = ILCreateFromPathW(m_szFile);
         }
-        hr = ::SHCreateShellItem(NULL, NULL, pidl, ppsi);
+        hr = SHCreateShellItemForXP0(NULL, NULL, pidl, ppsi);
         CoTaskMemFree(pidl);
         return hr;
     }

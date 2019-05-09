@@ -8,7 +8,6 @@
 #include <shlwapi.h>
 #include <cstdio>
 #include <strsafe.h>
-#include <new>
 #include "FileDialog.hpp"
 #include "ShellItemArray.hpp"
 

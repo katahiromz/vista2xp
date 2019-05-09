@@ -19,6 +19,13 @@ class MShellItemArray;
 BOOL _ILIsDesktop(LPCITEMIDLIST pidl);
 
 HRESULT STDAPICALLTYPE
+SHCreateShellItemForXP0(
+    PCIDLIST_ABSOLUTE pidlParent,
+    IShellFolder      *psfParent,
+    PCUITEMID_CHILD   pidl,
+    IShellItem        **ppsi);
+
+HRESULT STDAPICALLTYPE
 SHGetNameFromIDListForXP0(PCIDLIST_ABSOLUTE pidl, SIGDN sigdnName, PWSTR *ppszName);
 
 ///////////////////////////////////////////////////////////////////////////////
