@@ -3,12 +3,7 @@
  * Copyright (C) 2019 Katayama Hirofumi MZ <katayama.hirofumi.mz@gmail.com>
  */
 
-/* Vista+ */
-#define WINVER          0x0600
-#define _WIN32_WINNT    0x0600
-#define _WIN32_IE       0x0600
-#define NTDDI_VERSION   0x06000000
-
+#include "targetvervista.h"
 #include <windows.h>
 #include <stdio.h>
 

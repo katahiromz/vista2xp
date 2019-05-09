@@ -68,7 +68,7 @@ else()
     message(STATUS DO_FALLBACK=0)
 endif()
 
-# use targetver.h
+# use targetverxp.h and targetvervista.h
 include_directories(include)
 
 # support TDM-GCC-32

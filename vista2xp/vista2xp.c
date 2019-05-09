@@ -2,7 +2,7 @@
 /* This file is public domain software.
    Copyright (C) 2019 Katayama Hirofumi MZ <katayama.hirofumi.mz@gmail.com>. */
 #define _CRT_SECURE_NO_WARNINGS
-#include "targetver.h"
+#include "targetverxp.h"
 #include <windows.h>
 #include <windowsx.h>
 #include <tchar.h>

@@ -1,7 +1,7 @@
 // JustDoIt.cpp
 // This file is public domain software.
 // Copyright (C) 2019 Katayama Hirofumi MZ <katayama.hirofumi.mz@gmail.com>.
-#include "targetver.h"
+#include "targetverxp.h"
 #include "ExeImage.hpp"
 #include <shlwapi.h>
 #include <strsafe.h>
