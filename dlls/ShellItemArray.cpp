@@ -2,8 +2,12 @@
 /* This file is public domain software.
    Copyright (C) 2019 Katayama Hirofumi MZ <katayama.hirofumi.mz@gmail.com>. */
 
+#include "targetver.h"
 #include "ShellItemArray.hpp"
 #include <shlobj.h>
+#include <new>
+#include <shlwapi.h>
+#include <strsafe.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -100,7 +104,7 @@ SHGetNameFromIDListForXP0(PCIDLIST_ABSOLUTE pidl, SIGDN sigdnName, PWSTR *ppszNa
 
     *ppszName = NULL;
     ret = SHBindToParent(pidl, IID_IShellFolder, (void**)&psfparent, &child_pidl);
-    if(SUCCEEDED(ret))
+    if (SUCCEEDED(ret))
     {
         switch (sigdnName)
         {
@@ -593,17 +597,19 @@ STDMETHODIMP MEnumShellItems::Clone(IEnumShellItems **ppenum)
 ///////////////////////////////////////////////////////////////////////////////
 
 MShellItemArray::MShellItemArray() :
-    m_nRefCount(1)
+    m_nRefCount(1),
+    m_nItemCount(0),
+    m_pItems(NULL)
 {
 }
 
 MShellItemArray::~MShellItemArray()
 {
-    for (size_t i = 0; i < m_items.size(); ++i)
+    for (size_t i = 0; i < m_nItemCount; ++i)
     {
-        m_items[i]->Release();
+        m_pItems[i]->Release();
     }
-    m_items.clear();
+    CoTaskMemFree(m_pItems);
 }
 
 /*static*/ MShellItemArray *
@@ -612,13 +618,24 @@ MShellItemArray::CreateInstance()
     return new(std::nothrow) MShellItemArray();
 }
 
-void MShellItemArray::AddItem(IShellItem *pItem)
+HRESULT MShellItemArray::AddItem(IShellItem *pItem)
 {
-    if (pItem)
-    {
-        m_items.push_back(pItem);
-        pItem->AddRef();
-    }
+    if (!pItem)
+        return E_INVALIDARG;
+
+    ULONG nNewCount = m_nItemCount + 1;
+    IShellItem **pNewItems;
+    pNewItems = (IShellItem **)CoTaskMemAlloc(nNewCount * sizeof(IShellItem *));
+    if (!pNewItems)
+        return E_OUTOFMEMORY;
+
+    CopyMemory(pNewItems, m_pItems, m_nItemCount * sizeof(IShellItem *));
+    CoTaskMemFree(m_pItems);
+    m_pItems = pNewItems;
+
+    m_pItems[m_nItemCount] = pItem;
+    pItem->AddRef();
+    return S_OK;
 }
 
 STDMETHODIMP MShellItemArray::QueryInterface(REFIID riid, void **ppvObject)
@@ -685,9 +702,9 @@ STDMETHODIMP MShellItemArray::GetAttributes(
     HRESULT hr;
     SFGAOF attr;
 
-    for (size_t i = 0; i < m_items.size(); ++i)
+    for (ULONG i = 0; i < m_nItemCount; ++i)
     {
-        hr = m_items[i]->GetAttributes(sfgaoMask, &attr);
+        hr = m_pItems[i]->GetAttributes(sfgaoMask, &attr);
         if (FAILED(hr))
             break;
 
@@ -724,7 +741,7 @@ STDMETHODIMP MShellItemArray::GetCount(DWORD *pdwNumItems)
     if (!pdwNumItems)
         return E_INVALIDARG;
 
-    *pdwNumItems = DWORD(m_items.size());
+    *pdwNumItems = m_nItemCount;
     return S_OK;
 }
 
@@ -733,10 +750,10 @@ STDMETHODIMP MShellItemArray::GetItemAt(DWORD dwIndex, IShellItem **ppsi)
     if (!ppsi)
         return E_INVALIDARG;
 
-    if (dwIndex < m_items.size())
+    if (dwIndex < m_nItemCount)
     {
-        *ppsi = m_items[dwIndex];
-        m_items[dwIndex]->AddRef();
+        *ppsi = m_pItems[dwIndex];
+        m_pItems[dwIndex]->AddRef();
         return S_OK;
     }
 

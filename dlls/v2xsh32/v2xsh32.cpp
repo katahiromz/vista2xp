@@ -98,10 +98,17 @@ SHCreateShellItemArrayFromShellItemForXP(IShellItem *psi, REFIID riid, void **pp
     if (!pArray)
         return E_OUTOFMEMORY;
 
-    pArray->AddItem(psi);
+    HRESULT hr = pArray->AddItem(psi);
+    if (SUCCEEDED(hr))
+    {
+        *ppv = pArray;
+    }
+    else
+    {
+        pArray->Release();
+    }
 
-    *ppv = pArray;
-    return S_OK;
+    return hr;
 }
 
 extern "C"

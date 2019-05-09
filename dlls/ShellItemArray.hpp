@@ -7,11 +7,6 @@
 #include <windows.h>
 #include <objbase.h>
 #include <shobjidl.h>
-#include <vector>
-#include <string>
-#include <shlwapi.h>
-#include <strsafe.h>
-#include <new>
 
 class MEnumShellItems;
 class MShellItemArray;
@@ -104,7 +99,7 @@ class MShellItemArray : public IShellItemArray
 public:
     static MShellItemArray *CreateInstance();
 
-    void AddItem(IShellItem *pItem);
+    HRESULT AddItem(IShellItem *pItem);
 
     // IUnknown interface
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObject);
@@ -135,7 +130,8 @@ public:
 
 protected:
     LONG m_nRefCount;
-    std::vector<IShellItem *> m_items;
+    ULONG m_nItemCount;
+    IShellItem **m_pItems;
 
     MShellItemArray();
     virtual ~MShellItemArray();
