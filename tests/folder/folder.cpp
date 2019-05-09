@@ -10,8 +10,14 @@
 #define NTDDI_VERSION   0x06000000
 
 #include <windows.h>
+#include <initguid.h>
 #include <shobjidl.h>
 #include <stdio.h>
+
+#if defined(__GNUC__) && (__GNUC__ < 7)
+DEFINE_GUID(IID_IFileOpenDialog_, 0xd57c7288, 0xd4ad, 0x4768, 0xbe,0x02, 0x9d,0x96,0x95,0x32,0xd9,0x60);
+DEFINE_GUID(CLSID_FileOpenDialog_, 0xdc1c5a9c, 0xe88a, 0x4dde, 0xa5,0xa1, 0x60,0xf8,0x2a,0x20,0xae,0xf7);
+#endif
 
 int main(void)
 {
@@ -29,8 +35,8 @@ int main(void)
     LPWSTR pszFileName = NULL;
     IShellItem *psi = NULL;
 
-    hr = CoCreateInstance(CLSID_FileOpenDialog, NULL, CLSCTX_ALL, 
-                          IID_IFileOpenDialog,
+    hr = CoCreateInstance(CLSID_FileOpenDialog_, NULL, CLSCTX_ALL, 
+                          IID_IFileOpenDialog_,
                           reinterpret_cast<void**>(&pFileOpen));
     if (FAILED(hr))
     {

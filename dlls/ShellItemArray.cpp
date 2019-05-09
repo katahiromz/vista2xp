@@ -10,11 +10,16 @@
 #include <shlwapi.h>
 #include <strsafe.h>
 
-DEFINE_GUID(IID_IUnknown, 0x00000000, 0x0000, 0x0000, 0xc0,0x00, 0x00,0x00,0x00,0x00,0x00,0x46);
-DEFINE_GUID(BHID_SFObject, 0x3981e224, 0xf559, 0x11d3, 0x8e, 0x3a, 0x00, 0xc0, 0x4f, 0x68, 0x37, 0xd5);
-DEFINE_GUID(BHID_SFUIObject, 0x3981e225, 0xf559, 0x11d3, 0x8e, 0x3a, 0x00, 0xc0, 0x4f, 0x68, 0x37, 0xd5);
-DEFINE_GUID(BHID_SFViewObject, 0x3981e226, 0xf559, 0x11d3, 0x8e, 0x3a, 0x00, 0xc0, 0x4f, 0x68, 0x37, 0xd5);
-DEFINE_GUID(BHID_DataObject, 0xb8c0bd9f, 0xed24, 0x455c, 0x83, 0xe6, 0xd5, 0x39, 0xc, 0x4f, 0xe8, 0xc4);
+DEFINE_GUID(IID_IUnknown_, 0x00000000, 0x0000, 0x0000, 0xc0,0x00, 0x00,0x00,0x00,0x00,0x00,0x46);
+DEFINE_GUID(IID_IShellItem_, 0x43826d1e, 0xe718, 0x42ee, 0xbc,0x55, 0xa1,0xe2,0x61,0xc3,0x7b,0xfe);
+DEFINE_GUID(IID_IShellItemArray_, 0xb63ea76d, 0x1f85, 0x456f, 0xa1,0x9c, 0x48,0x15,0x9e,0xfa,0x85,0x8b);
+DEFINE_GUID(IID_IPersistIDList_, 0x1079acfc, 0x29bd, 0x11d3, 0x8e,0x0d, 0x00,0xc0,0x4f,0x68,0x37,0xd5);
+DEFINE_GUID(IID_IEnumShellItems_, 0x70629033, 0xe363, 0x4a28, 0xa5,0x67, 0x0d,0xb7,0x80,0x06,0xe6,0xd7);
+DEFINE_GUID(BHID_SFObject_, 0x3981e224, 0xf559, 0x11d3, 0x8e, 0x3a, 0x00, 0xc0, 0x4f, 0x68, 0x37, 0xd5);
+DEFINE_GUID(BHID_SFUIObject_, 0x3981e225, 0xf559, 0x11d3, 0x8e, 0x3a, 0x00, 0xc0, 0x4f, 0x68, 0x37, 0xd5);
+DEFINE_GUID(BHID_SFViewObject_, 0x3981e226, 0xf559, 0x11d3, 0x8e, 0x3a, 0x00, 0xc0, 0x4f, 0x68, 0x37, 0xd5);
+DEFINE_GUID(BHID_DataObject_, 0xb8c0bd9f, 0xed24, 0x455c, 0x83, 0xe6, 0xd5, 0x39, 0xc, 0x4f, 0xe8, 0xc4);
+DEFINE_GUID(CLSID_ShellItem_, 0x9ac9fbe1, 0xe0a2, 0x4ad6, 0xb4,0xee, 0xe2,0x12,0x01,0x3e,0xa9,0x17);
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -76,7 +81,7 @@ SHCreateShellItemForXP0(
     if (pItem)
     {
         IPersistIDList *pIDList = NULL;
-        hr = pItem->QueryInterface(IID_IPersistIDList, (void **)&pIDList);
+        hr = pItem->QueryInterface(IID_IPersistIDList_, (void **)&pIDList);
         if (SUCCEEDED(hr))
         {
             hr = pIDList->SetIDList(new_pidl);
@@ -257,11 +262,11 @@ HRESULT MShellItem::get_shellfolder(IBindCtx *pbc, REFIID riid, void **ppvOut)
 
 STDMETHODIMP MShellItem::QueryInterface(REFIID riid, void **ppvObject)
 {
-    if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IShellItem))
+    if (IsEqualIID(riid, IID_IUnknown_) || IsEqualIID(riid, IID_IShellItem_))
     {
         *ppvObject = static_cast<IShellItem *>(this);
     }
-    else if (IsEqualIID(riid, IID_IPersistIDList))
+    else if (IsEqualIID(riid, IID_IPersistIDList_))
     {
         *ppvObject = static_cast<IPersistIDList *>(this);
     }
@@ -296,11 +301,11 @@ STDMETHODIMP
 MShellItem::BindToHandler(IBindCtx *pbc, REFGUID rbhid, REFIID riid, void **ppvOut)
 {
     HRESULT hr;
-    if (IsEqualIID(rbhid, BHID_SFObject))
+    if (IsEqualIID(rbhid, BHID_SFObject_))
     {
         return get_shellfolder(pbc, riid, ppvOut);
     }
-    else if (IsEqualIID(rbhid, BHID_SFUIObject))
+    else if (IsEqualIID(rbhid, BHID_SFUIObject_))
     {
         IShellFolder *pShellFolder = NULL;
         if (_ILIsDesktop(m_pidl))
@@ -316,11 +321,11 @@ MShellItem::BindToHandler(IBindCtx *pbc, REFGUID rbhid, REFIID riid, void **ppvO
         pShellFolder->Release();
         return hr;
     }
-    else if (IsEqualIID(rbhid, BHID_DataObject))
+    else if (IsEqualIID(rbhid, BHID_DataObject_))
     {
-        return BindToHandler(pbc, BHID_SFUIObject, IID_IDataObject, ppvOut);
+        return BindToHandler(pbc, BHID_SFUIObject_, IID_IDataObject, ppvOut);
     }
-    else if (IsEqualIID(rbhid, BHID_SFViewObject))
+    else if (IsEqualIID(rbhid, BHID_SFViewObject_))
     {
         IShellFolder *psf = NULL;
         hr = get_shellfolder(NULL, IID_IShellFolder, (void **)&psf);
@@ -399,7 +404,7 @@ STDMETHODIMP MShellItem::Compare(IShellItem *oth, SICHINTF hint, int *piOrder)
     if (piOrder == NULL || oth == NULL)
         return E_POINTER;
 
-    hr = oth->QueryInterface(IID_IPersistIDList, (void **)&pIDList);
+    hr = oth->QueryInterface(IID_IPersistIDList_, (void **)&pIDList);
     if (SUCCEEDED(hr))
     {
         hr = pIDList->GetIDList(&pidl);
@@ -436,7 +441,7 @@ STDMETHODIMP MShellItem::Compare(IShellItem *oth, SICHINTF hint, int *piOrder)
 
 STDMETHODIMP MShellItem::GetClassID(CLSID *pClassID)
 {
-    *pClassID = CLSID_ShellItem;
+    *pClassID = CLSID_ShellItem_;
     return S_OK;
 }
 
@@ -499,7 +504,7 @@ MEnumShellItems::CreateInstance(IShellItemArray *array)
 
 STDMETHODIMP MEnumShellItems::QueryInterface(REFIID riid, void **ppvObject)
 {
-    if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IEnumShellItems))
+    if (IsEqualIID(riid, IID_IUnknown_) || IsEqualIID(riid, IID_IEnumShellItems_))
     {
         *ppvObject = static_cast<IEnumShellItems *>(this);
     }
@@ -645,7 +650,7 @@ HRESULT MShellItemArray::AddItem(IShellItem *pItem)
 
 STDMETHODIMP MShellItemArray::QueryInterface(REFIID riid, void **ppvObject)
 {
-    if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IShellItemArray))
+    if (IsEqualIID(riid, IID_IUnknown_) || IsEqualIID(riid, IID_IShellItemArray_))
     {
         *ppvObject = static_cast<IShellItemArray *>(this);
     }

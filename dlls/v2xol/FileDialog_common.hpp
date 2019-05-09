@@ -245,6 +245,13 @@ BOOL THIS_CLASS::UpdateFlags()
     else
         m_ofn.Flags &= ~OFN_NOTESTFILECREATE;
 
+#ifndef OFN_EX_NOPLACESBAR
+    #define OFN_EX_NOPLACESBAR 0x1
+#endif
+#ifndef OFN_FORCESHOWHIDDEN
+    #define OFN_FORCESHOWHIDDEN 0x10000000
+#endif
+
     if (m_options & FOS_HIDEMRUPLACES)
         m_ofn.FlagsEx |= OFN_EX_NOPLACESBAR;
     else

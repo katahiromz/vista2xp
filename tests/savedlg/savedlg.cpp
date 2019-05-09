@@ -10,6 +10,7 @@
 #define NTDDI_VERSION   0x06000000
 
 #include <windows.h>
+#include <initguid.h>
 #include <shobjidl.h>
 #include <cstdio>
 #include <cassert>
@@ -17,6 +18,9 @@
 #ifndef ARRAYSIZE
     #define ARRAYSIZE(array) (sizeof(array) / sizeof(array[0]))
 #endif
+
+DEFINE_GUID(IID_IFileSaveDialog_, 0x84bccd23, 0x5fde, 0x4cdb, 0xae,0xa4, 0xaf,0x64,0xb8,0x3d,0x78,0xab);
+DEFINE_GUID(CLSID_FileSaveDialog_, 0xc0b4e2f3, 0xba21, 0x4773, 0x8d,0xba, 0x33,0x5e,0xc9,0x46,0xeb,0x8b);
 
 int main(void)
 {
@@ -42,8 +46,8 @@ int main(void)
         { L"All Files (*.*)", L"*.*"}
     };
 
-    hr = CoCreateInstance(CLSID_FileSaveDialog, NULL, CLSCTX_ALL, 
-                          IID_IFileSaveDialog,
+    hr = CoCreateInstance(CLSID_FileSaveDialog_, NULL, CLSCTX_ALL, 
+                          IID_IFileSaveDialog_,
                           reinterpret_cast<void**>(&pFileSave));
     if (FAILED(hr))
     {

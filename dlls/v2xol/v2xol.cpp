@@ -8,6 +8,9 @@
 #include <strsafe.h>
 #include "FileDialog.hpp"
 
+extern const GUID CLSID_FileOpenDialog_;
+extern const GUID CLSID_FileSaveDialog_;
+
 static HINSTANCE s_hinstDLL;
 static HINSTANCE s_hOle32;
 
@@ -26,8 +29,8 @@ CoCreateInstanceForXP(REFCLSID rclsid, LPUNKNOWN pUnkOuter,
     if (!s_pCoCreateInstance)
         return E_UNEXPECTED;
 
-    if (IsEqualIID(rclsid, CLSID_FileOpenDialog) ||
-        IsEqualIID(rclsid, CLSID_FileSaveDialog))
+    if (IsEqualIID(rclsid, CLSID_FileOpenDialog_) ||
+        IsEqualIID(rclsid, CLSID_FileSaveDialog_))
     {
         if (DO_FALLBACK)
         {
@@ -39,7 +42,7 @@ CoCreateInstanceForXP(REFCLSID rclsid, LPUNKNOWN pUnkOuter,
         if (pUnkOuter)
             return CLASS_E_NOAGGREGATION;
 
-        if (IsEqualIID(rclsid, CLSID_FileOpenDialog))
+        if (IsEqualIID(rclsid, CLSID_FileOpenDialog_))
         {
             IFileOpenDialog *pObj = createFileOpenDialog();
             if (!pObj)
@@ -49,7 +52,7 @@ CoCreateInstanceForXP(REFCLSID rclsid, LPUNKNOWN pUnkOuter,
             return hr;
         }
 
-        if (IsEqualIID(rclsid, CLSID_FileSaveDialog))
+        if (IsEqualIID(rclsid, CLSID_FileSaveDialog_))
         {
             IFileSaveDialog *pObj = createFileSaveDialog();
             if (!pObj)

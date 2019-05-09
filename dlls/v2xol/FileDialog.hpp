@@ -17,6 +17,8 @@ interface IFileDialog;
     interface IFileSaveDialog;
 interface IFileDialogEvents;
 
+#ifndef __IShellItemFilter_INTERFACE_DEFINED__
+#define __IShellItemFilter_INTERFACE_DEFINED__
 interface IShellItemFilter : public IUnknown
 {
     virtual HRESULT STDMETHODCALLTYPE IncludeItem(
@@ -26,24 +28,30 @@ interface IShellItemFilter : public IUnknown
         IShellItem *psi,
         SHCONTF *pgrfFlags) = 0;
 };
+#endif
 
-typedef enum FDE_OVERWRITE_RESPONSE {
-    FDEOR_DEFAULT = 0,
-    FDEOR_ACCEPT = 1,
-    FDEOR_REFUSE = 2
-} FDE_OVERWRITE_RESPONSE;
+#ifndef FD_DEFINED
+#define FD_DEFINED
+    typedef enum FDE_OVERWRITE_RESPONSE {
+        FDEOR_DEFAULT = 0,
+        FDEOR_ACCEPT = 1,
+        FDEOR_REFUSE = 2
+    } FDE_OVERWRITE_RESPONSE;
 
-typedef enum FDE_SHAREVIOLATION_RESPONSE {
-    FDESVR_DEFAULT = 0,
-    FDESVR_ACCEPT = 1,
-    FDESVR_REFUSE = 2
-} FDE_SHAREVIOLATION_RESPONSE;
+    typedef enum FDE_SHAREVIOLATION_RESPONSE {
+        FDESVR_DEFAULT = 0,
+        FDESVR_ACCEPT = 1,
+        FDESVR_REFUSE = 2
+    } FDE_SHAREVIOLATION_RESPONSE;
 
-typedef enum FDAP {
-    FDAP_BOTTOM = 0,
-    FDAP_TOP = 1
-} FDAP;
+    typedef enum FDAP {
+        FDAP_BOTTOM = 0,
+        FDAP_TOP = 1
+    } FDAP;
+#endif
 
+#ifndef __IFileDialogEvents_INTERFACE_DEFINED__
+#define __IFileDialogEvents_INTERFACE_DEFINED__
 interface IFileDialogEvents : public IUnknown
 {
     virtual HRESULT STDMETHODCALLTYPE OnFileOk(
@@ -72,6 +80,10 @@ interface IFileDialogEvents : public IUnknown
         IShellItem *psi,
         FDE_OVERWRITE_RESPONSE *pResponse) = 0;
 };
+#endif
+
+#ifndef __IFileDialog_INTERFACE_DEFINED__
+#define __IFileDialog_INTERFACE_DEFINED__
 
 enum _FILEOPENDIALOGOPTIONS {
     FOS_OVERWRITEPROMPT = 0x2,
@@ -173,7 +185,10 @@ interface IFileDialog : public IModalWindow
     virtual HRESULT STDMETHODCALLTYPE SetFilter(
         IShellItemFilter *pFilter) = 0;
 };
+#endif
 
+#ifndef __IFileOpenDialog_INTERFACE_DEFINED__
+#define __IFileOpenDialog_INTERFACE_DEFINED__
 interface IFileOpenDialog : public IFileDialog
 {
     virtual HRESULT STDMETHODCALLTYPE GetResults(
@@ -182,7 +197,10 @@ interface IFileOpenDialog : public IFileDialog
     virtual HRESULT STDMETHODCALLTYPE GetSelectedItems(
         IShellItemArray **ppsai) = 0;
 };
+#endif
 
+#ifndef __IFileSaveDialog_INTERFACE_DEFINED__
+#define __IFileSaveDialog_INTERFACE_DEFINED__
 interface IFileSaveDialog : public IFileDialog
 {
     virtual HRESULT STDMETHODCALLTYPE SetSaveAsItem(
@@ -204,8 +222,25 @@ interface IFileSaveDialog : public IFileDialog
         HWND hwnd,
         IFileOperationProgressSink *pSink) = 0;
 };
+#endif
 
 IFileOpenDialog *createFileOpenDialog(void);
 IFileSaveDialog *createFileSaveDialog(void);
+
+#if defined(__GNUC__) && (__GNUC__ < 7)
+    inline LPITEMIDLIST WINAPI ILCreateFromPathW(LPCWSTR path)
+    {
+        IShellFolder *sf = NULL;
+        LPITEMIDLIST pidl = NULL;
+        DWORD pchEaten;
+
+        if (SUCCEEDED(SHGetDesktopFolder(&sf)))
+        {
+            sf->ParseDisplayName(0, NULL, (LPWSTR)path, &pchEaten, &pidl, NULL);
+            sf->Release();
+        }
+        return pidl;
+    }
+#endif
 
 #endif  // ndef FILE_DIALOG_HPP_
