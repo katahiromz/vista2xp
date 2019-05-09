@@ -4,7 +4,6 @@
 
 #include "ShellItemArray.hpp"
 #include <shlobj.h>
-#include <algorithm> // for std::min
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -24,7 +23,7 @@ SHCreateShellItemForXP0(
         return E_INVALIDARG;
 
     *ppsi = NULL;
-    LPITEMIDLIST new_pidl;
+    LPITEMIDLIST new_pidl = NULL;
     HRESULT hr;
     if (pidlParent || psfParent)
     {
@@ -562,7 +561,10 @@ STDMETHODIMP MEnumShellItems::Next(
 
 STDMETHODIMP MEnumShellItems::Skip(ULONG celt)
 {
-    m_dwIndex = std::min(m_dwIndex + celt, m_dwCount - 1);
+    if (m_dwIndex + celt < m_dwCount - 1)
+        m_dwIndex = m_dwIndex + celt;
+    else
+        m_dwIndex = m_dwCount - 1;
     return S_OK;
 }
 

@@ -278,12 +278,12 @@ LPITEMIDLIST THIS_CLASS::GetFolderIDList()
     {
         if (::IsWindow(m_hwnd))
         {
-            SIZE_T size = (SIZE_T)SendMessage(GetParent(m_hwnd), CDM_GETFOLDERIDLIST, 0, 0);
+            SIZE_T size = (SIZE_T)::SendMessage(::GetParent(m_hwnd), CDM_GETFOLDERIDLIST, 0, 0);
             LPITEMIDLIST pidl = (LPITEMIDLIST)CoTaskMemAlloc(size);
             if (!pidl)
                 return NULL;
 
-            ::SendMessage(GetParent(m_hwnd), CDM_GETFOLDERIDLIST, size, (LPARAM)pidl);
+            ::SendMessage(::GetParent(m_hwnd), CDM_GETFOLDERIDLIST, size, (LPARAM)pidl);
             return pidl;
         }
         else
@@ -542,7 +542,7 @@ STDMETHODIMP THIS_CLASS::Advise(
     if (m_pEvents)
         return E_FAIL;
 
-    m_dwCookie = std::rand();
+    m_dwCookie = 0xDEADFACE;
     *pdwCookie = m_dwCookie;
 
     m_pEvents = pfde;

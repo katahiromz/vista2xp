@@ -307,7 +307,7 @@ STDMETHODIMP THIS_CLASS::GetResults(IShellItemArray **ppenum)
 
         LPITEMIDLIST pidl = ILCreateFromPathW(szPath);
         IShellItem *psi = NULL;
-        ::SHCreateShellItem(NULL, NULL, pidl, &psi);
+        SHCreateShellItemForXP0(NULL, NULL, pidl, &psi);
         CoTaskMemFree(pidl);
 
         if (!psi)
