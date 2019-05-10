@@ -45,7 +45,9 @@ You can check the IAT by dumpbin /imports of Visual Studio Command Prompt.
 
 ## WARNING!
 
-Please don't convert the system files.
+- Please don't convert the system files.
+- It doesn't make sense to use on the compressed files. Please use on the installed/expanded files.
+- .NET and x64 are not supported yet.
 
 ## Contact Us
 
