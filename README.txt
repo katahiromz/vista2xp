@@ -5,7 +5,7 @@
 This software may be able to convert an app for Vista/7/10 to an XP app.
 I'm sorry if unable to do it.
 
-Platforms: Vista/7/10
+Platforms: Windows XP/Vista/7/10
 
 Download: https://katahiromz.web.fc2.com/vista2xp/en
 

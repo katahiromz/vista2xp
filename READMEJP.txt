@@ -7,7 +7,7 @@
 このソフトは、Vista/7/10向けのアプリをXP向けのアプリに変換できるかもしれないソフトです。
 できなかったらごめんなさい。
 
-対応環境: Vista/7/10
+対応環境: Windows XP/Vista/7/10
 
 ダウンロード: https://katahiromz.web.fc2.com/vista2xp/ja
 
