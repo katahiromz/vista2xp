@@ -51,7 +51,7 @@ Use TDM-GCC-32 5.1.0, and use cmake. Visual Studio can't build.
 
 - Please don't convert the system files.
 - It doesn't make sense to use on the compressed files. Please use on the installed/expanded files.
-- .NET and x64 are not supported yet.
+- DOTNET and x64 are not supported yet.
 
 ## Contact Us
 
