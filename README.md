@@ -51,7 +51,9 @@ Use TDM-GCC-32 5.1.0, and use cmake. Visual Studio can't build.
 
 - Please don't convert the system files.
 - It doesn't make sense to use on the compressed files. Please use on the installed/expanded files.
-- DOTNET and x64 are not supported yet.
+- DOTNET, DirectX 10 and x64 are not supported yet.
+
+If you are lacking DirectX 10 support, take a look of this: [https://km-software-directx-10.apponic.com/](https://km-software-directx-10.apponic.com/).
 
 ## Contact Us
 
