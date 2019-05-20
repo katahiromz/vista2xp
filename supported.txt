@@ -105,3 +105,4 @@ shell32.SHCreateItemWithParent
 shell32.SHCreateItemFromIDList
 shell32.SHCreateShellItem
 shell32.SHGetNameFromIDList
+shell32.SHGetLocalizedName
