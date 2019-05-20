@@ -22,6 +22,7 @@ typedef HRESULT (STDAPICALLTYPE *FN_SHCreateItemWithParent)(PCIDLIST_ABSOLUTE, I
 typedef HRESULT (STDAPICALLTYPE *FN_SHCreateItemFromIDList)(PCIDLIST_ABSOLUTE, REFIID, void **);
 typedef HRESULT (STDAPICALLTYPE *FN_SHCreateShellItem)(PCIDLIST_ABSOLUTE, IShellFolder *, PCUITEMID_CHILD, IShellItem **);
 typedef HRESULT (STDAPICALLTYPE *FN_SHGetNameFromIDList)(PCIDLIST_ABSOLUTE, SIGDN, PWSTR *);
+typedef HRESULT (STDAPICALLTYPE *FN_SHGetLocalizedName)(PCWSTR, PWSTR, UINT cch, int *);
 
 static FN_SHCreateShellItemArray s_pSHCreateShellItemArray;
 static FN_SHCreateShellItemArrayFromDataObject s_pSHCreateShellItemArrayFromDataObject;
@@ -31,6 +32,7 @@ static FN_SHCreateItemWithParent s_pSHCreateItemWithParent;
 static FN_SHCreateItemFromIDList s_pSHCreateItemFromIDList;
 static FN_SHCreateShellItem s_pSHCreateShellItem;
 static FN_SHGetNameFromIDList s_pSHGetNameFromIDList;
+static FN_SHGetLocalizedName s_pSHGetLocalizedName;
 
 // TODO: SHGetItemFromDataObject, SHGetItemFromObject, SHGetIDListFromObject, SHBindToObject, SHCreateDataObject
 // TODO: SHOpenWithDialog
@@ -253,6 +255,24 @@ SHGetNameFromIDListForXP(PCIDLIST_ABSOLUTE pidl, SIGDN sigdnName, PWSTR *ppszNam
     return SHGetNameFromIDListForXP0(pidl, sigdnName, ppszName);
 }
 
+extern "C"
+HRESULT STDAPICALLTYPE
+SHGetLocalizedNameForXP(
+    PCWSTR pszPath,
+    PWSTR  pszResModule,
+    UINT   cch,
+    int    *pidsRes)
+{
+    if (s_pSHGetLocalizedName && DO_FALLBACK)
+        return (*s_pSHGetLocalizedName)(pszPath, pszResModule, cch, pidsRes);
+
+    if (!PathFileExistsW(pszPath))
+        return 0x80070002;
+
+    // no localization available
+    return 0x80004002;
+}
+
 #define GETPROC(fn) s_p##fn = (FN_##fn)GetProcAddress(s_hShell32, #fn)
 
 extern "C"
@@ -273,6 +293,7 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         GETPROC(SHCreateItemFromIDList);
         GETPROC(SHCreateShellItem);
         GETPROC(SHGetNameFromIDList);
+        GETPROC(SHGetLocalizedName);
         break;
 
     case DLL_PROCESS_DETACH:

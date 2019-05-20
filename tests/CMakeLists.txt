@@ -20,3 +20,7 @@ target_link_libraries(multifile uuid)
 # folder.exe
 add_executable(folder folder/folder.cpp)
 target_link_libraries(folder uuid)
+
+# localized.exe
+add_executable(localized localized/localized.cpp)
+target_link_libraries(localized shell32)

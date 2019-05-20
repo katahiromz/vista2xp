@@ -11,6 +11,7 @@ EXPORTS
     SHCreateItemFromIDList = SHCreateItemFromIDListForXP
     SHCreateShellItem = SHCreateShellItemForXP
     SHGetNameFromIDList = SHGetNameFromIDListForXP
+    SHGetLocalizedName = SHGetLocalizedNameForXP
 
     ; v2xsh32 --> shell32
     ; Activate_RunDLL = shell32.Activate_RunDLL
