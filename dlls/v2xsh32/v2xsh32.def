@@ -12,6 +12,8 @@ EXPORTS
     SHCreateShellItem = SHCreateShellItemForXP
     SHGetNameFromIDList = SHGetNameFromIDListForXP
     SHGetLocalizedName = SHGetLocalizedNameForXP
+    SHSetFolderPathA = shell32.ord231 @231 NONAME
+    SHSetFolderPathW = shell32.ord232 @232 NONAME
 
     ; v2xsh32 --> shell32
     ; Activate_RunDLL = shell32.Activate_RunDLL

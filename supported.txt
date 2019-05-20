@@ -106,3 +106,5 @@ shell32.SHCreateItemFromIDList
 shell32.SHCreateShellItem
 shell32.SHGetNameFromIDList
 shell32.SHGetLocalizedName
+shell32.SHSetFolderPathA
+shell32.SHSetFolderPathW
