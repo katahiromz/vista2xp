@@ -42,6 +42,7 @@ You can check the IAT by dumpbin /imports of Visual Studio Command Prompt.
     - Add v2xsh32 (shell32).
 - 2019.XX.YY ver.0.5
     - Make [Cancel] button [Exit].
+    - Supported SHGetLocalizedName, SHSetFolderPathA and SHSetFolderPathW.
 
 ## WARNING!
 
