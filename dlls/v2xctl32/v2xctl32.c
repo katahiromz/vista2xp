@@ -6,6 +6,7 @@
 #include <string.h>
 #include <strsafe.h>
 #include <psapi.h>
+#include "taskdlg.h"
 
 #ifndef ARRAYSIZE
     #define ARRAYSIZE(array) (sizeof(array) / sizeof(array[0]))
@@ -13,23 +14,6 @@
 
 static HINSTANCE s_hinstDLL;
 static HINSTANCE s_hComCtl32;
-
-#ifndef TD_WARNING_ICON
-    #define TD_WARNING_ICON MAKEINTRESOURCEW (-1)
-    #define TD_ERROR_ICON MAKEINTRESOURCEW (-2)
-    #define TD_INFORMATION_ICON MAKEINTRESOURCEW (-3)
-    #define TD_SHIELD_ICON MAKEINTRESOURCEW (-4)
-    enum _TASKDIALOG_COMMON_BUTTON_FLAGS
-    {
-        TDCBF_OK_BUTTON = 0x1,
-        TDCBF_YES_BUTTON = 0x2,
-        TDCBF_NO_BUTTON = 0x4,
-        TDCBF_CANCEL_BUTTON = 0x8,
-        TDCBF_RETRY_BUTTON = 0x10,
-        TDCBF_CLOSE_BUTTON = 0x20
-    };
-    typedef int TASKDIALOG_COMMON_BUTTON_FLAGS;
-#endif
 
 // TaskDialog
 typedef HRESULT (WINAPI *FN_TaskDialog)(HWND, HINSTANCE, PCWSTR, PCWSTR, PCWSTR, TASKDIALOG_COMMON_BUTTON_FLAGS, PCWSTR, int *);
