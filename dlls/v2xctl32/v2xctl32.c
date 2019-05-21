@@ -277,6 +277,8 @@ typedef struct TASKDIALOGPARAMS
     INT iRadioButton;
 } TASKDIALOGPARAMS;
 
+#define MAX_BUTTONS 6
+
 static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     TASKDIALOGPARAMS *params = (TASKDIALOGPARAMS *)lParam;
@@ -427,7 +429,7 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     // check radio button
     if (!(pTaskConfig->dwFlags & TDF_NO_DEFAULT_RADIO_BUTTON))
     {
-        for (i = 0; i < 6; ++i)
+        for (i = 0; i < MAX_BUTTONS; ++i)
         {
             if (pTaskConfig->cRadioButtons <= i)
                 break;
@@ -445,7 +447,7 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
 
     // radio
-    for (i = 0; i < 6; ++i)
+    for (i = 0; i < MAX_BUTTONS; ++i)
     {
         hCtrl = GetDlgItem(hwnd, rad1 + i);
 
@@ -478,8 +480,8 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     GetWindowRect(hwnd, &rc1);
     if (pTaskConfig->dwFlags & TDF_USE_COMMAND_LINKS)
     {
-        rc1.bottom -= (6 - pTaskConfig->cRadioButtons) * cyRadio;
-        rc1.bottom -= (6 - pTaskConfig->cButtons) * cyCommandLink;
+        rc1.bottom -= (MAX_BUTTONS - pTaskConfig->cRadioButtons) * cyRadio;
+        rc1.bottom -= (MAX_BUTTONS - pTaskConfig->cButtons) * cyCommandLink;
         rc1.bottom -= cyButtons;
 
         DestroyWindow(GetDlgItem(hwnd, psh7));
@@ -489,7 +491,7 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         DestroyWindow(GetDlgItem(hwnd, psh11));
         DestroyWindow(GetDlgItem(hwnd, psh12));
 
-        for (i = 0; i < 6; ++i)
+        for (i = 0; i < MAX_BUTTONS; ++i)
         {
             hCtrl = GetDlgItem(hwnd, psh1 + i);
 
@@ -517,7 +519,7 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             GetWindowRect(hCtrl, &rc2);
             MapWindowRect(NULL, hwnd, &rc2);
             MoveWindow(hCtrl,
-                rc2.left, rc2.top - (6 - pTaskConfig->cRadioButtons) * cyRadio,
+                rc2.left, rc2.top - (MAX_BUTTONS - pTaskConfig->cRadioButtons) * cyRadio,
                 rc2.right - rc2.left, rc2.bottom - rc2.top,
                 TRUE);
 
@@ -528,8 +530,8 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
     else
     {
-        rc1.bottom -= (6 - pTaskConfig->cRadioButtons) * cyRadio;
-        rc1.bottom -= 6 * cyCommandLink;
+        rc1.bottom -= (MAX_BUTTONS - pTaskConfig->cRadioButtons) * cyRadio;
+        rc1.bottom -= MAX_BUTTONS * cyCommandLink;
 
         DestroyWindow(GetDlgItem(hwnd, psh1));
         DestroyWindow(GetDlgItem(hwnd, psh2));
@@ -538,7 +540,7 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         DestroyWindow(GetDlgItem(hwnd, psh5));
         DestroyWindow(GetDlgItem(hwnd, psh6));
 
-        for (i = 0; i < 6; ++i)
+        for (i = 0; i < MAX_BUTTONS; ++i)
         {
             hCtrl = GetDlgItem(hwnd, psh7 + i);
 
@@ -573,8 +575,8 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             GetWindowRect(hCtrl, &rc2);
             MapWindowRect(NULL, hwnd, &rc2);
             pt.y = rc2.top;
-            pt.y -= (6 - pTaskConfig->cRadioButtons) * cyRadio;
-            pt.y -= cyCommandLink * 6;
+            pt.y -= (MAX_BUTTONS - pTaskConfig->cRadioButtons) * cyRadio;
+            pt.y -= cyCommandLink * MAX_BUTTONS;
             MoveWindow(hCtrl,
                 pt.x, pt.y,
                 siz.cx + 16,
@@ -607,7 +609,9 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
         if (pTaskConfig->dwFlags & TDF_USE_COMMAND_LINKS)
         {
-            cyMinus = cyCommandLink * (6 - pTaskConfig->cButtons) + cyButtons + (6 - pTaskConfig->cRadioButtons) * cyRadio;
+            cyMinus = cyCommandLink * (MAX_BUTTONS - pTaskConfig->cButtons);
+            cyMinus += cyButtons;
+            cyMinus += (MAX_BUTTONS - pTaskConfig->cRadioButtons) * cyRadio;
             MoveWindow(hStc2,
                 rc2.left, rc2.top - cyMinus,
                 rc2.right - rc2.left, rc2.bottom - rc2.top,
@@ -615,7 +619,8 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         }
         else
         {
-            cyMinus = cyCommandLink * 6 + (6 - pTaskConfig->cRadioButtons) * cyRadio;
+            cyMinus = cyCommandLink * MAX_BUTTONS;
+            cyMinus += (MAX_BUTTONS - pTaskConfig->cRadioButtons) * cyRadio;
             MoveWindow(hStc2,
                 rc2.left, rc2.top - cyMinus,
                 rc2.right - rc2.left, rc2.bottom - rc2.top,
@@ -716,12 +721,15 @@ TaskDialogIndirectForXP(const TASKDIALOGCONFIG *pTaskConfig,
                                         pfVerificationFlagChecked);
     }
 
-    if (!pTaskConfig || pTaskConfig->cbSize != sizeof(*pTaskConfig))
+    if (!pTaskConfig || pTaskConfig->cbSize != sizeof(*pTaskConfig) ||
+        (pTaskConfig->cButtons && !pTaskConfig->pButtons) ||
+        (pTaskConfig->cRadioButtons && !pTaskConfig->pRadioButtons) ||
+        (!pTaskConfig->cButtons && pTaskConfig->cRadioButtons))
     {
         return E_INVALIDARG;
     }
 
-    if (!pTaskConfig->cButtons || !pTaskConfig->pButtons)
+    if (!pTaskConfig->cButtons)
     {
         return TaskDialogForXP(pTaskConfig->hwndParent, pTaskConfig->hInstance,
                                pTaskConfig->pszWindowTitle,
