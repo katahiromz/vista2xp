@@ -43,6 +43,7 @@ You can check the IAT by `dumpbin /imports` of Visual Studio Command Prompt.
 - 2019.XX.YY ver.0.5
     - Make [Cancel] button [Exit].
     - Supported SHGetLocalizedName, SHSetFolderPathA and SHSetFolderPathW.
+    - Supported TaskDialogIndirect.
 
 ## How to build?
 
