@@ -19,6 +19,10 @@ int main(void)
     printf("TaskDialogIndirect is not supported\n");
 #else
     {
+        HRESULT hr = TaskDialogIndirect(NULL, NULL, NULL, NULL);
+        printf("hr: %08X\n", hr);
+    }
+    {
         TASKDIALOGCONFIG config = { sizeof(TASKDIALOGCONFIG) };
         config.hInstance = GetModuleHandleA(NULL);
         config.dwCommonButtons = TDCBF_YES_BUTTON | TDCBF_NO_BUTTON;
