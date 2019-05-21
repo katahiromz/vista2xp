@@ -280,7 +280,11 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     SetDlgItemText(hwnd, stc1, pszText);
 
     // icon
-    if (pszIcon == TD_ERROR_ICON)
+    if (pTaskConfig->dwFlags & TDF_USE_HICON_MAIN)
+    {
+        SendDlgItemMessage(hwnd, ico1, STM_SETICON, (WPARAM)pTaskConfig->hMainIcon, 0);
+    }
+    else if (pszIcon == TD_ERROR_ICON)
     {
         HICON hIcon = LoadIcon(NULL, IDI_HAND);
         SendDlgItemMessage(hwnd, ico1, STM_SETICON, (WPARAM)hIcon, 0);
