@@ -423,6 +423,8 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     if (pTaskConfig->nDefaultButton)
     {
         SendMessage(hwnd, DM_SETDEFID, pTaskConfig->nDefaultButton, 0);
+        SetFocus(GetDlgItem(hwnd, pTaskConfig->nDefaultButton));
+        return FALSE;
     }
 
     return TRUE;
