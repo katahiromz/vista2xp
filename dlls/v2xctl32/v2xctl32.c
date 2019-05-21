@@ -531,7 +531,7 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
         if (pTaskConfig->dwFlags & TDF_USE_COMMAND_LINKS)
         {
-            cyMinus = cyButtons + (6 - pTaskConfig->cRadioButtons) * cyRadio;
+            cyMinus = cyCommandLink * (6 - pTaskConfig->cButtons) + cyButtons + (6 - pTaskConfig->cRadioButtons) * cyRadio;
             MoveWindow(hStc2,
                 rc2.left, rc2.top - cyMinus,
                 rc2.right - rc2.left, rc2.bottom - rc2.top,
