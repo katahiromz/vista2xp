@@ -423,7 +423,7 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     cyCommandLink = rc2.top - rc1.top;
 
     // calculate cyButtons
-    GetWindowRect(GetDlgItem(hwnd, psh7), &rc1);
+    GetWindowRect(GetDlgItem(hwnd, psh1 + MAX_BUTTONS), &rc1);
     cyButtons = rc1.bottom - rc1.top;
 
     // check radio button
@@ -484,12 +484,10 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         rc1.bottom -= (MAX_BUTTONS - pTaskConfig->cButtons) * cyCommandLink;
         rc1.bottom -= cyButtons;
 
-        DestroyWindow(GetDlgItem(hwnd, psh7));
-        DestroyWindow(GetDlgItem(hwnd, psh8));
-        DestroyWindow(GetDlgItem(hwnd, psh9));
-        DestroyWindow(GetDlgItem(hwnd, psh10));
-        DestroyWindow(GetDlgItem(hwnd, psh11));
-        DestroyWindow(GetDlgItem(hwnd, psh12));
+        for (i = 0; i < MAX_BUTTONS; ++i)
+        {
+            DestroyWindow(GetDlgItem(hwnd, psh1 + MAX_BUTTONS + i));
+        }
 
         for (i = 0; i < MAX_BUTTONS; ++i)
         {
@@ -533,16 +531,14 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         rc1.bottom -= (MAX_BUTTONS - pTaskConfig->cRadioButtons) * cyRadio;
         rc1.bottom -= MAX_BUTTONS * cyCommandLink;
 
-        DestroyWindow(GetDlgItem(hwnd, psh1));
-        DestroyWindow(GetDlgItem(hwnd, psh2));
-        DestroyWindow(GetDlgItem(hwnd, psh3));
-        DestroyWindow(GetDlgItem(hwnd, psh4));
-        DestroyWindow(GetDlgItem(hwnd, psh5));
-        DestroyWindow(GetDlgItem(hwnd, psh6));
+        for (i = 0; i < MAX_BUTTONS; ++i)
+        {
+            DestroyWindow(GetDlgItem(hwnd, psh1 + i));
+        }
 
         for (i = 0; i < MAX_BUTTONS; ++i)
         {
-            hCtrl = GetDlgItem(hwnd, psh7 + i);
+            hCtrl = GetDlgItem(hwnd, psh1 + MAX_BUTTONS + i);
 
             if (i >= pTaskConfig->cButtons)
             {
