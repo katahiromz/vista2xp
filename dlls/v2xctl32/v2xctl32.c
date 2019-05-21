@@ -7,6 +7,7 @@
 #include <strsafe.h>
 #include <psapi.h>
 #include "taskdlg.h"
+#include "resource.h"
 
 #ifndef ARRAYSIZE
     #define ARRAYSIZE(array) (sizeof(array) / sizeof(array[0]))
@@ -163,7 +164,7 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
     else if (pszIcon == TD_SHIELD_ICON)
     {
         params.hInstance = s_hinstDLL;
-        params.lpszIcon = MAKEINTRESOURCEW(100);
+        params.lpszIcon = MAKEINTRESOURCEW(IDI_SHIELD_ICON);
         params.dwStyle |= MB_USERICON;
     }
     else if (pszIcon == TD_WARNING_ICON)
