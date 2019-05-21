@@ -194,6 +194,82 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
     return S_OK;
 }
 
+VOID DoRepositionPointDx(LPPOINT ppt, SIZE siz, LPCRECT prc)
+{
+    if (ppt->x + siz.cx > prc->right)
+        ppt->x = prc->right - siz.cx;
+    if (ppt->y + siz.cy > prc->bottom)
+        ppt->y = prc->bottom - siz.cy;
+    if (ppt->x < prc->left)
+        ppt->x = prc->left;
+    if (ppt->y < prc->top)
+        ppt->y = prc->top;
+}
+
+RECT WorkAreaFromWindowDx(HWND hwnd)
+{
+    RECT rc;
+#if (WINVER >= 0x0500)
+    MONITORINFO mi;
+    mi.cbSize = sizeof(mi);
+    HMONITOR hMonitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+    if (GetMonitorInfo(hMonitor, &mi))
+    {
+        return mi.rcWork;
+    }
+#endif
+    SystemParametersInfo(SPI_GETWORKAREA, 0, &rc, 0);
+    return rc;
+}
+
+void DoCenterWindow(HWND hwnd)
+{
+    HWND hwndParent;
+    BOOL bChild = !!(GetWindowStyle(hwnd) & WS_CHILD);
+    RECT rcWorkArea, rcParent;
+    SIZE sizParent, siz;
+    RECT rc;
+    POINT pt;
+
+    if (bChild)
+        hwndParent = GetParent(hwnd);
+    else
+        hwndParent = GetWindow(hwnd, GW_OWNER);
+
+    rcWorkArea = WorkAreaFromWindowDx(hwnd);
+
+    if (hwndParent)
+        GetWindowRect(hwndParent, &rcParent);
+    else
+        rcParent = rcWorkArea;
+
+    sizParent.cx = rcParent.right - rcParent.left;
+    sizParent.cy = rcParent.bottom - rcParent.top;
+
+    GetWindowRect(hwnd, &rc);
+    siz.cx = rc.right - rc.left;
+    siz.cy = rc.bottom - rc.top;
+
+    pt.x = rcParent.left + (sizParent.cx - siz.cx) / 2;
+    pt.y = rcParent.top + (sizParent.cy - siz.cy) / 2;
+
+    if (bChild && hwndParent)
+    {
+        GetClientRect(hwndParent, &rcParent);
+        MapWindowPoints(hwndParent, NULL, (LPPOINT)&rcParent, 2);
+        DoRepositionPointDx(&pt, siz, &rcParent);
+
+        ScreenToClient(hwndParent, &pt);
+    }
+    else
+    {
+        DoRepositionPointDx(&pt, siz, &rcWorkArea);
+    }
+
+    SetWindowPos(hwnd, NULL, pt.x, pt.y, 0, 0,
+                 SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+}
+
 typedef struct TASKDIALOGPARAMS
 {
     const TASKDIALOGCONFIG *pTaskConfig;
@@ -553,6 +629,8 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
 
     MoveWindow(hwnd, rc1.left, rc1.top, rc1.right - rc1.left, rc1.bottom - rc1.top, TRUE);
+
+    DoCenterWindow(hwnd);
 
     if (!(pTaskConfig->dwFlags & TDF_ALLOW_DIALOG_CANCELLATION))
     {
