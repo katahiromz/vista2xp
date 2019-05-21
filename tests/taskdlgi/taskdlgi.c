@@ -87,7 +87,7 @@ int main(void)
         config.hwndParent = NULL;
         config.pButtons = buttons;
         config.cButtons = ARRAYSIZE(buttons);
-        config.dwFlags = TDF_ALLOW_DIALOG_CANCELLATION | TDF_USE_COMMAND_LINKS;
+        config.dwFlags = TDF_ALLOW_DIALOG_CANCELLATION;
         config.pszMainIcon = TD_WARNING_ICON; 
         config.pszWindowTitle = TEXT("pszWindowTitle");
         config.pszMainInstruction = TEXT("pszMainInstruction"); 
