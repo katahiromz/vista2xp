@@ -17,7 +17,11 @@ static HINSTANCE s_hComCtl32;
 
 // TaskDialog
 typedef HRESULT (WINAPI *FN_TaskDialog)(HWND, HINSTANCE, PCWSTR, PCWSTR, PCWSTR, TASKDIALOG_COMMON_BUTTON_FLAGS, PCWSTR, int *);
+// TaskDialogIndirect
+typedef HRESULT (WINAPI *FN_TaskDialogIndirect)(const TASKDIALOGCONFIG *, int *, int *, BOOL *);
+
 static FN_TaskDialog s_pTaskDialog = NULL;
+static FN_TaskDialogIndirect s_pTaskDialogIndirect = NULL;
 
 LPWSTR JoinStrings(LPCWSTR psz1, LPCWSTR psz2)
 {
@@ -188,6 +192,38 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
     return S_OK;
 }
 
+HRESULT WINAPI
+TaskDialogIndirectForXP(const TASKDIALOGCONFIG *pTaskConfig,
+                        int *pnButton, int *pnRadioButton,
+                        BOOL *pfVerificationFlagChecked)
+{
+    if (s_pTaskDialogIndirect && DO_FALLBACK)
+    {
+        return (*s_pTaskDialogIndirect)(pTaskConfig, pnButton, pnRadioButton,
+                                        pfVerificationFlagChecked);
+    }
+
+    if (!pTaskConfig)
+    {
+        return E_INVALIDARG;
+    }
+
+    if (!pTaskConfig->cButtons || !pTaskConfig->pButtons)
+    {
+        return TaskDialogForXP(pTaskConfig->hwndParent, pTaskConfig->hInstance,
+                               pTaskConfig->pszWindowTitle,
+                               pTaskConfig->pszMainInstruction,
+                               pTaskConfig->pszContent,
+                               pTaskConfig->dwCommonButtons,
+                               pTaskConfig->pszMainIcon, pnButton);
+    }
+
+    // TODO:
+    return 0;
+}
+
+#define GETPROC(fn) s_p##fn = (FN_##fn)GetProcAddress(s_hComCtl32, #fn)
+
 BOOL WINAPI
 DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
@@ -197,7 +233,8 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         s_hinstDLL = hinstDLL;
         DisableThreadLibraryCalls(hinstDLL);
         s_hComCtl32 = GetModuleHandleA("comctl32");
-        s_pTaskDialog = (FN_TaskDialog)GetProcAddress(s_hComCtl32, "TaskDialog");
+        GETPROC(TaskDialog);
+        GETPROC(TaskDialogIndirect);
         break;
     case DLL_PROCESS_DETACH:
         break;
