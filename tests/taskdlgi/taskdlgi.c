@@ -118,6 +118,110 @@ int main(void)
             break;
         }
     }
+    {
+        TASKDIALOG_BUTTON buttons[] =
+        {
+            { FINE, TEXT("&Fine") },
+            { CLOUD, TEXT("&Cloud") },
+            { RAIN, TEXT("&Rain") },
+            { SNOW, TEXT("&Snow") }
+        };
+        TASKDIALOG_BUTTON radio_buttons[] =
+        {
+            { 1000, TEXT("Radio 1") },
+            { 1001, TEXT("Radio 2") },
+            { 1002, TEXT("Radio 3") },
+            { 1003, TEXT("Radio 4") },
+            { 1004, TEXT("Radio 5") }
+        };
+        TASKDIALOGCONFIG config;
+        ZeroMemory(&config, sizeof(config));
+        config.cbSize = sizeof(config); 
+        config.hInstance = GetModuleHandleA(NULL);
+        config.hwndParent = NULL;
+        config.pButtons = buttons;
+        config.cButtons = ARRAYSIZE(buttons);
+        config.pRadioButtons = radio_buttons;
+        config.cRadioButtons = ARRAYSIZE(radio_buttons);
+        config.dwFlags = TDF_ALLOW_DIALOG_CANCELLATION;
+        config.pszMainIcon = TD_WARNING_ICON; 
+        config.pszWindowTitle = TEXT("with radio buttons");
+        config.pszMainInstruction = TEXT("pszMainInstruction"); 
+        config.pszContent = TEXT("pszContent"); 
+        config.pszFooterIcon = TD_INFORMATION_ICON;
+        config.pszFooter = TEXT("pszFooter");
+        config.nDefaultButton = CLOUD;
+        INT selected = 0xDEADBEEF;
+        HRESULT hr = TaskDialogIndirect(&config, &selected, NULL, NULL);
+        printf("hr: %08X\n", hr);
+        switch (selected)
+        {
+        case FINE:
+            puts("FINE");
+            break;
+        case CLOUD:
+            puts("CLOUD");
+            break;
+        case RAIN:
+            puts("RAIN");
+            break;
+        case SNOW:
+            puts("SNOW");
+            break;
+        }
+    }
+    {
+        TASKDIALOG_BUTTON buttons[] =
+        {
+            { FINE, TEXT("&Fine") },
+            { CLOUD, TEXT("&Cloud") },
+            { RAIN, TEXT("&Rain") },
+            { SNOW, TEXT("&Snow") }
+        };
+        TASKDIALOG_BUTTON radio_buttons[] =
+        {
+            { 1000, TEXT("Radio 1") },
+            { 1001, TEXT("Radio 2") },
+            { 1002, TEXT("Radio 3") },
+            { 1003, TEXT("Radio 4") },
+            { 1004, TEXT("Radio 5") }
+        };
+        TASKDIALOGCONFIG config;
+        ZeroMemory(&config, sizeof(config));
+        config.cbSize = sizeof(config); 
+        config.hInstance = GetModuleHandleA(NULL);
+        config.hwndParent = NULL;
+        config.pButtons = buttons;
+        config.cButtons = ARRAYSIZE(buttons);
+        config.pRadioButtons = radio_buttons;
+        config.cRadioButtons = ARRAYSIZE(radio_buttons);
+        config.dwFlags = TDF_ALLOW_DIALOG_CANCELLATION | TDF_USE_COMMAND_LINKS | TDF_NO_DEFAULT_RADIO_BUTTON;
+        config.pszMainIcon = TD_WARNING_ICON; 
+        config.pszWindowTitle = TEXT("with radio buttons 2");
+        config.pszMainInstruction = TEXT("pszMainInstruction"); 
+        config.pszContent = TEXT("pszContent"); 
+        config.pszFooterIcon = TD_INFORMATION_ICON;
+        config.pszFooter = TEXT("pszFooter");
+        config.nDefaultButton = CLOUD;
+        INT selected = 0xDEADBEEF;
+        HRESULT hr = TaskDialogIndirect(&config, &selected, NULL, NULL);
+        printf("hr: %08X\n", hr);
+        switch (selected)
+        {
+        case FINE:
+            puts("FINE");
+            break;
+        case CLOUD:
+            puts("CLOUD");
+            break;
+        case RAIN:
+            puts("RAIN");
+            break;
+        case SNOW:
+            puts("SNOW");
+            break;
+        }
+    }
 #endif
 
     return 0;
