@@ -143,6 +143,7 @@ int main(void)
         config.cButtons = ARRAYSIZE(buttons);
         config.pRadioButtons = radio_buttons;
         config.cRadioButtons = ARRAYSIZE(radio_buttons);
+        config.nDefaultRadioButton = 1001;
         config.dwFlags = TDF_ALLOW_DIALOG_CANCELLATION;
         config.pszMainIcon = TD_WARNING_ICON; 
         config.pszWindowTitle = TEXT("with radio buttons");
@@ -152,8 +153,10 @@ int main(void)
         config.pszFooter = TEXT("pszFooter");
         config.nDefaultButton = CLOUD;
         INT selected = 0xDEADBEEF;
-        HRESULT hr = TaskDialogIndirect(&config, &selected, NULL, NULL);
+        INT radio = 0xDEADBEEF;
+        HRESULT hr = TaskDialogIndirect(&config, &selected, &radio, NULL);
         printf("hr: %08X\n", hr);
+        printf("radio: %08X\n", radio);
         switch (selected)
         {
         case FINE:
@@ -204,8 +207,10 @@ int main(void)
         config.pszFooter = TEXT("pszFooter");
         config.nDefaultButton = CLOUD;
         INT selected = 0xDEADBEEF;
-        HRESULT hr = TaskDialogIndirect(&config, &selected, NULL, NULL);
+        INT radio = 0xDEADBEEF;
+        HRESULT hr = TaskDialogIndirect(&config, &selected, &radio, NULL);
         printf("hr: %08X\n", hr);
+        printf("radio: %08X\n", radio);
         switch (selected)
         {
         case FINE:

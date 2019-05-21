@@ -194,9 +194,17 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
     return S_OK;
 }
 
+typedef struct TASKDIALOGPARAMS
+{
+    const TASKDIALOGCONFIG *pTaskConfig;
+    INT iButton;
+    INT iRadioButton;
+} TASKDIALOGPARAMS;
+
 static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
-    const TASKDIALOGCONFIG *pTaskConfig = (const TASKDIALOGCONFIG *)lParam;
+    TASKDIALOGPARAMS *params = (TASKDIALOGPARAMS *)lParam;
+    const TASKDIALOGCONFIG *pTaskConfig = params->pTaskConfig;
     HINSTANCE hInstance = pTaskConfig->hInstance;
     PCWSTR pszWindowTitle = pTaskConfig->pszWindowTitle;
     PCWSTR pszMainInstruction = pTaskConfig->pszMainInstruction;
@@ -205,7 +213,7 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     PCWSTR pszIcon = pTaskConfig->pszMainIcon;
     LPWSTR psz0, psz1, pszText, pszButton, pch, pszFooter;
     WCHAR szTitle[MAX_PATH], szInst[MAX_PATH], szContent[MAX_PATH], szButtonText[64], szFooter[MAX_PATH];
-    INT i, id, cyCommandLink, cyButtons;
+    INT i, id, cyRadio, cyCommandLink, cyButtons, cyMinus;
     RECT rc1, rc2;
     HWND hCtrl;
     HDC hDC;
@@ -323,6 +331,11 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         }
     }
 
+    // calculate cyRadio
+    GetWindowRect(GetDlgItem(hwnd, rad1), &rc1);
+    GetWindowRect(GetDlgItem(hwnd, rad2), &rc2);
+    cyRadio = rc2.top - rc1.top;
+
     // calculate cyCommandLink
     GetWindowRect(GetDlgItem(hwnd, psh1), &rc1);
     GetWindowRect(GetDlgItem(hwnd, psh2), &rc2);
@@ -331,13 +344,65 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     MapWindowPoints(NULL, hwnd, &pt, 1);
     cyCommandLink = rc2.top - rc1.top;
 
+    // calculate cyButtons
     GetWindowRect(GetDlgItem(hwnd, psh7), &rc1);
     cyButtons = rc1.bottom - rc1.top;
+
+    // check radio button
+    if (!(pTaskConfig->dwFlags & TDF_NO_DEFAULT_RADIO_BUTTON))
+    {
+        for (i = 0; i < 6; ++i)
+        {
+            if (pTaskConfig->cRadioButtons <= i)
+                break;
+
+            if (pTaskConfig->nDefaultRadioButton == pTaskConfig->pRadioButtons[i].nButtonID)
+            {
+                CheckRadioButton(hwnd, rad1, rad6, rad1 + i);
+                break;
+            }
+        }
+        if (i == pTaskConfig->cRadioButtons)
+        {
+            CheckRadioButton(hwnd, rad1, rad6, rad1);
+        }
+    }
+
+    // radio
+    for (i = 0; i < 6; ++i)
+    {
+        hCtrl = GetDlgItem(hwnd, rad1 + i);
+
+        if (i >= pTaskConfig->cRadioButtons)
+        {
+            DestroyWindow(hCtrl);
+            continue;
+        }
+
+        // set text
+        pszButton = (LPWSTR)pTaskConfig->pRadioButtons[i].pszButtonText;
+        if (HIWORD(pszButton) == 0)
+        {
+            LoadString(hInstance, LOWORD(pszButton), szButtonText, ARRAYSIZE(szButtonText));
+            pszButton = szButtonText;
+        }
+        pszButton = _wcsdup(pszButton);
+        pch = wcschr(pszButton, L'\n');
+        if (pch)
+            *pch = 0;
+        SetWindowText(hCtrl, pszButton);
+        free(pszButton);
+
+        // set id
+        id = pTaskConfig->pRadioButtons[i].nButtonID;
+        SetWindowLongPtr(hCtrl, GWLP_ID, id);
+    }
 
     // shrink dialog box
     GetWindowRect(hwnd, &rc1);
     if (pTaskConfig->dwFlags & TDF_USE_COMMAND_LINKS)
     {
+        rc1.bottom -= (6 - pTaskConfig->cRadioButtons) * cyRadio;
         rc1.bottom -= (6 - pTaskConfig->cButtons) * cyCommandLink;
         rc1.bottom -= cyButtons;
 
@@ -372,6 +437,14 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             SetWindowText(hCtrl, pszButton);
             free(pszButton);
 
+            // move
+            GetWindowRect(hCtrl, &rc2);
+            MapWindowRect(NULL, hwnd, &rc2);
+            MoveWindow(hCtrl,
+                rc2.left, rc2.top - (6 - pTaskConfig->cRadioButtons) * cyRadio,
+                rc2.right - rc2.left, rc2.bottom - rc2.top,
+                TRUE);
+
             // set id
             id = pTaskConfig->pButtons[i].nButtonID;
             SetWindowLongPtr(hCtrl, GWLP_ID, id);
@@ -379,6 +452,7 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
     else
     {
+        rc1.bottom -= (6 - pTaskConfig->cRadioButtons) * cyRadio;
         rc1.bottom -= 6 * cyCommandLink;
 
         DestroyWindow(GetDlgItem(hwnd, psh1));
@@ -422,8 +496,11 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             // move
             GetWindowRect(hCtrl, &rc2);
             MapWindowRect(NULL, hwnd, &rc2);
+            pt.y = rc2.top;
+            pt.y -= (6 - pTaskConfig->cRadioButtons) * cyRadio;
+            pt.y -= cyCommandLink * 6;
             MoveWindow(hCtrl,
-                pt.x, rc2.top - cyCommandLink * 6,
+                pt.x, pt.y,
                 siz.cx + 16,
                 rc2.bottom - rc2.top,
                 TRUE);
@@ -454,15 +531,17 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
         if (pTaskConfig->dwFlags & TDF_USE_COMMAND_LINKS)
         {
+            cyMinus = cyButtons + (6 - pTaskConfig->cRadioButtons) * cyRadio;
             MoveWindow(hStc2,
-                rc2.left, rc2.top - cyButtons,
+                rc2.left, rc2.top - cyMinus,
                 rc2.right - rc2.left, rc2.bottom - rc2.top,
                 TRUE);
         }
         else
         {
+            cyMinus = cyCommandLink * 6 + (6 - pTaskConfig->cRadioButtons) * cyRadio;
             MoveWindow(hStc2,
-                rc2.left, rc2.top - cyCommandLink * 6,
+                rc2.left, rc2.top - cyMinus,
                 rc2.right - rc2.left, rc2.bottom - rc2.top,
                 TRUE);
         }
@@ -493,17 +572,38 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
 static void TaskDlg_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
-    const TASKDIALOGCONFIG *pTaskConfig;
-    pTaskConfig = (const TASKDIALOGCONFIG *)GetWindowLongPtr(hwnd, DWLP_USER);
+    TASKDIALOGPARAMS *params = (TASKDIALOGPARAMS *)GetWindowLongPtr(hwnd, DWLP_USER);
+    const TASKDIALOGCONFIG *pTaskConfig = params->pTaskConfig;
+    INT i, radio_id;
 
-    if (codeNotify == BN_CLICKED)
-        EndDialog(hwnd, id);
-
-    if (pTaskConfig->dwFlags & TDF_ALLOW_DIALOG_CANCELLATION)
+    for (i = 0; i < pTaskConfig->cButtons; ++i)
     {
-        if (id == IDCANCEL)
-            EndDialog(hwnd, IDCANCEL);
+        if (pTaskConfig->pButtons[i].nButtonID == id)
+        {
+            params->iButton = id;
+            EndDialog(hwnd, id);
+            break;
+        }
     }
+
+    if (id == IDCANCEL)
+    {
+        if (pTaskConfig->dwFlags & TDF_ALLOW_DIALOG_CANCELLATION)
+        {
+            params->iButton = id;
+            EndDialog(hwnd, id);
+        }
+    }
+
+    for (i = 0; i < pTaskConfig->cRadioButtons; ++i)
+    {
+        radio_id = pTaskConfig->pRadioButtons[i].nButtonID;
+        if (IsDlgButtonChecked(hwnd, radio_id))
+        {
+            params->iRadioButton = radio_id;
+        }
+    }
+
 }
 
 static INT_PTR CALLBACK
@@ -529,6 +629,9 @@ TaskDialogIndirectForXP(const TASKDIALOGCONFIG *pTaskConfig,
                         int *pnButton, int *pnRadioButton,
                         BOOL *pfVerificationFlagChecked)
 {
+    TASKDIALOGPARAMS params;
+    params.pTaskConfig = pTaskConfig;
+    
     if (s_pTaskDialogIndirect && DO_FALLBACK)
     {
         return (*s_pTaskDialogIndirect)(pTaskConfig, pnButton, pnRadioButton,
@@ -550,15 +653,15 @@ TaskDialogIndirectForXP(const TASKDIALOGCONFIG *pTaskConfig,
                                pTaskConfig->pszMainIcon, pnButton);
     }
 
+    DialogBoxParamW(s_hinstDLL, MAKEINTRESOURCEW(IDD_TASKDLG),
+                                pTaskConfig->hwndParent, TaskDlgProc, (LPARAM)&params);
     if (pnButton)
     {
-        *pnButton = DialogBoxParamW(s_hinstDLL, MAKEINTRESOURCEW(IDD_TASKDLG),
-                                    pTaskConfig->hwndParent, TaskDlgProc, (LPARAM)pTaskConfig);
+        *pnButton = params.iButton;
     }
-    else
+    if (pnRadioButton)
     {
-        DialogBoxParamW(s_hinstDLL, MAKEINTRESOURCEW(IDD_TASKDLG),
-                        pTaskConfig->hwndParent, TaskDlgProc, (LPARAM)pTaskConfig);
+        *pnRadioButton = params.iRadioButton;
     }
 
     return S_OK;
