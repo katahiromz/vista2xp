@@ -204,7 +204,7 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     TASKDIALOG_COMMON_BUTTON_FLAGS dwCommonButtons = pTaskConfig->dwCommonButtons;
     PCWSTR pszIcon = pTaskConfig->pszMainIcon;
     LPWSTR psz0, psz1, pszText, pszButton, pch;
-    WCHAR szTitle[MAX_PATH], szInst[MAX_PATH], szContent[MAX_PATH];
+    WCHAR szTitle[MAX_PATH], szInst[MAX_PATH], szContent[MAX_PATH], szButtonText[64];
     INT i, id, cyCommandLink, cyButtons;
     RECT rc1, rc2;
     HWND hCtrl;
@@ -357,7 +357,13 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             }
 
             // set text
-            pszButton = _wcsdup(pTaskConfig->pButtons[i].pszButtonText);
+            pszButton = (LPWSTR)pTaskConfig->pButtons[i].pszButtonText;
+            if (HIWORD(pszButton) == 0)
+            {
+                LoadString(hInstance, LOWORD(pszButton), szButtonText, ARRAYSIZE(szButtonText));
+                pszButton = szButtonText;
+            }
+            pszButton = _wcsdup(pszButton);
             pch = wcschr(pszButton, L'\n');
             if (pch)
                 *pch = 0;
@@ -394,7 +400,13 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             hFontOld = SelectObject(hDC, hFont);
 
             // set text
-            pszButton = _wcsdup(pTaskConfig->pButtons[i].pszButtonText);
+            pszButton = (LPWSTR)pTaskConfig->pButtons[i].pszButtonText;
+            if (HIWORD(pszButton) == 0)
+            {
+                LoadString(hInstance, LOWORD(pszButton), szButtonText, ARRAYSIZE(szButtonText));
+                pszButton = szButtonText;
+            }
+            pszButton = _wcsdup(pszButton);
             pch = wcschr(pszButton, L'\n');
             if (pch)
                 *pch = 0;
