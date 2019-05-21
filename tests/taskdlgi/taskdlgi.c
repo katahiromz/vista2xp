@@ -49,7 +49,7 @@ int main(void)
         config.pszMainIcon = TD_INFORMATION_ICON;
         config.pszMainInstruction = TEXT("pszMainInstruction");
         config.pszContent = TEXT("pszContent");
-        config.dwFlags = TDF_ALLOW_DIALOG_CANCELLATION | TDF_USE_COMMAND_LINKS;
+        config.dwFlags = TDF_USE_COMMAND_LINKS;
         INT selected = 0xDEADBEEF;
         HRESULT hr = TaskDialogIndirect(&config, &selected, NULL, NULL);
         printf("hr: %08X\n", hr);

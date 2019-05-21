@@ -420,6 +420,12 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
     MoveWindow(hwnd, rc1.left, rc1.top, rc1.right - rc1.left, rc1.bottom - rc1.top, TRUE);
 
+    if (!(pTaskConfig->dwFlags & TDF_ALLOW_DIALOG_CANCELLATION))
+    {
+        HMENU hMenu = GetSystemMenu(hwnd, FALSE);
+        DeleteMenu(hMenu, SC_CLOSE, MF_BYCOMMAND);
+    }
+
     if (pTaskConfig->nDefaultButton)
     {
         SendMessage(hwnd, DM_SETDEFID, pTaskConfig->nDefaultButton, 0);
