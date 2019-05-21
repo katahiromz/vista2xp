@@ -95,6 +95,7 @@ kernel32.K32GetWsChanges
 kernel32.K32InitializeProcessForWsWatch
 kernel32.K32QueryWorkingSet
 comctl32.TaskDialog
+comctl32.TaskDialogIndirect
 user32.ChangeWindowMessageFilter
 user32.ChangeWindowMessageFilterEx
 shell32.SHCreateShellItemArray

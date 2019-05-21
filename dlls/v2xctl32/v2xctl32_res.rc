@@ -18,11 +18,11 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 IDD_TASKDLG DIALOG 0, 0, 280, 235
 CAPTION "pszWindowTitle"
-STYLE DS_MODALFRAME | WS_POPUPWINDOW | WS_DLGFRAME
-FONT 9, "MS UI Gothic"
+STYLE DS_CENTER | DS_MODALFRAME | WS_POPUPWINDOW | WS_DLGFRAME
+FONT 9, "Tahoma"
 {
     ICON 0, ico1, 5, 5, 0, 0
-    LTEXT "pszMainInstruction + ""\\n\\n"" + pszContent", -1, 30, 5, 245, 55
+    LTEXT "pszMainInstruction + ""\\n\\n"" + pszContent", stc1, 30, 5, 245, 55
     PUSHBUTTON "psh1", psh1, 5, 65, 270, 25, BS_MULTILINE
     PUSHBUTTON "psh2", psh2, 5, 95, 270, 25, BS_MULTILINE
     PUSHBUTTON "psh3", psh3, 5, 125, 270, 25, BS_MULTILINE

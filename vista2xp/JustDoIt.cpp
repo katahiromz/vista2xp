@@ -68,7 +68,8 @@ bool do_comctl32(codereverse::ExeImage& image, size_t i, char *name)
         codereverse::ImportSymbol& symbol = symbols[k];
         if (symbol.Name.wImportByName)
         {
-            if (lstrcmpA(symbol.pszName, "TaskDialog") == 0)
+            if (lstrcmpA(symbol.pszName, "TaskDialog") == 0 ||
+                lstrcmpA(symbol.pszName, "TaskDialogIndirect") == 0)
             {
                 if (lstrcmpiA(name, "comctl32") == 0)
                     StringCbCopyA(const_cast<char *>(name), 9, "v2xctl32");

@@ -4,6 +4,7 @@
 EXPORTS
     ; v2xctl32
     TaskDialog = TaskDialogForXP
+    TaskDialogIndirect = TaskDialogIndirectForXP
 
     ; v2xctl32 --> comctl32
     AddMRUStringW = comctl32.AddMRUStringW

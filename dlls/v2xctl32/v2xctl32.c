@@ -3,6 +3,7 @@
    Copyright (C) 2019 Katayama Hirofumi MZ <katayama.hirofumi.mz@gmail.com>. */
 #include "targetverxp.h"
 #include <windows.h>
+#include <windowsx.h>
 #include <string.h>
 #include <strsafe.h>
 #include <psapi.h>
@@ -193,6 +194,266 @@ TaskDialogForXP(HWND hwndOwner, HINSTANCE hInstance, PCWSTR pszWindowTitle,
     return S_OK;
 }
 
+static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
+{
+    const TASKDIALOGCONFIG *pTaskConfig = (const TASKDIALOGCONFIG *)lParam;
+    HINSTANCE hInstance = pTaskConfig->hInstance;
+    PCWSTR pszWindowTitle = pTaskConfig->pszWindowTitle;
+    PCWSTR pszMainInstruction = pTaskConfig->pszMainInstruction;
+    PCWSTR pszContent = pTaskConfig->pszContent;
+    TASKDIALOG_COMMON_BUTTON_FLAGS dwCommonButtons = pTaskConfig->dwCommonButtons;
+    PCWSTR pszIcon = pTaskConfig->pszMainIcon;
+    LPWSTR psz0, psz1, pszText, pszButton, pch;
+    WCHAR szTitle[MAX_PATH], szInst[MAX_PATH], szContent[MAX_PATH];
+    INT i, id, cyCommandLink, cyButtons;
+    RECT rc1, rc2;
+    HWND hCtrl;
+    HDC hDC;
+    HFONT hFont;
+    HGDIOBJ hFontOld;
+    POINT pt;
+    SIZE siz;
+
+    SetWindowLongPtr(hwnd, DWLP_USER, lParam);
+
+    // title
+    if (!pszWindowTitle)
+    {
+        GetModuleFileNameW(NULL, szTitle, ARRAYSIZE(szTitle));
+        psz0 = wcsrchr(szTitle, L'\\');
+        psz1 = wcsrchr(szTitle, L'/');
+        if (!psz0)
+            psz0 = psz1;
+        if (psz0 < psz1)
+            psz0 = psz1;
+        pszWindowTitle = psz0 + 1;
+    }
+    else if (HIWORD(pszWindowTitle) == 0)
+    {
+        LoadStringW(hInstance, LOWORD(pszWindowTitle), szTitle, ARRAYSIZE(szTitle));
+        pszWindowTitle = szTitle;
+    }
+    SetWindowText(hwnd, pszWindowTitle);
+
+    // main instruction
+    if (!pszMainInstruction)
+    {
+        pszMainInstruction = L"";
+    }
+    else if (HIWORD(pszMainInstruction) == 0)
+    {
+        LoadStringW(hInstance, LOWORD(pszMainInstruction), szInst, ARRAYSIZE(szInst));
+        pszMainInstruction = szInst;
+    }
+
+    // context
+    if (!pszContent)
+    {
+        pszContent = L"";
+    }
+    else if (HIWORD(pszContent) == 0)
+    {
+        LoadStringW(hInstance, LOWORD(pszContent), szContent, ARRAYSIZE(szContent));
+        pszContent = szContent;
+    }
+
+    // build pszText
+    if (!pszMainInstruction || !*pszMainInstruction)
+    {
+        pszText = _wcsdup(pszContent);
+    }
+    else
+    {
+        psz0 = JoinStrings(pszMainInstruction, L"\n\n");
+        if (!psz0)
+            return E_OUTOFMEMORY;
+
+        pszText = JoinStrings(psz0, pszContent);
+        free(psz0);
+    }
+    if (!pszText)
+    {
+        EndDialog(hwnd, IDCLOSE);
+        return FALSE;
+    }
+
+    SetDlgItemText(hwnd, stc1, pszText);
+
+    // icon
+    if (pszIcon == TD_ERROR_ICON)
+    {
+        HICON hIcon = LoadIcon(NULL, IDI_HAND);
+        SendDlgItemMessage(hwnd, ico1, STM_SETICON, (WPARAM)hIcon, 0);
+        MessageBeep(MB_ICONERROR);
+    }
+    else if (pszIcon == TD_INFORMATION_ICON)
+    {
+        HICON hIcon = LoadIcon(NULL, IDI_ASTERISK);
+        SendDlgItemMessage(hwnd, ico1, STM_SETICON, (WPARAM)hIcon, 0);
+        MessageBeep(MB_ICONINFORMATION);
+    }
+    else if (pszIcon == TD_SHIELD_ICON)
+    {
+        HICON hIcon = LoadIcon(s_hinstDLL, MAKEINTRESOURCEW(IDI_SHIELD_ICON));
+        SendDlgItemMessage(hwnd, ico1, STM_SETICON, (WPARAM)hIcon, 0);
+    }
+    else if (pszIcon == TD_WARNING_ICON)
+    {
+        HICON hIcon = LoadIcon(NULL, IDI_EXCLAMATION);
+        SendDlgItemMessage(hwnd, ico1, STM_SETICON, (WPARAM)hIcon, 0);
+        MessageBeep(MB_ICONWARNING);
+    }
+    else
+    {
+        if (hInstance == NULL)
+        {
+            free(pszText);
+            EndDialog(hwnd, IDCLOSE);
+            return FALSE;
+        }
+        else
+        {
+            HICON hIcon = LoadIcon(hInstance, pszIcon);
+            SendDlgItemMessage(hwnd, ico1, STM_SETICON, (WPARAM)hIcon, 0);
+        }
+    }
+
+    // calculate cyCommandLink
+    GetWindowRect(GetDlgItem(hwnd, psh1), &rc1);
+    GetWindowRect(GetDlgItem(hwnd, psh2), &rc2);
+    pt.x = rc1.left;
+    pt.y = rc1.top;
+    MapWindowPoints(NULL, hwnd, &pt, 1);
+    cyCommandLink = rc2.top - rc1.top;
+
+    GetWindowRect(GetDlgItem(hwnd, psh6), &rc1);
+    cyButtons = rc1.bottom - rc1.top;
+
+    // shrink dialog box
+    GetWindowRect(hwnd, &rc1);
+    if (pTaskConfig->dwFlags & TDF_USE_COMMAND_LINKS)
+    {
+        rc1.bottom -= (5 - pTaskConfig->cButtons) * cyCommandLink;
+        rc1.bottom -= cyButtons;
+
+        DestroyWindow(GetDlgItem(hwnd, psh6));
+        DestroyWindow(GetDlgItem(hwnd, psh7));
+        DestroyWindow(GetDlgItem(hwnd, psh8));
+        DestroyWindow(GetDlgItem(hwnd, psh9));
+        DestroyWindow(GetDlgItem(hwnd, psh10));
+
+        for (i = 0; i < 5; ++i)
+        {
+            hCtrl = GetDlgItem(hwnd, psh1 + i);
+
+            if (i >= pTaskConfig->cButtons)
+            {
+                DestroyWindow(hCtrl);
+                continue;
+            }
+
+            // set text
+            pszButton = _wcsdup(pTaskConfig->pButtons[i].pszButtonText);
+            pch = wcschr(pszButton, L'\n');
+            if (pch)
+                *pch = 0;
+            SetWindowText(hCtrl, pszButton);
+            free(pszButton);
+
+            // set id
+            id = pTaskConfig->pButtons[i].nButtonID;
+            SetWindowLongPtr(hCtrl, GWLP_ID, id);
+        }
+    }
+    else
+    {
+        rc1.bottom -= 5 * cyCommandLink;
+
+        DestroyWindow(GetDlgItem(hwnd, psh1));
+        DestroyWindow(GetDlgItem(hwnd, psh2));
+        DestroyWindow(GetDlgItem(hwnd, psh3));
+        DestroyWindow(GetDlgItem(hwnd, psh4));
+        DestroyWindow(GetDlgItem(hwnd, psh5));
+
+        for (i = 0; i < 5; ++i)
+        {
+            hCtrl = GetDlgItem(hwnd, psh6 + i);
+
+            if (i >= pTaskConfig->cButtons)
+            {
+                DestroyWindow(hCtrl);
+                continue;
+            }
+
+            hDC = GetDC(hCtrl);
+            hFont = GetWindowFont(hCtrl);
+            hFontOld = SelectObject(hDC, hFont);
+
+            // set text
+            pszButton = _wcsdup(pTaskConfig->pButtons[i].pszButtonText);
+            pch = wcschr(pszButton, L'\n');
+            if (pch)
+                *pch = 0;
+            SetWindowText(hCtrl, pszButton);
+            GetTextExtentPoint32(hDC, pszButton, lstrlen(pszButton), &siz);
+            free(pszButton);
+
+            SelectObject(hDC, hFontOld);
+
+            // move
+            GetWindowRect(hCtrl, &rc2);
+            MapWindowRect(NULL, hwnd, &rc2);
+            MoveWindow(hCtrl,
+                pt.x, rc2.top - cyCommandLink * 5,
+                siz.cx + 16,
+                rc2.bottom - rc2.top,
+                TRUE);
+
+            // set id
+            id = pTaskConfig->pButtons[i].nButtonID;
+            SetWindowLongPtr(hCtrl, GWLP_ID, id);
+
+            ReleaseDC(hCtrl, hDC);
+
+            pt.x += siz.cx + 24;
+        }
+    }
+    MoveWindow(hwnd, rc1.left, rc1.top, rc1.right - rc1.left, rc1.bottom - rc1.top, TRUE);
+
+    if (pTaskConfig->nDefaultButton)
+    {
+        SendMessage(hwnd, DM_SETDEFID, pTaskConfig->nDefaultButton, 0);
+    }
+
+    return TRUE;
+}
+
+static void TaskDlg_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
+{
+    const TASKDIALOGCONFIG *pTaskConfig;
+    pTaskConfig = (const TASKDIALOGCONFIG *)GetWindowLongPtr(hwnd, DWLP_USER);
+
+    if (codeNotify == BN_CLICKED)
+        EndDialog(hwnd, id);
+
+    if (pTaskConfig->dwFlags & TDF_ALLOW_DIALOG_CANCELLATION)
+    {
+        if (id == IDCANCEL)
+            EndDialog(hwnd, IDCANCEL);
+    }
+}
+
+static INT_PTR CALLBACK
+TaskDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    switch (uMsg)
+    {
+        HANDLE_MSG(hwnd, WM_INITDIALOG, TaskDlg_OnInitDialog);
+        HANDLE_MSG(hwnd, WM_COMMAND, TaskDlg_OnCommand);
+    }
+    return 0;
+}
+
 HRESULT WINAPI
 TaskDialogIndirectForXP(const TASKDIALOGCONFIG *pTaskConfig,
                         int *pnButton, int *pnRadioButton,
@@ -204,7 +465,7 @@ TaskDialogIndirectForXP(const TASKDIALOGCONFIG *pTaskConfig,
                                         pfVerificationFlagChecked);
     }
 
-    if (!pTaskConfig)
+    if (!pTaskConfig || pTaskConfig->cbSize != sizeof(*pTaskConfig))
     {
         return E_INVALIDARG;
     }
@@ -219,8 +480,18 @@ TaskDialogIndirectForXP(const TASKDIALOGCONFIG *pTaskConfig,
                                pTaskConfig->pszMainIcon, pnButton);
     }
 
-    // TODO:
-    return 0;
+    if (pnButton)
+    {
+        *pnButton = DialogBoxParamW(s_hinstDLL, MAKEINTRESOURCEW(IDD_TASKDLG),
+                                    pTaskConfig->hwndParent, TaskDlgProc, (LPARAM)pTaskConfig);
+    }
+    else
+    {
+        DialogBoxParamW(s_hinstDLL, MAKEINTRESOURCEW(IDD_TASKDLG),
+                        pTaskConfig->hwndParent, TaskDlgProc, (LPARAM)pTaskConfig);
+    }
+
+    return S_OK;
 }
 
 #define GETPROC(fn) s_p##fn = (FN_##fn)GetProcAddress(s_hComCtl32, #fn)
