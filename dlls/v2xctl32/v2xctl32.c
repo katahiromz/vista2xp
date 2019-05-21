@@ -203,8 +203,8 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     PCWSTR pszContent = pTaskConfig->pszContent;
     TASKDIALOG_COMMON_BUTTON_FLAGS dwCommonButtons = pTaskConfig->dwCommonButtons;
     PCWSTR pszIcon = pTaskConfig->pszMainIcon;
-    LPWSTR psz0, psz1, pszText, pszButton, pch;
-    WCHAR szTitle[MAX_PATH], szInst[MAX_PATH], szContent[MAX_PATH], szButtonText[64];
+    LPWSTR psz0, psz1, pszText, pszButton, pch, pszFooter;
+    WCHAR szTitle[MAX_PATH], szInst[MAX_PATH], szContent[MAX_PATH], szButtonText[64], szFooter[MAX_PATH];
     INT i, id, cyCommandLink, cyButtons;
     RECT rc1, rc2;
     HWND hCtrl;
@@ -213,6 +213,7 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     HGDIOBJ hFontOld;
     POINT pt;
     SIZE siz;
+    HWND hStc2;
 
     SetWindowLongPtr(hwnd, DWLP_USER, lParam);
 
@@ -330,23 +331,24 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     MapWindowPoints(NULL, hwnd, &pt, 1);
     cyCommandLink = rc2.top - rc1.top;
 
-    GetWindowRect(GetDlgItem(hwnd, psh6), &rc1);
+    GetWindowRect(GetDlgItem(hwnd, psh7), &rc1);
     cyButtons = rc1.bottom - rc1.top;
 
     // shrink dialog box
     GetWindowRect(hwnd, &rc1);
     if (pTaskConfig->dwFlags & TDF_USE_COMMAND_LINKS)
     {
-        rc1.bottom -= (5 - pTaskConfig->cButtons) * cyCommandLink;
+        rc1.bottom -= (6 - pTaskConfig->cButtons) * cyCommandLink;
         rc1.bottom -= cyButtons;
 
-        DestroyWindow(GetDlgItem(hwnd, psh6));
         DestroyWindow(GetDlgItem(hwnd, psh7));
         DestroyWindow(GetDlgItem(hwnd, psh8));
         DestroyWindow(GetDlgItem(hwnd, psh9));
         DestroyWindow(GetDlgItem(hwnd, psh10));
+        DestroyWindow(GetDlgItem(hwnd, psh11));
+        DestroyWindow(GetDlgItem(hwnd, psh12));
 
-        for (i = 0; i < 5; ++i)
+        for (i = 0; i < 6; ++i)
         {
             hCtrl = GetDlgItem(hwnd, psh1 + i);
 
@@ -377,17 +379,18 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
     else
     {
-        rc1.bottom -= 5 * cyCommandLink;
+        rc1.bottom -= 6 * cyCommandLink;
 
         DestroyWindow(GetDlgItem(hwnd, psh1));
         DestroyWindow(GetDlgItem(hwnd, psh2));
         DestroyWindow(GetDlgItem(hwnd, psh3));
         DestroyWindow(GetDlgItem(hwnd, psh4));
         DestroyWindow(GetDlgItem(hwnd, psh5));
+        DestroyWindow(GetDlgItem(hwnd, psh6));
 
-        for (i = 0; i < 5; ++i)
+        for (i = 0; i < 6; ++i)
         {
-            hCtrl = GetDlgItem(hwnd, psh6 + i);
+            hCtrl = GetDlgItem(hwnd, psh7 + i);
 
             if (i >= pTaskConfig->cButtons)
             {
@@ -420,7 +423,7 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             GetWindowRect(hCtrl, &rc2);
             MapWindowRect(NULL, hwnd, &rc2);
             MoveWindow(hCtrl,
-                pt.x, rc2.top - cyCommandLink * 5,
+                pt.x, rc2.top - cyCommandLink * 6,
                 siz.cx + 16,
                 rc2.bottom - rc2.top,
                 TRUE);
@@ -434,6 +437,42 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             pt.x += siz.cx + 24;
         }
     }
+
+    // footer
+    hStc2 = GetDlgItem(hwnd, stc2);
+    GetWindowRect(hStc2, &rc2);
+    MapWindowRect(NULL, hwnd, &rc2);
+    pszFooter = (LPWSTR)pTaskConfig->pszFooter;
+    if (pszFooter && pszFooter[0])
+    {
+        if (HIWORD(pszFooter) == 0)
+        {
+            LoadString(hInstance, LOWORD(pszFooter), szFooter, ARRAYSIZE(szFooter));
+            pszFooter = szFooter;
+        }
+        SetWindowText(hStc2, pszFooter);
+
+        if (pTaskConfig->dwFlags & TDF_USE_COMMAND_LINKS)
+        {
+            MoveWindow(hStc2,
+                rc2.left, rc2.top - cyButtons,
+                rc2.right - rc2.left, rc2.bottom - rc2.top,
+                TRUE);
+        }
+        else
+        {
+            MoveWindow(hStc2,
+                rc2.left, rc2.top - cyCommandLink * 6,
+                rc2.right - rc2.left, rc2.bottom - rc2.top,
+                TRUE);
+        }
+    }
+    else
+    {
+        rc1.bottom -= rc2.bottom - rc2.top;
+        DestroyWindow(hStc2);
+    }
+
     MoveWindow(hwnd, rc1.left, rc1.top, rc1.right - rc1.left, rc1.bottom - rc1.top, TRUE);
 
     if (!(pTaskConfig->dwFlags & TDF_ALLOW_DIALOG_CANCELLATION))
@@ -474,6 +513,13 @@ TaskDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         HANDLE_MSG(hwnd, WM_INITDIALOG, TaskDlg_OnInitDialog);
         HANDLE_MSG(hwnd, WM_COMMAND, TaskDlg_OnCommand);
+    case WM_CTLCOLORSTATIC:
+        if ((HWND)lParam == GetDlgItem(hwnd, stc1) ||
+            (HWND)lParam == GetDlgItem(hwnd, stc2))
+        {
+            return SetDlgMsgResult(hwnd, WM_CTLCOLORSTATIC, GetStockBrush(WHITE_BRUSH));
+        }
+        break;
     }
     return 0;
 }
