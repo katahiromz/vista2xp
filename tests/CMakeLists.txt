@@ -2,6 +2,10 @@
 add_executable(taskdlg taskdlg/taskdlg.c taskdlg/taskdlg_res.rc)
 target_link_libraries(taskdlg comctl32)
 
+# taskdlgi.exe
+add_executable(taskdlgi taskdlgi/taskdlgi.c taskdlgi/taskdlgi_res.rc)
+target_link_libraries(taskdlgi comctl32)
+
 # regtest.exe
 add_executable(regtest regtest/regtest.c)
 
