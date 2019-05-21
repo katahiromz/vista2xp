@@ -56,7 +56,7 @@ int main(void)
         {
             { 100, L"&Download and install the update now\n"
                    L"Update the program to version 2007.1" },
-            { 101, L"Do &not download the update"
+            { 101, L"Do &not download the update\n"
                    L"You will be reminded to install the update in one week" }
         };
         TASKDIALOGCONFIG config = { sizeof(TASKDIALOGCONFIG) };
