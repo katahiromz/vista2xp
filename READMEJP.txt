@@ -42,7 +42,7 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
     - TaskDialog を改良。
     - v2xol (ole32) を追加。
     - v2xsh32 (shell32) を追加。
-- 2019.XX.YY ver.0.5
+- 2019.05.22 ver.0.5
     - [キャンセル] ボタンを [終了] にする。
     - SHGetLocalizedName、SHSetFolderPathA および SHSetFolderPathW 関数をサポート。
     - TaskDialogIndirect 関数をサポート。
