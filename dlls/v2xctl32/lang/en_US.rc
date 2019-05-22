@@ -8,7 +8,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_DEFAULT
 //////////////////////////////////////////////////////////////////////////////
 // RT_DIALOG
 
-IDD_TASKDLG DIALOG 0, 0, 280, 345
+IDD_TASKDLG DIALOG 0, 0, 280, 375
 CAPTION "pszWindowTitle"
 STYLE DS_CENTER | DS_MODALFRAME | WS_POPUPWINDOW | WS_DLGFRAME
 FONT 9, "Tahoma"
@@ -33,7 +33,8 @@ FONT 9, "Tahoma"
     PUSHBUTTON "psh10", psh10, 140, 290, 40, 15
     PUSHBUTTON "psh11", psh11, 185, 290, 40, 15
     PUSHBUTTON "psh12", psh12, 230, 290, 40, 15
-    LTEXT "pszFooter", stc2, 5, 310, 270, 30
+    AUTOCHECKBOX "pszVerificationText", chx1, 5, 310, 270, 30, BS_MULTILINE
+    LTEXT "pszFooter", stc2, 5, 345, 270, 25
 }
 
 //////////////////////////////////////////////////////////////////////////////

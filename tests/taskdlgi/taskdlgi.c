@@ -233,7 +233,7 @@ int main(void)
             { 100, L"&Download and install the update now" },
             { 101, L"Do &not download the update" },
         };
-        BOOL bVerify = FALSE;
+        BOOL bVerify = 0xDEADFACE;
         TASKDIALOGCONFIG config = { sizeof(TASKDIALOGCONFIG) };
         config.hInstance = GetModuleHandleA(NULL);
         config.pButtons = buttons;
@@ -247,6 +247,7 @@ int main(void)
         HRESULT hr = TaskDialogIndirect(&config, &selected, NULL, &bVerify);
         printf("hr: %08X\n", hr);
         printf("selected: %d\n", selected);
+        printf("bVerify: %d\n", bVerify);
     }
     {
         TASKDIALOG_BUTTON buttons[] =
@@ -282,10 +283,11 @@ int main(void)
         config.pszVerificationText = TEXT("pszVerificationText\nTESTTEST\nTEST");
         INT selected = 0xDEADBEEF;
         INT radio = 0xDEADBEEF;
-        BOOL bVerify = FALSE;
+        BOOL bVerify = 0xDEADFACE;
         HRESULT hr = TaskDialogIndirect(&config, &selected, &radio, &bVerify);
         printf("hr: %08X\n", hr);
         printf("radio: %08X\n", radio);
+        printf("bVerify: %d\n", bVerify);
         switch (selected)
         {
         case FINE:

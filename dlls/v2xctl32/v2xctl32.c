@@ -275,6 +275,7 @@ typedef struct TASKDIALOGPARAMS
     const TASKDIALOGCONFIG *pTaskConfig;
     INT iButton;
     INT iRadioButton;
+    BOOL bVerificationChecked;
 } TASKDIALOGPARAMS;
 
 #define MAX_BUTTONS 6
@@ -289,9 +290,9 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     PCWSTR pszContent = pTaskConfig->pszContent;
     TASKDIALOG_COMMON_BUTTON_FLAGS dwCommonButtons = pTaskConfig->dwCommonButtons;
     PCWSTR pszIcon = pTaskConfig->pszMainIcon;
-    LPWSTR psz0, psz1, pszText, pszButton, pch, pszFooter;
-    WCHAR szTitle[MAX_PATH], szInst[MAX_PATH], szContent[MAX_PATH], szButtonText[64], szFooter[MAX_PATH];
-    INT i, id, cyRadio, cyCommandLink, cyButtons, cyMinus;
+    LPWSTR psz0, psz1, pszText, pszButton, pch, pszFooter, pszVerification;
+    WCHAR szInst[MAX_PATH], szText[MAX_PATH], szButtonText[64], szFooter[MAX_PATH];
+    INT i, id, cyRadio, cyCommandLink, cyButtons, cyMinus, cyVerificationText;
     RECT rc1, rc2;
     HWND hCtrl;
     HDC hDC;
@@ -306,9 +307,9 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     // title
     if (!pszWindowTitle)
     {
-        GetModuleFileNameW(NULL, szTitle, ARRAYSIZE(szTitle));
-        psz0 = wcsrchr(szTitle, L'\\');
-        psz1 = wcsrchr(szTitle, L'/');
+        GetModuleFileNameW(NULL, szText, ARRAYSIZE(szText));
+        psz0 = wcsrchr(szText, L'\\');
+        psz1 = wcsrchr(szText, L'/');
         if (!psz0)
             psz0 = psz1;
         if (psz0 < psz1)
@@ -317,8 +318,8 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
     else if (HIWORD(pszWindowTitle) == 0)
     {
-        LoadStringW(hInstance, LOWORD(pszWindowTitle), szTitle, ARRAYSIZE(szTitle));
-        pszWindowTitle = szTitle;
+        LoadStringW(hInstance, LOWORD(pszWindowTitle), szText, ARRAYSIZE(szText));
+        pszWindowTitle = szText;
     }
     SetWindowText(hwnd, pszWindowTitle);
 
@@ -340,8 +341,8 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
     else if (HIWORD(pszContent) == 0)
     {
-        LoadStringW(hInstance, LOWORD(pszContent), szContent, ARRAYSIZE(szContent));
-        pszContent = szContent;
+        LoadStringW(hInstance, LOWORD(pszContent), szText, ARRAYSIZE(szText));
+        pszContent = szText;
     }
 
     // build pszText
@@ -363,7 +364,6 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         EndDialog(hwnd, IDCLOSE);
         return FALSE;
     }
-
     SetDlgItemText(hwnd, stc1, pszText);
 
     // icon
@@ -426,6 +426,45 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     GetWindowRect(GetDlgItem(hwnd, psh1 + MAX_BUTTONS), &rc1);
     cyButtons = rc1.bottom - rc1.top;
 
+    // calculate cyVerificationText
+    GetWindowRect(GetDlgItem(hwnd, chx1), &rc1);
+    GetWindowRect(GetDlgItem(hwnd, stc2), &rc2);
+    cyVerificationText = rc2.top - rc1.top;
+
+    // verification text
+    if (pTaskConfig->dwFlags & TDF_VERIFICATION_FLAG_CHECKED)
+    {
+        CheckDlgButton(hwnd, chx1, BST_CHECKED);
+        params->bVerificationChecked = TRUE;
+    }
+    pszVerification = (LPWSTR)pTaskConfig->pszVerificationText;
+    if (pszVerification)
+    {
+        if (HIWORD(pszVerification) == 0)
+        {
+            LoadStringW(hInstance, LOWORD(pszVerification), szText, ARRAYSIZE(szText));
+            pszVerification = szText;
+        }
+        SetDlgItemText(hwnd, chx1, pszVerification);
+
+        GetWindowRect(GetDlgItem(hwnd, chx1), &rc1);
+        MapWindowRect(NULL, hwnd, &rc1);
+
+        cyMinus = (MAX_BUTTONS - pTaskConfig->cRadioButtons) * cyRadio;
+
+        if (pTaskConfig->dwFlags & TDF_USE_COMMAND_LINKS)
+            cyMinus += (MAX_BUTTONS - pTaskConfig->cButtons) * cyCommandLink;
+        else
+            cyMinus += cyButtons;
+
+        cyMinus += cyButtons;
+
+        MoveWindow(GetDlgItem(hwnd, chx1),
+            rc1.left, rc1.top - cyMinus,
+            rc1.right - rc1.left, rc1.bottom - rc1.top,
+            TRUE);
+    }
+
     // check radio button
     if (!(pTaskConfig->dwFlags & TDF_NO_DEFAULT_RADIO_BUTTON))
     {
@@ -483,6 +522,10 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         rc1.bottom -= (MAX_BUTTONS - pTaskConfig->cRadioButtons) * cyRadio;
         rc1.bottom -= (MAX_BUTTONS - pTaskConfig->cButtons) * cyCommandLink;
         rc1.bottom -= cyButtons;
+        if (!pszVerification)
+        {
+            rc1.bottom -= cyVerificationText;
+        }
 
         for (i = 0; i < MAX_BUTTONS; ++i)
         {
@@ -530,6 +573,10 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     {
         rc1.bottom -= (MAX_BUTTONS - pTaskConfig->cRadioButtons) * cyRadio;
         rc1.bottom -= MAX_BUTTONS * cyCommandLink;
+        if (!pszVerification)
+        {
+            rc1.bottom -= cyVerificationText;
+        }
 
         for (i = 0; i < MAX_BUTTONS; ++i)
         {
@@ -594,7 +641,7 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     GetWindowRect(hStc2, &rc2);
     MapWindowRect(NULL, hwnd, &rc2);
     pszFooter = (LPWSTR)pTaskConfig->pszFooter;
-    if (pszFooter && pszFooter[0])
+    if (pszFooter)
     {
         if (HIWORD(pszFooter) == 0)
         {
@@ -608,6 +655,10 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             cyMinus = cyCommandLink * (MAX_BUTTONS - pTaskConfig->cButtons);
             cyMinus += cyButtons;
             cyMinus += (MAX_BUTTONS - pTaskConfig->cRadioButtons) * cyRadio;
+            if (!pszVerification)
+            {
+                cyMinus += cyVerificationText;
+            }
             MoveWindow(hStc2,
                 rc2.left, rc2.top - cyMinus,
                 rc2.right - rc2.left, rc2.bottom - rc2.top,
@@ -617,6 +668,10 @@ static BOOL TaskDlg_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         {
             cyMinus = cyCommandLink * MAX_BUTTONS;
             cyMinus += (MAX_BUTTONS - pTaskConfig->cRadioButtons) * cyRadio;
+            if (!pszVerification)
+            {
+                cyMinus += cyVerificationText;
+            }
             MoveWindow(hStc2,
                 rc2.left, rc2.top - cyMinus,
                 rc2.right - rc2.left, rc2.bottom - rc2.top,
@@ -654,6 +709,12 @@ static void TaskDlg_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     TASKDIALOGPARAMS *params = (TASKDIALOGPARAMS *)GetWindowLongPtr(hwnd, DWLP_USER);
     const TASKDIALOGCONFIG *pTaskConfig = params->pTaskConfig;
     INT i, radio_id;
+
+    if (id == chx1)
+    {
+        params->bVerificationChecked = (IsDlgButtonChecked(hwnd, chx1) == BST_CHECKED);
+        return;
+    }
 
     for (i = 0; i < pTaskConfig->cButtons; ++i)
     {
@@ -710,7 +771,8 @@ TaskDialogIndirectForXP(const TASKDIALOGCONFIG *pTaskConfig,
 {
     TASKDIALOGPARAMS params;
     params.pTaskConfig = pTaskConfig;
-    
+    params.bVerificationChecked = FALSE;
+
     if (s_pTaskDialogIndirect && DO_FALLBACK)
     {
         return (*s_pTaskDialogIndirect)(pTaskConfig, pnButton, pnRadioButton,
@@ -744,6 +806,10 @@ TaskDialogIndirectForXP(const TASKDIALOGCONFIG *pTaskConfig,
     if (pnRadioButton)
     {
         *pnRadioButton = params.iRadioButton;
+    }
+    if (pfVerificationFlagChecked)
+    {
+        *pfVerificationFlagChecked = params.bVerificationChecked;
     }
 
     return S_OK;
