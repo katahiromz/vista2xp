@@ -8,6 +8,8 @@
 #include <tchar.h>
 #include <commctrl.h>
 #include <commdlg.h>
+#include <objbase.h>
+#include <shobjidl.h>
 #include <shlobj.h>
 #include <shlwapi.h>
 #include <strsafe.h>
@@ -181,17 +183,58 @@ void AddFile(HWND hwnd, LPCTSTR pszFile)
     SendDlgItemMessage(hwnd, lst1, LB_ADDSTRING, 0, (LPARAM)pszFile);
 }
 
+// get the path of a shortcut file
+BOOL GetPathOfShortcutDx(HWND hwnd, LPCWSTR pszLnkFile, LPWSTR pszPath)
+{
+    BOOL                bRes = FALSE;
+    WIN32_FIND_DATAW    find;
+    IShellLinkW*        pShellLink;
+    IPersistFile*       pPersistFile;
+    HRESULT             hRes;
+
+    // NOTE: CoInitialize/CoInitializeEx call required before this
+    pszPath[0] = 0;
+    hRes = CoCreateInstance(&CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
+                            &IID_IShellLinkW, (void **)&pShellLink);
+    if (SUCCEEDED(hRes))
+    {
+        hRes = pShellLink->lpVtbl->QueryInterface(pShellLink, &IID_IPersistFile,
+                                                  (void **)&pPersistFile);
+        if (SUCCEEDED(hRes))
+        {
+            hRes = pPersistFile->lpVtbl->Load(pPersistFile, pszLnkFile, STGM_READ);
+            if (SUCCEEDED(hRes))
+            {
+                pShellLink->lpVtbl->Resolve(pShellLink, hwnd, SLR_NO_UI | SLR_UPDATE);
+
+                hRes = pShellLink->lpVtbl->GetPath(pShellLink, pszPath, MAX_PATH, &find, 0);
+                if (SUCCEEDED(hRes) && 0 != pszPath[0])
+                {
+                    bRes = TRUE;
+                }
+            }
+            pPersistFile->lpVtbl->Release(pPersistFile);
+        }
+        pShellLink->lpVtbl->Release(pShellLink);
+    }
+    return bRes;
+}
+
 void OnDropFiles(HWND hwnd, HDROP hdrop)
 {
     UINT i, nCount;
-    TCHAR szPath[MAX_PATH];
+    TCHAR szPath[MAX_PATH], szTarget[MAX_PATH];
 
     nCount = DragQueryFile(hdrop, 0xFFFFFFFF, NULL, 0);
 
     for (i = 0; i < nCount; ++i)
     {
         DragQueryFile(hdrop, i, szPath, ARRAYSIZE(szPath));
-        AddFile(hwnd, szPath);
+
+        if (GetPathOfShortcutDx(hwnd, szPath, szTarget))
+            AddFile(hwnd, szTarget);
+        else
+            AddFile(hwnd, szPath);
     }
 
     DragFinish(hdrop);
@@ -363,10 +406,12 @@ WinMain(HINSTANCE   hInstance,
 {
     s_hInst = GetModuleHandleA(NULL);
     InitCommonControls();
+    CoInitialize(NULL);
 
     if (!CheckSourceDlls())
         return -1;
 
     DialogBox(hInstance, MAKEINTRESOURCE(1), NULL, DialogProc);
+    CoUninitialize();
     return 0;
 }
