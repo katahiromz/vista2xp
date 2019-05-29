@@ -232,9 +232,19 @@ void OnDropFiles(HWND hwnd, HDROP hdrop)
         DragQueryFile(hdrop, i, szPath, ARRAYSIZE(szPath));
 
         if (GetPathOfShortcutDx(hwnd, szPath, szTarget))
-            AddFile(hwnd, szTarget);
+        {
+            if (PathIsDirectory(szTarget))
+                AddFolder(hwnd, szTarget);
+            else
+                AddFile(hwnd, szTarget);
+        }
         else
-            AddFile(hwnd, szPath);
+        {
+            if (PathIsDirectory(szTarget))
+                AddFolder(hwnd, szPath);
+            else
+                AddFile(hwnd, szPath);
+        }
     }
 
     DragFinish(hdrop);
