@@ -33,6 +33,7 @@ static const LPCTSTR s_aapszNames[][3] =
     { TEXT("v2xu32.dll"), TEXT("..\\v2xu32.dll"), TEXT("..\\..\\v2xu32.dll") },
     { TEXT("v2xol.dll"), TEXT("..\\v2xol.dll"), TEXT("..\\..\\v2xol.dll") },
     { TEXT("v2xsh32.dll"), TEXT("..\\v2xsh32.dll"), TEXT("..\\..\\v2xsh32.dll") },
+    { TEXT("v2xcrt.dll"), TEXT("..\\v2xcrt.dll"), TEXT("..\\..\\v2xcrt.dll") },
 };
 
 static const INT s_aids[] =
@@ -42,17 +43,18 @@ static const INT s_aids[] =
     IDS_LOADV2XU32,
     IDS_LOADV2XOL,
     IDS_LOADV2XSH32,
+    IDS_LOADV2XCRT,
 };
 
 LPTSTR GetDllSource(INT i)
 {
-    assert(i < 5);
+    assert(i < 6);
     return s_szDLLs[i];
 }
 
 LPCTSTR GetDllNames(INT i)
 {
-    assert(i < 5);
+    assert(i < 6);
     return s_aapszNames[i][0];
 }
 

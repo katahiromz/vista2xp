@@ -51,6 +51,8 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
     - SHCreateItemFromParsingName 関数をサポート。
     - GetDpiForWindow 関数をサポート。
     - SetThreadDpiAwarenessContext 関数をサポート。
+    - v2xcrt (msvcrt) を追加。
+    - wcsnlen 関数をサポート。
 
 ## 警告
 

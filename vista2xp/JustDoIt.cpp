@@ -175,12 +175,39 @@ bool do_shell32(codereverse::ExeImage& image, size_t i, char *name)
     return false;
 }
 
+bool do_msvcrt(codereverse::ExeImage& image, size_t i, char *name)
+{
+    std::vector<codereverse::ImportSymbol> symbols;
+    if (!image.get_import_symbols(i, symbols))
+    {
+        return false;
+    }
+
+    for (size_t k = 0; k < symbols.size(); ++k)
+    {
+        codereverse::ImportSymbol& symbol = symbols[k];
+        if (symbol.Name.wImportByName)
+        {
+            if (lstrcmpA(symbol.pszName, "wcsnlen") == 0)
+            {
+                if (lstrcmpiA(name, "msvcrt") == 0)
+                    StringCbCopyA(const_cast<char *>(name), 6, "v2xcrt");
+                else if (lstrcmpiA(name, "msvcrt.dll") == 0)
+                    StringCbCopyA(const_cast<char *>(name), 10, "v2xcrt.dll");
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 extern "C"
 HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
 {
     LPCTSTR pszTitle = PathFindFileName(pszFile);
 
-    for (size_t i = 0; i < 5; ++i)
+    for (size_t i = 0; i < 6; ++i)
     {
         if (lstrcmpi(pszTitle, GetDllNames(i)) == 0)
         {
@@ -215,6 +242,8 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
     bool v2xu32_found = false;
     bool v2xol_found = false;
     bool v2xsh32_found = false;
+    bool v2xcrt_found = false;
+
     for (DWORD i = 0; i < names.size(); ++i)
     {
         if (lstrcmpiA(names[i], "kernel32.dll") == 0 ||
@@ -241,6 +270,11 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
                  lstrcmpiA(names[i], "shell32") == 0)
         {
             v2xsh32_found = do_shell32(image, i, const_cast<char *>(names[i]));
+        }
+        else if (lstrcmpiA(names[i], "msvcrt.dll") == 0 ||
+                 lstrcmpiA(names[i], "msvcrt") == 0)
+        {
+            v2xcrt_found = do_msvcrt(image, i, const_cast<char *>(names[i]));
         }
     }
 
@@ -345,7 +379,27 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
             return E_FAIL;
     }
 
-    if (v2xker32_found || v2xctl32_found || v2xu32_found || v2xol_found || v2xsh32_found)
+    if (v2xcrt_found)
+    {
+        // cut off file title
+        *pch = 0;
+
+        // create backup
+        PathAppend(szPath, TEXT("Vista2XP-Backup"));
+        CreateDirectory(szPath, NULL);
+        PathAppend(szPath, pszTitle);
+        CopyFile(pszFile, szPath, TRUE);
+
+        // cut off file title
+        *pch = 0;
+
+        PathAppend(szPath, GetDllNames(5));
+        if (!PathFileExists(szPath) && !CopyFile(GetDllSource(5), szPath, FALSE))
+            return E_FAIL;
+    }
+
+    if (v2xker32_found || v2xctl32_found || v2xu32_found || v2xol_found ||
+        v2xsh32_found || v2xcrt_found)
     {
         if (!image.do_reverse_map() || !image.save(pszFile))
         {
