@@ -26,6 +26,10 @@ static FN_memmove_s s_pmemmove_s = NULL;
 typedef int (__cdecl *FN_memcpy_s)(void *, size_t, const void *, size_t);
 static FN_memcpy_s s_pmemcpy_s = NULL;
 
+// _except_handler4_common
+typedef int (__cdecl *FN__except_handler4_common)(void);
+static FN__except_handler4_common s_p_except_handler4_common = NULL;
+
 size_t __cdecl wcsnlen_forxp(const wchar_t *s, size_t maxlen)
 {
     size_t i;
@@ -98,6 +102,16 @@ int __cdecl memcpy_s_forxp(void *dest, size_t destmax, const void *src, size_t c
     return 22;
 }
 
+int __cdecl _except_handler4_common_forxp(void)
+{
+    if (s_p_except_handler4_common && DO_FALLBACK)
+    {
+        return (*s_p_except_handler4_common)();
+    }
+
+    return 0;
+}
+
 #define GETPROC(fn) s_p##fn = (FN_##fn)GetProcAddress(s_hMSVCRT, #fn)
 
 BOOL WINAPI
@@ -112,6 +126,7 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         GETPROC(wcsnlen);
         GETPROC(memmove_s);
         GETPROC(memcpy_s);
+        GETPROC(_except_handler4_common);
         break;
     case DLL_PROCESS_DETACH:
         break;
