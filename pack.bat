@@ -1,4 +1,4 @@
-set DIST=vista2xp-0.5
+set DIST=vista2xp-0.6
 if not exist %DIST% mkdir %DIST%
 copy README.txt %DIST%
 copy READMEJP.txt %DIST%

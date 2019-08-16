@@ -12,7 +12,7 @@
 
 AppId={{A7770A09-8021-4ADC-B9F8-1D73153AB14C}
 AppName=vista2xp
-AppVerName=vista2xp 0.5
+AppVerName=vista2xp 0.6
 AppPublisher=Katayama Hirofumi MZ
 AppPublisherURL=http://katahiromz.web.fc2.com/
 AppSupportURL=http://katahiromz.web.fc2.com/
@@ -23,7 +23,7 @@ DisableDirPage=no
 AllowNoIcons=yes
 LicenseFile=LICENSE.txt
 OutputDir=.
-OutputBaseFilename=vista2xp-0.5-setup
+OutputBaseFilename=vista2xp-0.6-setup
 SetupIconFile=vista2xp\res\Icon_1.ico
 Compression=lzma
 SolidCompression=yes
@@ -33,9 +33,9 @@ VersionInfoCompany=Katayama Hirofumi MZ
 VersionInfoCopyright=Copyright (C) 2019 Katayama Hirofumi MZ.
 VersionInfoDescription=vista2xp
 VersionInfoProductName=vista2xp
-VersionInfoProductTextVersion=0.5
-VersionInfoProductVersion=0.5
-VersionInfoVersion=0.5
+VersionInfoProductTextVersion=0.6
+VersionInfoProductVersion=0.6
+VersionInfoVersion=0.6
 
 [Languages]
 Name: "english"; MessagesFile:  "compiler:Default.isl"
