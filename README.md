@@ -45,7 +45,7 @@ You can check the IAT by `dumpbin /imports` of Visual Studio Command Prompt.
     - Make [Cancel] button [Exit].
     - Supported `SHGetLocalizedName`, `SHSetFolderPathA` and `SHSetFolderPathW`.
     - Supported `TaskDialogIndirect`.
-- 2019.XX.YY ver.0.6
+- 2019.08.16 ver.0.6
     - Fixed broken v2xu32.dll.
     - Supported `SHCreateItemFromParsingName`.
     - Supported `GetDpiForWindow`.
