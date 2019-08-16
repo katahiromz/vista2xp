@@ -52,7 +52,7 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
     - GetDpiForWindow 関数をサポート。
     - SetThreadDpiAwarenessContext 関数をサポート。
     - v2xcrt (msvcrt) を追加。
-    - wcsnlen 関数をサポート。
+    - wcsnlen と memmove_s 関数をサポート。
 
 ## 警告
 

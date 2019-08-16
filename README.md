@@ -42,15 +42,15 @@ You can check the IAT by `dumpbin /imports` of Visual Studio Command Prompt.
     - Add `v2xsh32` (`shell32`).
 - 2019.05.22 ver.0.5
     - Make [Cancel] button [Exit].
-    - Supported SHGetLocalizedName, SHSetFolderPathA and SHSetFolderPathW.
-    - Supported TaskDialogIndirect.
+    - Supported `SHGetLocalizedName`, `SHSetFolderPathA` and `SHSetFolderPathW`.
+    - Supported `TaskDialogIndirect`.
 - 2019.XX.YY ver.0.6
     - Fixed broken v2xu32.dll.
-    - Supported SHCreateItemFromParsingName.
-    - Supported GetDpiForWindow.
-    - Supported SetThreadDpiAwarenessContext.
+    - Supported `SHCreateItemFromParsingName`.
+    - Supported `GetDpiForWindow`.
+    - Supported `SetThreadDpiAwarenessContext`.
     - Add `v2xcrt` (`msvcrt`).
-    - Supported wcsnlen.
+    - Supported `wcsnlen` and `memmove_s`.
 
 ## How to build?
 
