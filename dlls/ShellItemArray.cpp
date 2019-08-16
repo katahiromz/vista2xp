@@ -585,6 +585,7 @@ STDMETHODIMP MEnumShellItems::Skip(ULONG celt)
 STDMETHODIMP MEnumShellItems::Reset()
 {
     m_dwIndex = 0;
+    return S_OK;
 }
 
 STDMETHODIMP MEnumShellItems::Clone(IEnumShellItems **ppenum)

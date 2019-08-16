@@ -155,6 +155,7 @@ bool do_shell32(codereverse::ExeImage& image, size_t i, char *name)
                 lstrcmpA(symbol.pszName, "SHCreateShellItemArrayFromDataObject") == 0 ||
                 lstrcmpA(symbol.pszName, "SHCreateShellItemArrayFromIDLists") == 0 ||
                 lstrcmpA(symbol.pszName, "SHCreateShellItemArrayFromShellItem") == 0 ||
+                lstrcmpA(symbol.pszName, "SHCreateItemFromParsingName") == 0 ||
                 lstrcmpA(symbol.pszName, "SHCreateItemWithParent") == 0 ||
                 lstrcmpA(symbol.pszName, "SHCreateItemFromIDList") == 0 ||
                 lstrcmpA(symbol.pszName, "SHCreateShellItem") == 0 ||

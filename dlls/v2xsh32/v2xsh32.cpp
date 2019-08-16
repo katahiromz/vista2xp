@@ -18,6 +18,7 @@ typedef HRESULT (STDAPICALLTYPE *FN_SHCreateShellItemArray)(PCIDLIST_ABSOLUTE, I
 typedef HRESULT (STDAPICALLTYPE *FN_SHCreateShellItemArrayFromDataObject)(IDataObject *, REFIID, void **);
 typedef HRESULT (STDAPICALLTYPE *FN_SHCreateShellItemArrayFromIDLists)(UINT, PCIDLIST_ABSOLUTE_ARRAY, IShellItemArray **);
 typedef HRESULT (STDAPICALLTYPE *FN_SHCreateShellItemArrayFromShellItem)(IShellItem *, REFIID, void **);
+typedef HRESULT (STDAPICALLTYPE *FN_SHCreateItemFromParsingName)(PCWSTR, IBindCtx *, REFIID, void **);
 typedef HRESULT (STDAPICALLTYPE *FN_SHCreateItemWithParent)(PCIDLIST_ABSOLUTE, IShellFolder *, PCUITEMID_CHILD, REFIID, void **);
 typedef HRESULT (STDAPICALLTYPE *FN_SHCreateItemFromIDList)(PCIDLIST_ABSOLUTE, REFIID, void **);
 typedef HRESULT (STDAPICALLTYPE *FN_SHCreateShellItem)(PCIDLIST_ABSOLUTE, IShellFolder *, PCUITEMID_CHILD, IShellItem **);
@@ -28,6 +29,7 @@ static FN_SHCreateShellItemArray s_pSHCreateShellItemArray;
 static FN_SHCreateShellItemArrayFromDataObject s_pSHCreateShellItemArrayFromDataObject;
 static FN_SHCreateShellItemArrayFromIDLists s_pSHCreateShellItemArrayFromIDLists;
 static FN_SHCreateShellItemArrayFromShellItem s_pSHCreateShellItemArrayFromShellItem;
+static FN_SHCreateItemFromParsingName s_pSHCreateItemFromParsingName;
 static FN_SHCreateItemWithParent s_pSHCreateItemWithParent;
 static FN_SHCreateItemFromIDList s_pSHCreateItemFromIDList;
 static FN_SHCreateShellItem s_pSHCreateShellItem;
@@ -273,6 +275,32 @@ SHGetLocalizedNameForXP(
     return 0x80004002;
 }
 
+extern "C"
+HRESULT STDAPICALLTYPE
+SHCreateItemFromParsingNameForXP(
+    PCWSTR   pszPath,
+    IBindCtx *pbc,
+    REFIID   riid,
+    void     **ppv)
+{
+    if (s_pSHCreateItemFromParsingName && DO_FALLBACK)
+        return (*s_pSHCreateItemFromParsingName)(pszPath, pbc, riid, ppv);
+
+    LPITEMIDLIST pidl;
+    HRESULT hr;
+
+    *ppv = NULL;
+
+    hr = SHParseDisplayName(pszPath, pbc, &pidl, 0, NULL);
+    if (FAILED(hr))
+        return hr;
+
+    hr = SHCreateItemFromIDListForXP(pidl, riid, ppv);
+    ILFree(pidl);
+
+    return hr;
+}
+
 #define GETPROC(fn) s_p##fn = (FN_##fn)GetProcAddress(s_hShell32, #fn)
 
 extern "C"
@@ -289,6 +317,7 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         GETPROC(SHCreateShellItemArrayFromDataObject);
         GETPROC(SHCreateShellItemArrayFromIDLists);
         GETPROC(SHCreateShellItemArrayFromShellItem);
+        GETPROC(SHCreateItemFromParsingName);
         GETPROC(SHCreateItemWithParent);
         GETPROC(SHCreateItemFromIDList);
         GETPROC(SHCreateShellItem);
