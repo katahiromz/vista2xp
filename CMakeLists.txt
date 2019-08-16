@@ -77,6 +77,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     message(STATUS "GCC_VERSION = ${GCC_VERSION}")
     if ("${GCC_VERSION}" STRLESS "7.0.0")
         include_directories(tdm_gcc_include)
+        add_definitions(-DSHParseDisplayName_WORKAROUND)
     endif()
 endif()
 
@@ -85,7 +86,7 @@ add_definitions(-DUNICODE -D_UNICODE)
 
 # vista2xp.exe
 add_executable(vista2xp WIN32
-    vista2xp/vista2xp.c
+    vista2xp/vista2xp.cpp
     vista2xp/vista2xp_res.rc
     vista2xp/JustDoIt.cpp)
 target_link_libraries(vista2xp comdlg32 comctl32 shlwapi)

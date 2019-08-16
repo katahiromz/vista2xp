@@ -1,4 +1,4 @@
-/* vista2xp.c
+/* vista2xp.cpp
 /* This file is public domain software.
    Copyright (C) 2019 Katayama Hirofumi MZ <katayama.hirofumi.mz@gmail.com>. */
 #define _CRT_SECURE_NO_WARNINGS
@@ -196,28 +196,27 @@ BOOL GetPathOfShortcutDx(HWND hwnd, LPCWSTR pszLnkFile, LPWSTR pszPath)
 
     // NOTE: CoInitialize/CoInitializeEx call required before this
     pszPath[0] = 0;
-    hRes = CoCreateInstance(&CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
-                            &IID_IShellLinkW, (void **)&pShellLink);
+    hRes = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
+                            IID_IShellLinkW, (void **)&pShellLink);
     if (SUCCEEDED(hRes))
     {
-        hRes = pShellLink->lpVtbl->QueryInterface(pShellLink, &IID_IPersistFile,
-                                                  (void **)&pPersistFile);
+        hRes = pShellLink->QueryInterface(IID_IPersistFile, (void **)&pPersistFile);
         if (SUCCEEDED(hRes))
         {
-            hRes = pPersistFile->lpVtbl->Load(pPersistFile, pszLnkFile, STGM_READ);
+            hRes = pPersistFile->Load(pszLnkFile, STGM_READ);
             if (SUCCEEDED(hRes))
             {
-                pShellLink->lpVtbl->Resolve(pShellLink, hwnd, SLR_NO_UI | SLR_UPDATE);
+                pShellLink->Resolve(hwnd, SLR_NO_UI | SLR_UPDATE);
 
-                hRes = pShellLink->lpVtbl->GetPath(pShellLink, pszPath, MAX_PATH, &find, 0);
+                hRes = pShellLink->GetPath(pszPath, MAX_PATH, &find, 0);
                 if (SUCCEEDED(hRes) && 0 != pszPath[0])
                 {
                     bRes = TRUE;
                 }
             }
-            pPersistFile->lpVtbl->Release(pPersistFile);
+            pPersistFile->Release();
         }
-        pShellLink->lpVtbl->Release(pShellLink);
+        pShellLink->Release();
     }
     return bRes;
 }

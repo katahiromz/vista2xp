@@ -286,12 +286,16 @@ SHCreateItemFromParsingNameForXP(
     if (s_pSHCreateItemFromParsingName && DO_FALLBACK)
         return (*s_pSHCreateItemFromParsingName)(pszPath, pbc, riid, ppv);
 
-    LPITEMIDLIST pidl;
+    PIDLIST_ABSOLUTE pidl;
     HRESULT hr;
 
     *ppv = NULL;
 
+#ifdef SHParseDisplayName_WORKAROUND
+    hr = SHParseDisplayName(pszPath, pbc, (LPITEMIDLIST)&pidl, 0, NULL);
+#else
     hr = SHParseDisplayName(pszPath, pbc, &pidl, 0, NULL);
+#endif
     if (FAILED(hr))
         return hr;
 

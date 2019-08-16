@@ -28,7 +28,3 @@ target_link_libraries(folder uuid)
 # localized.exe
 add_executable(localized localized/localized.cpp)
 target_link_libraries(localized shell32)
-
-# memcpy.exe
-add_executable(memcpy memcpy/memcpy.c)
-target_link_libraries(memcpy msvcrt)

@@ -11,10 +11,8 @@
     #define ARRAYSIZE(array) (sizeof(array) / sizeof(array[0]))
 #endif
 
-extern "C"
 LPTSTR GetDllSource(INT i);
 
-extern "C"
 LPCTSTR GetDllNames(INT i);
 
 bool do_kernel32(codereverse::ExeImage& image, size_t i, char *name)
@@ -206,7 +204,6 @@ bool do_msvcrt(codereverse::ExeImage& image, size_t i, char *name)
     return false;
 }
 
-extern "C"
 HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
 {
     LPCTSTR pszTitle = PathFindFileName(pszFile);
