@@ -189,7 +189,8 @@ bool do_msvcrt(codereverse::ExeImage& image, size_t i, char *name)
         if (symbol.Name.wImportByName)
         {
             if (lstrcmpA(symbol.pszName, "wcsnlen") == 0 ||
-                lstrcmpA(symbol.pszName, "memmove_s") == 0)
+                lstrcmpA(symbol.pszName, "memmove_s") == 0 ||
+                lstrcmpA(symbol.pszName, "memcpy_s") == 0)
             {
                 if (lstrcmpiA(name, "msvcrt") == 0)
                     StringCbCopyA(const_cast<char *>(name), 6, "v2xcrt");

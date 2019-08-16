@@ -5,6 +5,7 @@ EXPORTS
     ; v2xcrt
     wcsnlen = wcsnlen_forxp
     memmove_s = memmove_s_forxp
+    memcpy_s = memcpy_s_forxp
 
     ; v2xcrt --> msvcrt
     _CIacos = msvcrt._CIacos

@@ -50,7 +50,7 @@ You can check the IAT by dumpbin /imports of Visual Studio Command Prompt.
     - Supported GetDpiForWindow.
     - Supported SetThreadDpiAwarenessContext.
     - Add v2xcrt (msvcrt).
-    - Supported wcsnlen and memmove_s.
+    - Supported wcsnlen, memmove_s and memcpy_s.
 
 ## WARNING!
 

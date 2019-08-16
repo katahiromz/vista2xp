@@ -22,6 +22,10 @@ static FN_wcsnlen s_pwcsnlen = NULL;
 typedef int (__cdecl *FN_memmove_s)(void *, size_t, const void *, size_t);
 static FN_memmove_s s_pmemmove_s = NULL;
 
+// memcpy_s
+typedef int (__cdecl *FN_memcpy_s)(void *, size_t, const void *, size_t);
+static FN_memcpy_s s_pmemcpy_s = NULL;
+
 size_t __cdecl wcsnlen_forxp(const wchar_t *s, size_t maxlen)
 {
     size_t i;
@@ -65,6 +69,35 @@ int __cdecl memmove_s_forxp(void *dest, size_t destmax, const void *src, size_t 
     return 0;
 }
 
+int __cdecl memcpy_s_forxp(void *dest, size_t destmax, const void *src, size_t count)
+{
+    const char *d;
+    const char *s;
+
+    if (s_pmemcpy_s && DO_FALLBACK)
+    {
+        return (*s_pmemcpy_s)(dest, destmax, src, count);
+    }
+
+    if (!dest || !src || destmax > RSIZE_MAX || count > RSIZE_MAX || count > destmax)
+    {
+        if (dest && destmax <= RSIZE_MAX)
+            memset(dest, 0, destmax);
+        return 22;
+    }
+
+    d = (const char *)dest;
+    s = (const char *)src;
+
+    if (d + count <= s || s + count <= d)
+    {
+        memcpy(dest, src, count);
+        return 0;
+    }
+
+    return 22;
+}
+
 #define GETPROC(fn) s_p##fn = (FN_##fn)GetProcAddress(s_hMSVCRT, #fn)
 
 BOOL WINAPI
@@ -78,6 +111,7 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         s_hMSVCRT = GetModuleHandleA("msvcrt");
         GETPROC(wcsnlen);
         GETPROC(memmove_s);
+        GETPROC(memcpy_s);
         break;
     case DLL_PROCESS_DETACH:
         break;
