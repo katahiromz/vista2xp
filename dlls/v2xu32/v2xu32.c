@@ -7,6 +7,12 @@
 #include <strsafe.h>
 #include <psapi.h>
 
+DECLARE_HANDLE(DPI_AWARENESS_CONTEXT);
+
+#define DPI_AWARENESS_CONTEXT_UNAWARE           ((DPI_AWARENESS_CONTEXT)-1)
+#define DPI_AWARENESS_CONTEXT_SYSTEM_AWARE      ((DPI_AWARENESS_CONTEXT)-2)
+#define DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE ((DPI_AWARENESS_CONTEXT)-3)
+
 static HINSTANCE s_hinstDLL;
 static HINSTANCE s_hUser32;
 
@@ -37,6 +43,12 @@ static FN_ChangeWindowMessageFilter s_pChangeWindowMessageFilter = NULL;
 
 typedef BOOL (WINAPI *FN_ChangeWindowMessageFilterEx)(HWND, UINT, DWORD, PCHANGEFILTERSTRUCT);
 static FN_ChangeWindowMessageFilterEx s_pChangeWindowMessageFilterEx = NULL;
+
+typedef UINT (WINAPI *FN_GetDpiForWindow)(HWND hwnd);
+static FN_GetDpiForWindow s_pGetDpiForWindow = NULL;
+
+typedef DPI_AWARENESS_CONTEXT (WINAPI *FN_SetThreadDpiAwarenessContext)(DPI_AWARENESS_CONTEXT);
+static FN_SetThreadDpiAwarenessContext s_pSetThreadDpiAwarenessContext = NULL;
 
 BOOL WINAPI
 ChangeWindowMessageFilterForXP(UINT message, DWORD dwFlag)
@@ -72,6 +84,27 @@ ChangeWindowMessageFilterExForXP(HWND hwnd, UINT message, DWORD action,
     return TRUE;
 }
 
+UINT WINAPI
+GetDpiForWindowForXP(HWND hwnd)
+{
+    if (s_pGetDpiForWindow && DO_FALLBACK)
+        return (*s_pGetDpiForWindow)(hwnd);
+
+    if (IsWindow(hwnd))
+        return 96;
+
+    return 0;
+}
+
+DPI_AWARENESS_CONTEXT WINAPI
+SetThreadDpiAwarenessContextForXP(DPI_AWARENESS_CONTEXT dpiContext)
+{
+    if (s_pSetThreadDpiAwarenessContext && DO_FALLBACK)
+        return (*s_pSetThreadDpiAwarenessContext)(dpiContext);
+
+    return DPI_AWARENESS_CONTEXT_UNAWARE;
+}
+
 BOOL WINAPI
 DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
@@ -83,6 +116,8 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         s_hUser32 = GetModuleHandleA("user32");
         s_pChangeWindowMessageFilter = (FN_ChangeWindowMessageFilter)GetProcAddress(s_hUser32, "ChangeWindowMessageFilter");
         s_pChangeWindowMessageFilterEx = (FN_ChangeWindowMessageFilterEx)GetProcAddress(s_hUser32, "ChangeWindowMessageFilterEx");
+        s_pGetDpiForWindow = (FN_GetDpiForWindow)GetProcAddress(s_hUser32, "GetDpiForWindow");
+        s_pSetThreadDpiAwarenessContext = (FN_SetThreadDpiAwarenessContext)GetProcAddress(s_hUser32, "SetThreadDpiAwarenessContext");
         break;
     case DLL_PROCESS_DETACH:
         break;

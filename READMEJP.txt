@@ -46,6 +46,11 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
     - [キャンセル] ボタンを [終了] にする。
     - SHGetLocalizedName、SHSetFolderPathA および SHSetFolderPathW 関数をサポート。
     - TaskDialogIndirect 関数をサポート。
+- 2019.XX.YY ver.0.6
+    - 壊れた v2xu32.dll を修正。
+    - SHCreateItemFromParsingName 関数をサポート。
+    - GetDpiForWindow 関数をサポート。
+    - SetThreadDpiAwarenessContext 関数をサポート。
 
 ## 警告
 

@@ -97,11 +97,13 @@ bool do_user32(codereverse::ExeImage& image, size_t i, char *name)
         if (symbol.Name.wImportByName)
         {
             if (lstrcmpA(symbol.pszName, "ChangeWindowMessageFilter") == 0 ||
-                lstrcmpA(symbol.pszName, "ChangeWindowMessageFilterEx") == 0)
+                lstrcmpA(symbol.pszName, "ChangeWindowMessageFilterEx") == 0 ||
+                lstrcmpA(symbol.pszName, "GetDpiForWindow") == 0 ||
+                lstrcmpA(symbol.pszName, "SetThreadDpiAwarenessContext") == 0)
             {
-                if (lstrcmpiA(name, "comctl32") == 0)
+                if (lstrcmpiA(name, "user32") == 0)
                     StringCbCopyA(const_cast<char *>(name), 7, "v2xu32");
-                else if (lstrcmpiA(name, "comctl32.dll") == 0)
+                else if (lstrcmpiA(name, "user32.dll") == 0)
                     StringCbCopyA(const_cast<char *>(name), 11, "v2xu32.dll");
                 return true;
             }

@@ -3,8 +3,10 @@
 
 EXPORTS
     ; v2xu32
-    ChangeWindowMessageFilterForXP = user32.ChangeWindowMessageFilter
-    ChangeWindowMessageFilterExForXP = user32.ChangeWindowMessageFilterEx
+    ChangeWindowMessageFilter = ChangeWindowMessageFilterForXP
+    ChangeWindowMessageFilterEx = ChangeWindowMessageFilterExForXP
+    GetDpiForWindow = GetDpiForWindowForXP
+    SetThreadDpiAwarenessContext = SetThreadDpiAwarenessContextForXP
 
     ; v2xu32 --> user32
     ActivateKeyboardLayout = user32.ActivateKeyboardLayout
