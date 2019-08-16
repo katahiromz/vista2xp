@@ -44,9 +44,9 @@ bool do_kernel32(codereverse::ExeImage& image, size_t i, char *name)
                 lstrcmpA(symbol.pszName, "IsWow64Process") == 0)
             {
                 if (lstrcmpiA(name, "kernel32") == 0)
-                    StringCbCopyA(const_cast<char *>(name), 9, "v2xker32");
+                    StringCbCopyA(const_cast<char *>(name), sizeof("v2xker32"), "v2xker32");
                 else if (lstrcmpiA(name, "kernel32.dll") == 0)
-                    StringCbCopyA(const_cast<char *>(name), 13, "v2xker32.dll");
+                    StringCbCopyA(const_cast<char *>(name), sizeof("v2xker32.dll"), "v2xker32.dll");
                 return true;
             }
         }
@@ -72,9 +72,9 @@ bool do_comctl32(codereverse::ExeImage& image, size_t i, char *name)
                 lstrcmpA(symbol.pszName, "TaskDialogIndirect") == 0)
             {
                 if (lstrcmpiA(name, "comctl32") == 0)
-                    StringCbCopyA(const_cast<char *>(name), 9, "v2xctl32");
+                    StringCbCopyA(const_cast<char *>(name), sizeof("v2xctl32"), "v2xctl32");
                 else if (lstrcmpiA(name, "comctl32.dll") == 0)
-                    StringCbCopyA(const_cast<char *>(name), 13, "v2xctl32.dll");
+                    StringCbCopyA(const_cast<char *>(name), sizeof("v2xctl32.dll"), "v2xctl32.dll");
                 return true;
             }
         }
@@ -102,9 +102,9 @@ bool do_user32(codereverse::ExeImage& image, size_t i, char *name)
                 lstrcmpA(symbol.pszName, "SetThreadDpiAwarenessContext") == 0)
             {
                 if (lstrcmpiA(name, "user32") == 0)
-                    StringCbCopyA(const_cast<char *>(name), 7, "v2xu32");
+                    StringCbCopyA(const_cast<char *>(name), sizeof("v2xu32"), "v2xu32");
                 else if (lstrcmpiA(name, "user32.dll") == 0)
-                    StringCbCopyA(const_cast<char *>(name), 11, "v2xu32.dll");
+                    StringCbCopyA(const_cast<char *>(name), sizeof("v2xu32.dll"), "v2xu32.dll");
                 return true;
             }
         }
@@ -129,9 +129,9 @@ bool do_ole32(codereverse::ExeImage& image, size_t i, char *name)
             if (lstrcmpA(symbol.pszName, "CoCreateInstance") == 0)
             {
                 if (lstrcmpiA(name, "ole32") == 0)
-                    StringCbCopyA(const_cast<char *>(name), 6, "v2xol");
+                    StringCbCopyA(const_cast<char *>(name), sizeof("v2xol"), "v2xol");
                 else if (lstrcmpiA(name, "ole32.dll") == 0)
-                    StringCbCopyA(const_cast<char *>(name), 10, "v2xol.dll");
+                    StringCbCopyA(const_cast<char *>(name), sizeof("v2xol.dll"), "v2xol.dll");
                 return true;
             }
         }
@@ -164,9 +164,9 @@ bool do_shell32(codereverse::ExeImage& image, size_t i, char *name)
                 lstrcmpA(symbol.pszName, "SHGetNameFromIDList") == 0)
             {
                 if (lstrcmpiA(name, "shell32") == 0)
-                    StringCbCopyA(const_cast<char *>(name), 6, "v2xsh32");
+                    StringCbCopyA(const_cast<char *>(name), sizeof("v2xsh32"), "v2xsh32");
                 else if (lstrcmpiA(name, "shell32.dll") == 0)
-                    StringCbCopyA(const_cast<char *>(name), 10, "v2xsh32.dll");
+                    StringCbCopyA(const_cast<char *>(name), sizeof("v2xsh32.dll"), "v2xsh32.dll");
                 return true;
             }
         }
@@ -195,9 +195,9 @@ bool do_msvcrt(codereverse::ExeImage& image, size_t i, char *name)
                 lstrcmpA(symbol.pszName, "_except_handler4_common") == 0)
             {
                 if (lstrcmpiA(name, "msvcrt") == 0)
-                    StringCbCopyA(const_cast<char *>(name), 6, "v2xcrt");
+                    StringCbCopyA(const_cast<char *>(name), sizeof("v2xcrt"), "v2xcrt");
                 else if (lstrcmpiA(name, "msvcrt.dll") == 0)
-                    StringCbCopyA(const_cast<char *>(name), 10, "v2xcrt.dll");
+                    StringCbCopyA(const_cast<char *>(name), sizeof("v2xcrt.dll"), "v2xcrt.dll");
                 return true;
             }
         }
