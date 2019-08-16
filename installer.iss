@@ -54,6 +54,7 @@ Source: "build\v2xctl32.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "build\v2xu32.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "build\v2xol.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "build\v2xsh32.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build\v2xcrt.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
