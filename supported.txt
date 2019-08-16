@@ -114,4 +114,5 @@ user32.SetThreadDpiAwarenessContext
 msvcrt.wcsnlen
 msvcrt.memmove_s
 msvcrt.memcpy_s
+msvcrt.__CxxFrameHandler3
 msvcrt._except_handler4_common
