@@ -109,3 +109,9 @@ shell32.SHGetNameFromIDList
 shell32.SHGetLocalizedName
 shell32.SHSetFolderPathA
 shell32.SHSetFolderPathW
+user32.GetDpiForWindow
+user32.SetThreadDpiAwarenessContext
+msvcrt.wcsnlen
+msvcrt.memmove_s
+msvcrt.memcpy_s
+msvcrt._except_handler4_common
