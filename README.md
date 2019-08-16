@@ -18,6 +18,7 @@ It modifies the IAT (Import Address Table) of EXE/DLL files.
 - If any Vista+ `user32` functions, importing of `user32.dll` will be altered to `v2xu32.dll`.
 - If any Vista+ `ole32` functions, importing of `ole32.dll` will be altered to `v2xol.dll`.
 - If any Vista+ `shell32` functions, importing of `shell32.dll` will be altered to `v2xsh32.dll`.
+- If any Vista+ `msvcrt` functions, importing of `msvcrt.dll` will be altered to `v2xcrt.dll`.
 
 You can check the IAT by `dumpbin /imports` of Visual Studio Command Prompt.
 

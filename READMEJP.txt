@@ -20,6 +20,7 @@
 - Vista以降の user32 関数があれば、user32.dll のインポートは v2xu32.dll に変わります。
 - Vista以降の ole32 関数があれば、ole32.dll のインポートは v2xol.dll に変わります。
 - Vista以降の shell32 関数があれば、shell32.dll のインポートは v2xsh32.dll に変わります。
+- Vista以降の msvcrt 関数があれば、msvcrt.dll のインポートは v2xcrt.dll に変わります。
 
 Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェックできます。
 
