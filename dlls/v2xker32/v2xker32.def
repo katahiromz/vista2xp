@@ -7,6 +7,9 @@ EXPORTS
     QueryFullProcessImageNameA = QueryFullProcessImageNameAForXP
     QueryFullProcessImageNameW = QueryFullProcessImageNameWForXP
     IsWow64Process = IsWow64ProcessForXP
+    GetVersion = GetVersionHacked
+    GetVersionExA = GetVersionExAHacked
+    GetVersionExW = GetVersionExWHacked
 
     ; kernel32 --> advapi32
     CreateProcessAsUserA = advapi32.CreateProcessAsUserA
@@ -556,9 +559,6 @@ EXPORTS
     GetUserDefaultUILanguage = kernel32.GetUserDefaultUILanguage
     GetUserGeoID = kernel32.GetUserGeoID
     GetVDMCurrentDirectories = kernel32.GetVDMCurrentDirectories
-    GetVersion = kernel32.GetVersion
-    GetVersionExA = kernel32.GetVersionExA
-    GetVersionExW = kernel32.GetVersionExW
     GetVolumeInformationA = kernel32.GetVolumeInformationA
     GetVolumeInformationW = kernel32.GetVolumeInformationW
     GetVolumeNameForVolumeMountPointA = kernel32.GetVolumeNameForVolumeMountPointA
