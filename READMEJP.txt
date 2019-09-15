@@ -55,6 +55,8 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
     - v2xcrt (msvcrt) を追加。
     - wcsnlen と memmove_s と memcpy_s 関数をサポート。
     - __CxxFrameHandler3 と _except_handler4_common 関数をサポート。
+- 2019.XX.YY ver.0.7
+    - オプショナル ヘッダーのバージョン情報を改変。
 
 ## 警告
 

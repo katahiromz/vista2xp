@@ -53,6 +53,8 @@ You can check the IAT by `dumpbin /imports` of Visual Studio Command Prompt.
     - Add `v2xcrt` (`msvcrt`).
     - Supported `wcsnlen`, `memmove_s` and `memcpy_s`.
     - Supported `__CxxFrameHandler3` and `_except_handler4_common`.
+- 2019.XX.YY ver.0.7
+    - Modify optional header's version info.
 
 ## How to build?
 

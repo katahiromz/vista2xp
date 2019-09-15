@@ -399,8 +399,47 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
             return E_FAIL;
     }
 
+    bool version_fix = false;
+    {
+        DWORD ver, preferred = MAKELONG(1, 5);
+        if (IMAGE_OPTIONAL_HEADER64 *optional64 = image.get_optional64())
+        {
+            ver = MAKELONG(optional64->MinorOperatingSystemVersion, optional64->MajorOperatingSystemVersion);
+            if (ver > preferred)
+            {
+                optional64->MajorOperatingSystemVersion = 5;
+                optional64->MinorOperatingSystemVersion = 1;
+                version_fix = true;
+            }
+            ver = MAKELONG(optional64->MinorSubsystemVersion, optional64->MajorSubsystemVersion);
+            if (ver > preferred)
+            {
+                optional64->MajorSubsystemVersion = 5;
+                optional64->MinorSubsystemVersion = 1;
+                version_fix = true;
+            }
+        }
+        else if (IMAGE_OPTIONAL_HEADER32 *optional32 = image.get_optional32())
+        {
+            ver = MAKELONG(optional32->MinorOperatingSystemVersion, optional32->MajorOperatingSystemVersion);
+            if (ver > preferred)
+            {
+                optional32->MajorOperatingSystemVersion = 5;
+                optional32->MinorOperatingSystemVersion = 1;
+                version_fix = true;
+            }
+            ver = MAKELONG(optional32->MinorSubsystemVersion, optional32->MajorSubsystemVersion);
+            if (ver > preferred)
+            {
+                optional32->MajorSubsystemVersion = 5;
+                optional32->MinorSubsystemVersion = 1;
+                version_fix = true;
+            }
+        }
+    }
+
     if (v2xker32_found || v2xctl32_found || v2xu32_found || v2xol_found ||
-        v2xsh32_found || v2xcrt_found)
+        v2xsh32_found || v2xcrt_found || version_fix)
     {
         if (!image.do_reverse_map() || !image.save(pszFile))
         {
