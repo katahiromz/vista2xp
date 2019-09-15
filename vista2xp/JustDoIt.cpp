@@ -33,6 +33,9 @@ bool do_kernel32(codereverse::ExeImage& image, size_t i, char *name)
                 memcmp(symbol.pszName, "time", 4) == 0 ||
                 lstrcmpA(symbol.pszName, "CreateProcessAsUserA") == 0 ||
                 lstrcmpA(symbol.pszName, "CreateProcessAsUserW") == 0 ||
+                lstrcmpA(symbol.pszName, "GetVersion") == 0 ||
+                lstrcmpA(symbol.pszName, "GetVersionExA") == 0 ||
+                lstrcmpA(symbol.pszName, "GetVersionExW") == 0 ||
                 lstrcmpA(symbol.pszName, "OpenProcessToken") == 0 ||
                 lstrcmpA(symbol.pszName, "OpenThreadToken") == 0 ||
                 lstrcmpA(symbol.pszName, "SetThreadToken") == 0 ||
