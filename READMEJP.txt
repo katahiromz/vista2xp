@@ -57,6 +57,7 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
     - __CxxFrameHandler3 と _except_handler4_common 関数をサポート。
 - 2019.XX.YY ver.0.7
     - オプショナル ヘッダーのバージョン情報を改変。
+    - GetVersion、GetVersionExA、GetVersionExW 関数をサポート。
 
 ## 警告
 

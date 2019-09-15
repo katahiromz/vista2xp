@@ -55,6 +55,7 @@ You can check the IAT by dumpbin /imports of Visual Studio Command Prompt.
     - Supported __CxxFrameHandler3 and _except_handler4_common.
 - 2019.XX.YY ver.0.7
     - Modify optional header's version info.
+    - Supported GetVersion, GetVersionExA and GetVersionExW.
 
 ## WARNING!
 

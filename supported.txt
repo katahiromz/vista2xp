@@ -1,4 +1,7 @@
 kernel32.GetTickCount64
+kernel32.GetVersion
+kernel32.GetVersionExA
+kernel32.GetVersionExW
 kernel32.QueryFullProcessImageNameA
 kernel32.QueryFullProcessImageNameW
 kernel32.IsWow64Process
