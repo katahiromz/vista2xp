@@ -58,7 +58,7 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
 - 2019.09.15 ver.0.7
     - オプショナル ヘッダーのバージョン情報を改変。
     - GetVersion、GetVersionExA、GetVersionExW 関数をサポート。
-- 2021.XX.YY ver.0.8
+- 2021.05.11 ver.0.8
     - SRWロック関数を部分的にサポート。
     - Initialize-once関数を部分的にサポート。
     - 状態変数関数を部分的にサポート。
