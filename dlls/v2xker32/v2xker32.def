@@ -17,6 +17,8 @@ EXPORTS
     TryAcquireSRWLockShared = TryAcquireSRWLockSharedForXP
     ReleaseSRWLockExclusive = ReleaseSRWLockExclusiveForXP
     ReleaseSRWLockShared = ReleaseSRWLockSharedForXP
+    InitOnceInitialize = InitOnceInitializeForXP
+    InitOnceExecuteOnce = InitOnceExecuteOnceForXP
 
     ; kernel32 --> advapi32
     CreateProcessAsUserA = advapi32.CreateProcessAsUserA

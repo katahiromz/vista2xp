@@ -12,6 +12,13 @@ typedef struct tagSRWLOCK_FOR_XP
     PVOID Ptr;
 } SRWLOCK_FOR_XP, *PSRWLOCK_FOR_XP;
 
+typedef union tagINIT_ONCE_FOR_XP
+{
+    PVOID Ptr;
+} INIT_ONCE_FOR_XP, *PINIT_ONCE_FOR_XP;
+
+typedef BOOL (WINAPI *PINIT_ONCE_FN_FOR_XP)(PINIT_ONCE_FOR_XP, PVOID, PVOID *);
+
 static HINSTANCE s_hinstDLL;
 static HINSTANCE s_hKernel32;
 static BOOL s_bUseQPC;
@@ -42,6 +49,12 @@ static FN_TryAcquireSRWLockExclusive s_pTryAcquireSRWLockExclusive;
 static FN_TryAcquireSRWLockShared s_pTryAcquireSRWLockShared;
 static FN_ReleaseSRWLockExclusive s_pReleaseSRWLockExclusive;
 static FN_ReleaseSRWLockShared s_pReleaseSRWLockShared;
+
+typedef VOID (WINAPI *FN_InitOnceInitialize)(PINIT_ONCE_FOR_XP);
+typedef BOOL (WINAPI *FN_InitOnceExecuteOnce)(PINIT_ONCE, PINIT_ONCE_FN, PVOID, LPVOID *);
+
+static FN_InitOnceInitialize s_pInitOnceInitialize;
+static FN_InitOnceExecuteOnce s_pInitOnceExecuteOnce;
 
 BOOL WINAPI
 IsWow64ProcessForXP(HANDLE hProcess, PBOOL Wow64Process)
@@ -321,6 +334,21 @@ VOID WINAPI ReleaseSRWLockSharedForXP(PSRWLOCK_FOR_XP SRWLock)
     LeaveCriticalSection((CRITICAL_SECTION*)SRWLock->Ptr);
 }
 
+VOID WINAPI InitOnceInitializeForXP(PINIT_ONCE_FOR_XP InitOnce)
+{
+    InitOnce->Ptr = NULL;
+}
+
+BOOL WINAPI
+InitOnceExecuteOnceForXP(PINIT_ONCE_FOR_XP InitOnce, PINIT_ONCE_FN_FOR_XP InitFn,
+                         PVOID Parameter, LPVOID *Context)
+{
+    if (InterlockedExchange((LPLONG)&InitOnce->Ptr, (1 << INIT_ONCE_CTX_RESERVED_BITS) - 1) == 0)
+    {
+        (*InitFn)(InitOnce, Parameter, Context);
+    }
+}
+
 BOOL WINAPI
 DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
@@ -342,6 +370,8 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         s_pTryAcquireSRWLockShared = (FN_TryAcquireSRWLockShared)GetProcAddress(s_hKernel32, "TryAcquireSRWLockShared");
         s_pReleaseSRWLockExclusive = (FN_ReleaseSRWLockExclusive)GetProcAddress(s_hKernel32, "ReleaseSRWLockExclusive");
         s_pReleaseSRWLockShared = (FN_ReleaseSRWLockShared)GetProcAddress(s_hKernel32, "ReleaseSRWLockShared");
+        s_pInitOnceInitialize = (FN_InitOnceInitialize)GetProcAddress(s_hKernel32, "InitOnceInitialize");
+        s_pInitOnceExecuteOnce = (FN_InitOnceExecuteOnce)GetProcAddress(s_hKernel32, "InitOnceExecuteOnce");
         break;
     case DLL_PROCESS_DETACH:
         break;

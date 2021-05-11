@@ -104,6 +104,8 @@ kernel32.TryAcquireSRWLockExclusive
 kernel32.TryAcquireSRWLockShared
 kernel32.ReleaseSRWLockExclusive
 kernel32.ReleaseSRWLockShared
+kernel32.InitOnceInitialize
+kernel32.InitOnceExecuteOnce
 comctl32.TaskDialog
 comctl32.TaskDialogIndirect
 user32.ChangeWindowMessageFilter

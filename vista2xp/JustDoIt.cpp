@@ -49,7 +49,9 @@ bool do_kernel32(codereverse::ExeImage& image, size_t i, char *name)
                 lstrcmpA(symbol.pszName, "TryAcquireSRWLockExclusive") == 0 ||
                 lstrcmpA(symbol.pszName, "TryAcquireSRWLockShared") == 0 ||
                 lstrcmpA(symbol.pszName, "ReleaseSRWLockExclusive") == 0 ||
-                lstrcmpA(symbol.pszName, "ReleaseSRWLockShared") == 0)
+                lstrcmpA(symbol.pszName, "ReleaseSRWLockShared") == 0 ||
+                lstrcmpA(symbol.pszName, "InitOnceInitialize") == 0 ||
+                lstrcmpA(symbol.pszName, "InitOnceExecuteOnce") == 0)
             {
                 if (lstrcmpiA(name, "kernel32") == 0)
                     StringCbCopyA(const_cast<char *>(name), sizeof("v2xker32"), "v2xker32");
