@@ -19,6 +19,11 @@ typedef union tagINIT_ONCE_FOR_XP
 
 typedef BOOL (WINAPI *PINIT_ONCE_FN_FOR_XP)(PINIT_ONCE_FOR_XP, PVOID, PVOID *);
 
+typedef struct tagCONDITION_VARIABLE_FOR_XP
+{
+    PVOID Ptr;
+} CONDITION_VARIABLE_FOR_XP, *PCONDITION_VARIABLE_FOR_XP;
+
 static HINSTANCE s_hinstDLL;
 static HINSTANCE s_hKernel32;
 static BOOL s_bUseQPC;
@@ -51,10 +56,22 @@ static FN_ReleaseSRWLockExclusive s_pReleaseSRWLockExclusive;
 static FN_ReleaseSRWLockShared s_pReleaseSRWLockShared;
 
 typedef VOID (WINAPI *FN_InitOnceInitialize)(PINIT_ONCE_FOR_XP);
-typedef BOOL (WINAPI *FN_InitOnceExecuteOnce)(PINIT_ONCE, PINIT_ONCE_FN, PVOID, LPVOID *);
+typedef BOOL (WINAPI *FN_InitOnceExecuteOnce)(PINIT_ONCE_FOR_XP, PINIT_ONCE_FN_FOR_XP, PVOID, LPVOID *);
 
 static FN_InitOnceInitialize s_pInitOnceInitialize;
 static FN_InitOnceExecuteOnce s_pInitOnceExecuteOnce;
+
+typedef VOID (WINAPI *FN_InitializeConditionVariable)(PCONDITION_VARIABLE_FOR_XP);
+typedef BOOL (WINAPI *FN_SleepConditionVariableCS)(PCONDITION_VARIABLE_FOR_XP, PCRITICAL_SECTION, DWORD);
+typedef BOOL (WINAPI *FN_SleepConditionVariableSRW)(PCONDITION_VARIABLE_FOR_XP, PSRWLOCK_FOR_XP, DWORD, ULONG);
+typedef VOID (WINAPI *FN_WakeConditionVariable)(PCONDITION_VARIABLE_FOR_XP);
+typedef VOID (WINAPI *FN_WakeAllConditionVariable)(PCONDITION_VARIABLE_FOR_XP);
+
+static FN_InitializeConditionVariable s_pInitializeConditionVariable;
+static FN_SleepConditionVariableCS s_pSleepConditionVariableCS;
+static FN_SleepConditionVariableSRW s_pSleepConditionVariableSRW;
+static FN_WakeConditionVariable s_pWakeConditionVariable;
+static FN_WakeAllConditionVariable s_pWakeAllConditionVariable;
 
 BOOL WINAPI
 IsWow64ProcessForXP(HANDLE hProcess, PBOOL Wow64Process)
@@ -336,6 +353,11 @@ VOID WINAPI ReleaseSRWLockSharedForXP(PSRWLOCK_FOR_XP SRWLock)
 
 VOID WINAPI InitOnceInitializeForXP(PINIT_ONCE_FOR_XP InitOnce)
 {
+    if (s_pInitOnceInitialize && DO_FALLBACK)
+    {
+        (*s_pInitOnceInitialize)(InitOnce);
+        return;
+    }
     InitOnce->Ptr = NULL;
 }
 
@@ -343,9 +365,131 @@ BOOL WINAPI
 InitOnceExecuteOnceForXP(PINIT_ONCE_FOR_XP InitOnce, PINIT_ONCE_FN_FOR_XP InitFn,
                          PVOID Parameter, LPVOID *Context)
 {
+    if (s_pInitOnceExecuteOnce && DO_FALLBACK)
+        return (*s_pInitOnceExecuteOnce)(InitOnce, InitFn, Parameter, Context);
     if (InterlockedExchange((LPLONG)&InitOnce->Ptr, (1 << INIT_ONCE_CTX_RESERVED_BITS) - 1) == 0)
     {
         (*InitFn)(InitOnce, Parameter, Context);
+    }
+}
+
+typedef struct COND_VAR_THREAD
+{
+    struct COND_VAR_THREAD *next;
+    HANDLE hEvent;
+} COND_VAR_THREAD;
+
+typedef struct COND_VAR
+{
+    DWORD dwTlsIndex;
+    COND_VAR_THREAD *threads;
+} COND_VAR;
+
+VOID WINAPI
+InitializeConditionVariableForXP(PCONDITION_VARIABLE_FOR_XP ConditionVariable)
+{
+    DWORD dwTlsIndex;
+    COND_VAR *var;
+    if (s_pInitializeConditionVariable && DO_FALLBACK)
+        return (*s_pInitializeConditionVariable)(ConditionVariable);
+    dwTlsIndex = TlsAlloc();
+    var = LocalAlloc(LPTR, sizeof(COND_VAR));
+    if (!var)
+    {
+        ConditionVariable->Ptr = NULL;
+        return;
+    }
+    var->dwTlsIndex = dwTlsIndex;
+    var->threads = NULL;
+    ConditionVariable->Ptr = var;
+}
+
+static HANDLE CondVar_GetEventHandle(PCONDITION_VARIABLE_FOR_XP ConditionVariable)
+{
+    COND_VAR_THREAD *thread;
+    COND_VAR *var = (COND_VAR *)ConditionVariable->Ptr;
+    if (var == NULL)
+    {
+        InitializeConditionVariableForXP(ConditionVariable);
+        var = (COND_VAR *)ConditionVariable->Ptr;
+        if (var == NULL)
+            return NULL;
+    }
+    thread = TlsGetValue(var->dwTlsIndex);
+    if (!thread)
+    {
+        thread = LocalAlloc(LPTR, sizeof(COND_VAR_THREAD));
+        if (!thread)
+            return NULL;
+        TlsSetValue(var->dwTlsIndex, thread);
+        if (!var->threads)
+        {
+            var->threads = thread;
+        }
+        else
+        {
+            thread->next = var->threads;
+            var->threads = thread;
+        }
+        if (!thread)
+            return NULL;
+    }
+    return (HANDLE)thread->hEvent;
+}
+
+BOOL WINAPI
+SleepConditionVariableCSForXP(PCONDITION_VARIABLE_FOR_XP ConditionVariable,
+                              PCRITICAL_SECTION CriticalSection, DWORD dwMilliseconds)
+{
+    HANDLE hEvent;
+    if (s_pSleepConditionVariableCS && DO_FALLBACK)
+        return (*s_pSleepConditionVariableCS)(ConditionVariable, CriticalSection, dwMilliseconds);
+    hEvent = CondVar_GetEventHandle(ConditionVariable);
+    LeaveCriticalSection(CriticalSection);
+    WaitForSingleObject(hEvent, dwMilliseconds);
+}
+
+BOOL WINAPI
+SleepConditionVariableSRWForXP(PCONDITION_VARIABLE_FOR_XP ConditionVariable,
+                               PSRWLOCK_FOR_XP SRWLock,
+                               DWORD dwMilliseconds, ULONG Flags)
+{
+    HANDLE hEvent;
+    if (s_pSleepConditionVariableSRW && DO_FALLBACK)
+        return (*s_pSleepConditionVariableSRW)(ConditionVariable, SRWLock, dwMilliseconds, Flags);
+    hEvent = CondVar_GetEventHandle(ConditionVariable);
+    if (Flags & CONDITION_VARIABLE_LOCKMODE_SHARED)
+        ReleaseSRWLockSharedForXP(SRWLock);
+    else
+        ReleaseSRWLockExclusiveForXP(SRWLock);
+    WaitForSingleObject(hEvent, dwMilliseconds);
+}
+
+VOID WINAPI WakeConditionVariableForXP(PCONDITION_VARIABLE_FOR_XP ConditionVariable)
+{
+    HANDLE hEvent;
+    if (s_pWakeConditionVariable && DO_FALLBACK)
+        return (*s_pWakeConditionVariable)(ConditionVariable);
+    hEvent = CondVar_GetEventHandle(ConditionVariable);
+    if (hEvent == NULL)
+        return;
+    SetEvent(hEvent);
+}
+
+VOID WINAPI WakeAllConditionVariableForXP(PCONDITION_VARIABLE_FOR_XP ConditionVariable)
+{
+    COND_VAR_THREAD *thread;
+    COND_VAR *var;
+    if (s_pWakeAllConditionVariable && DO_FALLBACK)
+        return (*s_pWakeAllConditionVariable)(ConditionVariable);
+    var = (COND_VAR *)ConditionVariable->Ptr;
+    if (!var)
+        return;
+    thread = var->threads;
+    while (thread)
+    {
+        SetEvent(thread->hEvent);
+        thread = thread->next;
     }
 }
 
@@ -372,6 +516,11 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         s_pReleaseSRWLockShared = (FN_ReleaseSRWLockShared)GetProcAddress(s_hKernel32, "ReleaseSRWLockShared");
         s_pInitOnceInitialize = (FN_InitOnceInitialize)GetProcAddress(s_hKernel32, "InitOnceInitialize");
         s_pInitOnceExecuteOnce = (FN_InitOnceExecuteOnce)GetProcAddress(s_hKernel32, "InitOnceExecuteOnce");
+        s_pInitializeConditionVariable = (FN_InitializeConditionVariable)GetProcAddress(s_hKernel32, "InitializeConditionVariable");
+        s_pSleepConditionVariableCS = (FN_SleepConditionVariableCS)GetProcAddress(s_hKernel32, "SleepConditionVariableCS");
+        s_pSleepConditionVariableSRW = (FN_SleepConditionVariableSRW)GetProcAddress(s_hKernel32, "SleepConditionVariableSRW");
+        s_pWakeConditionVariable = (FN_WakeConditionVariable)GetProcAddress(s_hKernel32, "WakeConditionVariable");
+        s_pWakeAllConditionVariable = (FN_WakeAllConditionVariable)GetProcAddress(s_hKernel32, "WakeAllConditionVariable");
         break;
     case DLL_PROCESS_DETACH:
         break;

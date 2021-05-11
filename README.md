@@ -58,7 +58,8 @@ You can check the IAT by `dumpbin /imports` of Visual Studio Command Prompt.
     - Supported `GetVersion`, `GetVersionExA` and `GetVersionExW`.
 - 2021.XX.YY ver.0.8
     - SRW lock functions are partially supported.
-    - initialize-once functions are partially supported.
+    - Initialize-once functions are partially supported.
+    - Condition variables functions are partially supported.
 
 ## How to build?
 
