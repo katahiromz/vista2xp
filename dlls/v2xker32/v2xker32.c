@@ -438,6 +438,8 @@ static HANDLE CondVar_GetEventHandle(PCONDITION_VARIABLE_FOR_XP ConditionVariabl
             var->threads = thread;
         }
     }
+    if (!thread->hEvent)
+        thread->hEvent = CreateEventW(NULL, TRUE, FALSE, NULL);
     return (HANDLE)thread->hEvent;
 }
 
