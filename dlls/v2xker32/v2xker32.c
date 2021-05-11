@@ -7,9 +7,10 @@
 #include <strsafe.h>
 #include <psapi.h>
 
-#ifndef ARRAYSIZE
-    #define ARRAYSIZE(array) (sizeof(array) / sizeof(array[0]))
-#endif
+typedef struct tagSRWLOCK_FOR_XP
+{
+    PVOID Ptr;
+} SRWLOCK_FOR_XP, *PSRWLOCK_FOR_XP;
 
 static HINSTANCE s_hinstDLL;
 static HINSTANCE s_hKernel32;
@@ -25,6 +26,22 @@ static FN_IsWow64Process s_pIsWow64Process;
 static FN_GetTickCount64 s_pGetTickCount64;
 static FN_QueryFullProcessImageNameA s_pQueryFullProcessImageNameA;
 static FN_QueryFullProcessImageNameW s_pQueryFullProcessImageNameW;
+
+typedef VOID (WINAPI *FN_InitializeSRWLock)(PSRWLOCK_FOR_XP SRWLock);
+typedef VOID (WINAPI *FN_AcquireSRWLockExclusive)(PSRWLOCK_FOR_XP SRWLock);
+typedef VOID (WINAPI *FN_AcquireSRWLockShared)(PSRWLOCK_FOR_XP SRWLock);
+typedef BOOLEAN (WINAPI *FN_TryAcquireSRWLockExclusive)(PSRWLOCK_FOR_XP SRWLock);
+typedef BOOLEAN (WINAPI *FN_TryAcquireSRWLockShared)(PSRWLOCK_FOR_XP SRWLock);
+typedef VOID (WINAPI *FN_ReleaseSRWLockExclusive)(PSRWLOCK_FOR_XP SRWLock);
+typedef VOID (WINAPI *FN_ReleaseSRWLockShared)(PSRWLOCK_FOR_XP SRWLock);
+
+static FN_InitializeSRWLock s_pInitializeSRWLock;
+static FN_AcquireSRWLockExclusive s_pAcquireSRWLockExclusive;
+static FN_AcquireSRWLockShared s_pAcquireSRWLockShared;
+static FN_TryAcquireSRWLockExclusive s_pTryAcquireSRWLockExclusive;
+static FN_TryAcquireSRWLockShared s_pTryAcquireSRWLockShared;
+static FN_ReleaseSRWLockExclusive s_pReleaseSRWLockExclusive;
+static FN_ReleaseSRWLockShared s_pReleaseSRWLockShared;
 
 BOOL WINAPI
 IsWow64ProcessForXP(HANDLE hProcess, PBOOL Wow64Process)
@@ -65,7 +82,7 @@ static BOOL Win32PathFromNTPathA(CHAR *pszDest, size_t cchDestMax, LPCSTR pszSrc
     {
         szDrive[0] = chDrive;
         szNTPath[0] = 0;
-        if (QueryDosDeviceA(szDrive, szNTPath, ARRAYSIZE(szNTPath)))
+        if (QueryDosDeviceA(szDrive, szNTPath, _countof(szNTPath)))
         {
             cchLen = lstrlenA(szNTPath);
             if (memcmp(szNTPath, pszSrc, cchLen * sizeof(CHAR)) == 0)
@@ -92,7 +109,7 @@ static BOOL Win32PathFromNTPathW(WCHAR *pszDest, size_t cchDestMax, LPCWSTR pszS
     {
         szDrive[0] = chDrive;
         szNTPath[0] = 0;
-        if (QueryDosDeviceW(szDrive, szNTPath, ARRAYSIZE(szNTPath)))
+        if (QueryDosDeviceW(szDrive, szNTPath, _countof(szNTPath)))
         {
             cchLen = lstrlenW(szNTPath);
             if (memcmp(szNTPath, pszSrc, cchLen * sizeof(WCHAR)) == 0)
@@ -131,7 +148,7 @@ QueryFullProcessImageNameAForXP(
     }
     else
     {
-        ret = GetProcessImageFileNameA(hProcess, szPath, ARRAYSIZE(szPath));
+        ret = GetProcessImageFileNameA(hProcess, szPath, _countof(szPath));
         Win32PathFromNTPathA(lpExeName, *lpdwSize, szPath);
     }
 
@@ -164,7 +181,7 @@ QueryFullProcessImageNameWForXP(
     }
     else
     {
-        ret = GetProcessImageFileNameW(hProcess, szPath, ARRAYSIZE(szPath));
+        ret = GetProcessImageFileNameW(hProcess, szPath, _countof(szPath));
         Win32PathFromNTPathW(lpExeName, *lpdwSize, szPath);
     }
 
@@ -237,6 +254,73 @@ GetVersionExWHacked(LPOSVERSIONINFOW osver)
     return TRUE;
 }
 
+VOID WINAPI InitializeSRWLockForXP(PSRWLOCK_FOR_XP SRWLock)
+{
+    if (s_pInitializeSRWLock && DO_FALLBACK)
+        return (*s_pInitializeSRWLock)(SRWLock);
+    SRWLock->Ptr = LocalAlloc(LPTR, sizeof(CRITICAL_SECTION));
+}
+VOID WINAPI AcquireSRWLockExclusiveForXP(PSRWLOCK_FOR_XP SRWLock)
+{
+    if (s_pAcquireSRWLockExclusive && DO_FALLBACK)
+    {
+        (*s_pAcquireSRWLockExclusive)(SRWLock);
+        return;
+    }
+    if (!SRWLock->Ptr)
+        InitializeSRWLockForXP(SRWLock);
+    EnterCriticalSection((CRITICAL_SECTION*)SRWLock->Ptr);
+}
+VOID WINAPI AcquireSRWLockSharedForXP(PSRWLOCK_FOR_XP SRWLock)
+{
+    if (s_pAcquireSRWLockShared && DO_FALLBACK)
+    {
+        (*s_pAcquireSRWLockShared)(SRWLock);
+        return;
+    }
+    if (!SRWLock->Ptr)
+        InitializeSRWLockForXP(SRWLock);
+    EnterCriticalSection((CRITICAL_SECTION*)SRWLock->Ptr);
+}
+BOOLEAN WINAPI TryAcquireSRWLockExclusiveForXP(PSRWLOCK_FOR_XP SRWLock)
+{
+    if (s_pTryAcquireSRWLockExclusive && DO_FALLBACK)
+        return (*s_pTryAcquireSRWLockExclusive)(SRWLock);
+    if (!SRWLock->Ptr)
+        InitializeSRWLockForXP(SRWLock);
+    return TryEnterCriticalSection((CRITICAL_SECTION*)SRWLock->Ptr);
+}
+BOOLEAN WINAPI TryAcquireSRWLockSharedForXP(PSRWLOCK_FOR_XP SRWLock)
+{
+    if (s_pTryAcquireSRWLockShared && DO_FALLBACK)
+        return (*s_pTryAcquireSRWLockShared)(SRWLock);
+    if (!SRWLock->Ptr)
+        InitializeSRWLockForXP(SRWLock);
+    return TryEnterCriticalSection((CRITICAL_SECTION*)SRWLock->Ptr);
+}
+VOID WINAPI ReleaseSRWLockExclusiveForXP(PSRWLOCK_FOR_XP SRWLock)
+{
+    if (s_pReleaseSRWLockExclusive && DO_FALLBACK)
+    {
+        (*s_pReleaseSRWLockExclusive)(SRWLock);
+        return;
+    }
+    if (!SRWLock->Ptr)
+        return;
+    LeaveCriticalSection((CRITICAL_SECTION*)SRWLock->Ptr);
+}
+VOID WINAPI ReleaseSRWLockSharedForXP(PSRWLOCK_FOR_XP SRWLock)
+{
+    if (s_pReleaseSRWLockShared && DO_FALLBACK)
+    {
+        (*s_pReleaseSRWLockShared)(SRWLock);
+        return;
+    }
+    if (!SRWLock->Ptr)
+        return;
+    LeaveCriticalSection((CRITICAL_SECTION*)SRWLock->Ptr);
+}
+
 BOOL WINAPI
 DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
@@ -251,6 +335,13 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         s_pGetTickCount64 = (FN_GetTickCount64)GetProcAddress(s_hKernel32, "GetTickCount64");
         s_pQueryFullProcessImageNameA = (FN_QueryFullProcessImageNameA)GetProcAddress(s_hKernel32, "QueryFullProcessImageNameA");
         s_pQueryFullProcessImageNameW = (FN_QueryFullProcessImageNameW)GetProcAddress(s_hKernel32, "QueryFullProcessImageNameW");
+        s_pInitializeSRWLock = (FN_InitializeSRWLock)GetProcAddress(s_hKernel32, "InitializeSRWLock");
+        s_pAcquireSRWLockExclusive = (FN_AcquireSRWLockExclusive)GetProcAddress(s_hKernel32, "AcquireSRWLockExclusive");
+        s_pAcquireSRWLockShared = (FN_AcquireSRWLockShared)GetProcAddress(s_hKernel32, "AcquireSRWLockShared");
+        s_pTryAcquireSRWLockExclusive = (FN_TryAcquireSRWLockExclusive)GetProcAddress(s_hKernel32, "TryAcquireSRWLockExclusive");
+        s_pTryAcquireSRWLockShared = (FN_TryAcquireSRWLockShared)GetProcAddress(s_hKernel32, "TryAcquireSRWLockShared");
+        s_pReleaseSRWLockExclusive = (FN_ReleaseSRWLockExclusive)GetProcAddress(s_hKernel32, "ReleaseSRWLockExclusive");
+        s_pReleaseSRWLockShared = (FN_ReleaseSRWLockShared)GetProcAddress(s_hKernel32, "ReleaseSRWLockShared");
         break;
     case DLL_PROCESS_DETACH:
         break;

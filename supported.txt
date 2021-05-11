@@ -97,6 +97,13 @@ kernel32.K32GetProcessMemoryInfo
 kernel32.K32GetWsChanges
 kernel32.K32InitializeProcessForWsWatch
 kernel32.K32QueryWorkingSet
+kernel32.InitializeSRWLock
+kernel32.AcquireSRWLockExclusive
+kernel32.AcquireSRWLockShared
+kernel32.TryAcquireSRWLockExclusive
+kernel32.TryAcquireSRWLockShared
+kernel32.ReleaseSRWLockExclusive
+kernel32.ReleaseSRWLockShared
 comctl32.TaskDialog
 comctl32.TaskDialogIndirect
 user32.ChangeWindowMessageFilter

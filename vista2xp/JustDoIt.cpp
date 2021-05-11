@@ -42,7 +42,14 @@ bool do_kernel32(codereverse::ExeImage& image, size_t i, char *name)
                 lstrcmpA(symbol.pszName, "GetTickCount64") == 0 ||
                 lstrcmpA(symbol.pszName, "QueryFullProcessImageNameA") == 0 ||
                 lstrcmpA(symbol.pszName, "QueryFullProcessImageNameW") == 0 ||
-                lstrcmpA(symbol.pszName, "IsWow64Process") == 0)
+                lstrcmpA(symbol.pszName, "IsWow64Process") == 0 ||
+                lstrcmpA(symbol.pszName, "InitializeSRWLock") == 0 ||
+                lstrcmpA(symbol.pszName, "AcquireSRWLockExclusive") == 0 ||
+                lstrcmpA(symbol.pszName, "AcquireSRWLockShared") == 0 ||
+                lstrcmpA(symbol.pszName, "TryAcquireSRWLockExclusive") == 0 ||
+                lstrcmpA(symbol.pszName, "TryAcquireSRWLockShared") == 0 ||
+                lstrcmpA(symbol.pszName, "ReleaseSRWLockExclusive") == 0 ||
+                lstrcmpA(symbol.pszName, "ReleaseSRWLockShared") == 0)
             {
                 if (lstrcmpiA(name, "kernel32") == 0)
                     StringCbCopyA(const_cast<char *>(name), sizeof("v2xker32"), "v2xker32");

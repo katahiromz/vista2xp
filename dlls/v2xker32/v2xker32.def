@@ -10,6 +10,13 @@ EXPORTS
     GetVersion = GetVersionHacked
     GetVersionExA = GetVersionExAHacked
     GetVersionExW = GetVersionExWHacked
+    InitializeSRWLock = InitializeSRWLockForXP
+    AcquireSRWLockExclusive = AcquireSRWLockExclusiveForXP
+    AcquireSRWLockShared = AcquireSRWLockSharedForXP
+    TryAcquireSRWLockExclusive = TryAcquireSRWLockExclusiveForXP
+    TryAcquireSRWLockShared = TryAcquireSRWLockSharedForXP
+    ReleaseSRWLockExclusive = ReleaseSRWLockExclusiveForXP
+    ReleaseSRWLockShared = ReleaseSRWLockSharedForXP
 
     ; kernel32 --> advapi32
     CreateProcessAsUserA = advapi32.CreateProcessAsUserA
