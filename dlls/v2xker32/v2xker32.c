@@ -290,6 +290,7 @@ VOID WINAPI InitializeSRWLockForXP(PSRWLOCK_FOR_XP SRWLock)
         return (*s_pInitializeSRWLock)(SRWLock);
     SRWLock->Ptr = LocalAlloc(LPTR, sizeof(CRITICAL_SECTION));
 }
+
 VOID WINAPI AcquireSRWLockExclusiveForXP(PSRWLOCK_FOR_XP SRWLock)
 {
     if (s_pAcquireSRWLockExclusive && DO_FALLBACK)
@@ -301,6 +302,7 @@ VOID WINAPI AcquireSRWLockExclusiveForXP(PSRWLOCK_FOR_XP SRWLock)
         InitializeSRWLockForXP(SRWLock);
     EnterCriticalSection((CRITICAL_SECTION*)SRWLock->Ptr);
 }
+
 VOID WINAPI AcquireSRWLockSharedForXP(PSRWLOCK_FOR_XP SRWLock)
 {
     if (s_pAcquireSRWLockShared && DO_FALLBACK)
@@ -312,6 +314,7 @@ VOID WINAPI AcquireSRWLockSharedForXP(PSRWLOCK_FOR_XP SRWLock)
         InitializeSRWLockForXP(SRWLock);
     EnterCriticalSection((CRITICAL_SECTION*)SRWLock->Ptr);
 }
+
 BOOLEAN WINAPI TryAcquireSRWLockExclusiveForXP(PSRWLOCK_FOR_XP SRWLock)
 {
     if (s_pTryAcquireSRWLockExclusive && DO_FALLBACK)
@@ -320,6 +323,7 @@ BOOLEAN WINAPI TryAcquireSRWLockExclusiveForXP(PSRWLOCK_FOR_XP SRWLock)
         InitializeSRWLockForXP(SRWLock);
     return TryEnterCriticalSection((CRITICAL_SECTION*)SRWLock->Ptr);
 }
+
 BOOLEAN WINAPI TryAcquireSRWLockSharedForXP(PSRWLOCK_FOR_XP SRWLock)
 {
     if (s_pTryAcquireSRWLockShared && DO_FALLBACK)
@@ -328,6 +332,7 @@ BOOLEAN WINAPI TryAcquireSRWLockSharedForXP(PSRWLOCK_FOR_XP SRWLock)
         InitializeSRWLockForXP(SRWLock);
     return TryEnterCriticalSection((CRITICAL_SECTION*)SRWLock->Ptr);
 }
+
 VOID WINAPI ReleaseSRWLockExclusiveForXP(PSRWLOCK_FOR_XP SRWLock)
 {
     if (s_pReleaseSRWLockExclusive && DO_FALLBACK)
@@ -339,6 +344,7 @@ VOID WINAPI ReleaseSRWLockExclusiveForXP(PSRWLOCK_FOR_XP SRWLock)
         return;
     LeaveCriticalSection((CRITICAL_SECTION*)SRWLock->Ptr);
 }
+
 VOID WINAPI ReleaseSRWLockSharedForXP(PSRWLOCK_FOR_XP SRWLock)
 {
     if (s_pReleaseSRWLockShared && DO_FALLBACK)
@@ -408,7 +414,7 @@ static HANDLE CondVar_GetEventHandle(PCONDITION_VARIABLE_FOR_XP ConditionVariabl
 {
     COND_VAR_THREAD *thread;
     COND_VAR *var = (COND_VAR *)ConditionVariable->Ptr;
-    if (var == NULL)
+    if (!var)
     {
         InitializeConditionVariableForXP(ConditionVariable);
         var = (COND_VAR *)ConditionVariable->Ptr;
@@ -431,8 +437,6 @@ static HANDLE CondVar_GetEventHandle(PCONDITION_VARIABLE_FOR_XP ConditionVariabl
             thread->next = var->threads;
             var->threads = thread;
         }
-        if (!thread)
-            return NULL;
     }
     return (HANDLE)thread->hEvent;
 }
@@ -445,8 +449,8 @@ SleepConditionVariableCSForXP(PCONDITION_VARIABLE_FOR_XP ConditionVariable,
     if (s_pSleepConditionVariableCS && DO_FALLBACK)
         return (*s_pSleepConditionVariableCS)(ConditionVariable, CriticalSection, dwMilliseconds);
     hEvent = CondVar_GetEventHandle(ConditionVariable);
-    LeaveCriticalSection(CriticalSection);
     WaitForSingleObject(hEvent, dwMilliseconds);
+    LeaveCriticalSection(CriticalSection);
 }
 
 BOOL WINAPI
@@ -458,11 +462,11 @@ SleepConditionVariableSRWForXP(PCONDITION_VARIABLE_FOR_XP ConditionVariable,
     if (s_pSleepConditionVariableSRW && DO_FALLBACK)
         return (*s_pSleepConditionVariableSRW)(ConditionVariable, SRWLock, dwMilliseconds, Flags);
     hEvent = CondVar_GetEventHandle(ConditionVariable);
+    WaitForSingleObject(hEvent, dwMilliseconds);
     if (Flags & CONDITION_VARIABLE_LOCKMODE_SHARED)
         ReleaseSRWLockSharedForXP(SRWLock);
     else
         ReleaseSRWLockExclusiveForXP(SRWLock);
-    WaitForSingleObject(hEvent, dwMilliseconds);
 }
 
 VOID WINAPI WakeConditionVariableForXP(PCONDITION_VARIABLE_FOR_XP ConditionVariable)
