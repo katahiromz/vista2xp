@@ -56,6 +56,8 @@ You can check the IAT by dumpbin /imports of Visual Studio Command Prompt.
 - 2019.09.15 ver.0.7
     - Modify optional header's version info.
     - Supported GetVersion, GetVersionExA and GetVersionExW.
+- 2021.XX.YY ver.0.8
+    - SRW lock functions are supported.
 
 ## WARNING!
 

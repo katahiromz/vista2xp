@@ -32,3 +32,5 @@ x64
 *.skrold
 vista2xp-*
 Testing
+.ninja*
+*.ninja
