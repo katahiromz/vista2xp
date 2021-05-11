@@ -63,7 +63,7 @@ You can check the IAT by `dumpbin /imports` of Visual Studio Command Prompt.
 
 ## How to build?
 
-Use TDM-GCC-32 5.1.0, and use cmake. Visual Studio can't build.
+Use ReactOS Build Environment, and use cmake. Visual Studio can't build.
 
 ## WARNING!
 
