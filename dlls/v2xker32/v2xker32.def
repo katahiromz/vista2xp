@@ -24,6 +24,8 @@ EXPORTS
     SleepConditionVariableSRW = SleepConditionVariableSRWForXP
     WakeConditionVariable = WakeConditionVariableForXP
     WakeAllConditionVariable = WakeAllConditionVariableForXP
+    GetThreadUILanguage = GetThreadUILanguageForXP
+    SetThreadUILanguage = SetThreadUILanguageForXP
 
     ; kernel32 --> advapi32
     CreateProcessAsUserA = advapi32.CreateProcessAsUserA

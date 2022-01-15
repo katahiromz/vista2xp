@@ -73,12 +73,43 @@ static FN_SleepConditionVariableSRW s_pSleepConditionVariableSRW;
 static FN_WakeConditionVariable s_pWakeConditionVariable;
 static FN_WakeAllConditionVariable s_pWakeAllConditionVariable;
 
+typedef LANGID (WINAPI *FN_GetThreadUILanguage)(VOID);
+typedef LANGID (WINAPI *FN_SetThreadUILanguage)(LANGID);
+
+static FN_GetThreadUILanguage s_pGetThreadUILanguage;
+static FN_SetThreadUILanguage s_pSetThreadUILanguage;
+
 BOOL WINAPI
 IsWow64ProcessForXP(HANDLE hProcess, PBOOL Wow64Process)
 {
     if (s_pIsWow64Process && DO_FALLBACK)
         return (*s_pIsWow64Process)(hProcess, Wow64Process);
     return FALSE;
+}
+
+BOOL IsWindowsVistaOrLater(VOID)
+{
+    OSVERSIONINFOW osver = { sizeof(osver) };
+    return (GetVersionExW(&osver) && osver.dwMajorVersion >= 6);
+}
+
+LANGID GetThreadUILanguageForXP()
+{
+    if (IsWindowsVistaOrLater() && s_pGetThreadUILanguage)
+        return (*s_pGetThreadUILanguage)();
+
+    return LANGIDFROMLCID(GetThreadLocale());
+}
+
+LANGID SetThreadUILanguageForXP(LANGID LangID)
+{
+    if (IsWindowsVistaOrLater() && s_pSetThreadUILanguage)
+        return (*s_pSetThreadUILanguage)(LangID);
+
+    if (SetThreadLocale(MAKELCID(LangID, SORT_DEFAULT)))
+        return LangID;
+
+    return 0;
 }
 
 ULONGLONG WINAPI GetTickCount64ForXP(void)
@@ -527,6 +558,8 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         s_pSleepConditionVariableSRW = (FN_SleepConditionVariableSRW)GetProcAddress(s_hKernel32, "SleepConditionVariableSRW");
         s_pWakeConditionVariable = (FN_WakeConditionVariable)GetProcAddress(s_hKernel32, "WakeConditionVariable");
         s_pWakeAllConditionVariable = (FN_WakeAllConditionVariable)GetProcAddress(s_hKernel32, "WakeAllConditionVariable");
+        s_pGetThreadUILanguage = (FN_GetThreadUILanguage)GetProcAddress(s_hKernel32, "GetThreadUILanguage");
+        s_pSetThreadUILanguage = (FN_SetThreadUILanguage)GetProcAddress(s_hKernel32, "SetThreadUILanguage");
         break;
     case DLL_PROCESS_DETACH:
         break;

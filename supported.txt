@@ -111,6 +111,8 @@ kernel32.SleepConditionVariableCS
 kernel32.SleepConditionVariableSRW
 kernel32.WakeConditionVariable
 kernel32.WakeAllConditionVariable
+kernel32.GetThreadUILanguage
+kernel32.SetThreadUILanguage
 comctl32.TaskDialog
 comctl32.TaskDialogIndirect
 user32.ChangeWindowMessageFilter
