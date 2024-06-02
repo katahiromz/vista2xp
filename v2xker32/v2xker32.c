@@ -79,16 +79,8 @@ typedef LANGID (WINAPI *FN_SetThreadUILanguage)(LANGID);
 static FN_GetThreadUILanguage s_pGetThreadUILanguage;
 static FN_SetThreadUILanguage s_pSetThreadUILanguage;
 
-typedef struct {
-    DWORD dwNLSVersionInfoSize;
-    DWORD dwNLSVersion;
-    DWORD dwDefinedVersion;
-    DWORD dwEffectiveId;
-    GUID  guidCustomVersion;
-} NLSVERSIONINFOEX, *LPNLSVERSIONINFOEX;
-
 typedef INT (WINAPI *FN_CompareStringEx)(LPCWSTR, DWORD, LPCWCH, INT, LPCWCH, INT, LPNLSVERSIONINFO, LPVOID, LPARAM);
-static FN_CompareStringEx *s_pCompareStringEx;
+static FN_CompareStringEx s_pCompareStringEx;
 
 BOOL WINAPI
 IsWow64ProcessForXP(HANDLE hProcess, PBOOL Wow64Process)
