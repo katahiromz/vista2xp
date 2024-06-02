@@ -49,7 +49,7 @@ RegCopyTreeWForXP(IN HKEY hKeySrc,
     return ERROR_CALL_NOT_IMPLEMENTED;
 }
 
-static LONG regDeleteTreeA(HKEY hKey, LPCSTR lpSubKey)
+static LONG DoRegDeleteTreeA(HKEY hKey, LPCSTR lpSubKey)
 {
     LONG ret;
     DWORD cchSubKeyMax, cchValueMax;
@@ -88,7 +88,7 @@ static LONG regDeleteTreeA(HKEY hKey, LPCSTR lpSubKey)
         if (RegEnumKeyExA(hSubKey, 0, pszName, &cch, NULL, NULL, NULL, NULL))
             break;
 
-        ret = regDeleteTreeA(hSubKey, pszName);
+        ret = DoRegDeleteTreeA(hSubKey, pszName);
         if (ret)
             goto cleanup;
     }
@@ -115,7 +115,7 @@ cleanup:
     return ret;
 }
 
-static LONG regDeleteTreeW(HKEY hKey, LPCWSTR lpSubKey)
+static LONG DoRegDeleteTreeW(HKEY hKey, LPCWSTR lpSubKey)
 {
     LONG ret;
     DWORD cchSubKeyMax, cchValueMax;
@@ -154,7 +154,7 @@ static LONG regDeleteTreeW(HKEY hKey, LPCWSTR lpSubKey)
         if (RegEnumKeyExW(hSubKey, 0, pszName, &cch, NULL, NULL, NULL, NULL))
             break;
 
-        ret = regDeleteTreeW(hSubKey, pszName);
+        ret = DoRegDeleteTreeW(hSubKey, pszName);
         if (ret)
             goto cleanup;
     }
@@ -188,7 +188,7 @@ RegDeleteTreeAForXP(IN HKEY hKey,
     if (s_pRegDeleteTreeA)
         return s_pRegDeleteTreeA(hKey, lpSubKey);
 
-    return regDeleteTreeA(hKey, lpSubKey);
+    return DoRegDeleteTreeA(hKey, lpSubKey);
 }
 
 LONG WINAPI
@@ -198,7 +198,7 @@ RegDeleteTreeWForXP(IN HKEY hKey,
     if (s_pRegDeleteTreeW)
         return s_pRegDeleteTreeW(hKey, lpSubKey);
 
-    return regDeleteTreeW(hKey, lpSubKey);
+    return DoRegDeleteTreeW(hKey, lpSubKey);
 }
 
 LONG WINAPI

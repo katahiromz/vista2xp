@@ -79,6 +79,17 @@ typedef LANGID (WINAPI *FN_SetThreadUILanguage)(LANGID);
 static FN_GetThreadUILanguage s_pGetThreadUILanguage;
 static FN_SetThreadUILanguage s_pSetThreadUILanguage;
 
+typedef struct {
+    DWORD dwNLSVersionInfoSize;
+    DWORD dwNLSVersion;
+    DWORD dwDefinedVersion;
+    DWORD dwEffectiveId;
+    GUID  guidCustomVersion;
+} NLSVERSIONINFOEX, *LPNLSVERSIONINFOEX;
+
+typedef INT (WINAPI *FN_CompareStringEx)(LPCWSTR, DWORD, LPCWCH, INT, LPCWCH, INT, LPNLSVERSIONINFO, LPVOID, LPARAM);
+static FN_CompareStringEx *s_pCompareStringEx;
+
 BOOL WINAPI
 IsWow64ProcessForXP(HANDLE hProcess, PBOOL Wow64Process)
 {
@@ -530,6 +541,44 @@ VOID WINAPI WakeAllConditionVariableForXP(PCONDITION_VARIABLE_FOR_XP ConditionVa
     }
 }
 
+INT WINAPI
+CompareStringExForXP(
+    LPCWSTR           lpLocaleName,
+    DWORD             dwCmpFlags,
+    LPCWCH            lpString1,
+    INT               cchCount1,
+    LPCWCH            lpString2,
+    INT               cchCount2,
+    LPNLSVERSIONINFO  lpVersionInformation,
+    LPVOID            lpReserved,
+    LPARAM            lParam)
+{
+    if (s_pCompareStringEx && DO_FALLBACK)
+        return s_pCompareStringEx(lpLocaleName,
+                                  dwCmpFlags,
+                                  lpString1,
+                                  cchCount1,
+                                  lpString2,
+                                  cchCount2,
+                                  lpVersionInformation,
+                                  lpReserved,
+                                  lParam);
+
+    dwCmpFlags &= (NORM_IGNORECASE |
+                   NORM_IGNOREKANATYPE |
+                   NORM_IGNORENONSPACE |
+                   NORM_IGNORESYMBOLS |
+                   NORM_IGNOREWIDTH |
+                   SORT_STRINGSORT);
+
+    return CompareStringW(LOCALE_USER_DEFAULT,
+                          dwCmpFlags,
+                          lpString1,
+                          cchCount1,
+                          lpString2,
+                          cchCount2);
+}
+
 BOOL WINAPI
 DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
@@ -560,6 +609,7 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         s_pWakeAllConditionVariable = (FN_WakeAllConditionVariable)GetProcAddress(s_hKernel32, "WakeAllConditionVariable");
         s_pGetThreadUILanguage = (FN_GetThreadUILanguage)GetProcAddress(s_hKernel32, "GetThreadUILanguage");
         s_pSetThreadUILanguage = (FN_SetThreadUILanguage)GetProcAddress(s_hKernel32, "SetThreadUILanguage");
+        s_pCompareStringEx = (FN_CompareStringEx)GetProcAddress(s_hKernel32, "CompareStringEx");
         break;
     case DLL_PROCESS_DETACH:
         break;

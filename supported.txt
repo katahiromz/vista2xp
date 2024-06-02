@@ -140,3 +140,4 @@ advapi32.RegDeleteTreeW
 advapi32.RegSetKeyValueW
 advapi32.RegLoadMUIStringW
 advapi32.RegLoadMUIStringA
+kernel32.CompareStringEx
