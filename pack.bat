@@ -10,3 +10,4 @@ copy build\v2xu32.dll %DIST%
 copy build\v2xol.dll %DIST%
 copy build\v2xsh32.dll %DIST%
 copy build\v2xcrt.dll %DIST%
+copy build\v2xadv32.dll %DIST%
