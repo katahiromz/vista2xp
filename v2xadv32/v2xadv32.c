@@ -43,7 +43,7 @@ RegCopyTreeWForXP(IN HKEY hKeySrc,
                   IN LPCWSTR lpSubKey  OPTIONAL,
                   IN HKEY hKeyDest)
 {
-    if (s_pRegCopyTreeW)
+    if (s_pRegCopyTreeW && DO_FALLBACK)
         return s_pRegCopyTreeW(hKeySrc, lpSubKey, hKeyDest);
 
     return ERROR_CALL_NOT_IMPLEMENTED;
@@ -185,7 +185,7 @@ LONG WINAPI
 RegDeleteTreeAForXP(IN HKEY hKey,
                     IN LPCSTR lpSubKey  OPTIONAL)
 {
-    if (s_pRegDeleteTreeA)
+    if (s_pRegDeleteTreeA && DO_FALLBACK)
         return s_pRegDeleteTreeA(hKey, lpSubKey);
 
     return DoRegDeleteTreeA(hKey, lpSubKey);
@@ -195,7 +195,7 @@ LONG WINAPI
 RegDeleteTreeWForXP(IN HKEY hKey,
                     IN LPCWSTR lpSubKey  OPTIONAL)
 {
-    if (s_pRegDeleteTreeW)
+    if (s_pRegDeleteTreeW && DO_FALLBACK)
         return s_pRegDeleteTreeW(hKey, lpSubKey);
 
     return DoRegDeleteTreeW(hKey, lpSubKey);
@@ -212,7 +212,7 @@ RegSetKeyValueWForXP(IN HKEY hKey,
     HKEY hSubKey;
     LONG error;
 
-    if (s_pRegSetKeyValueW)
+    if (s_pRegSetKeyValueW && DO_FALLBACK)
         return s_pRegSetKeyValueW(hKey, lpSubKey, lpValueName, dwType, lpData, cbData);
 
     error = RegOpenKeyExW(hKey, lpSubKey, 0, KEY_WRITE, &hSubKey);
@@ -239,7 +239,7 @@ RegLoadMUIStringWForXP(
     LPWSTR pwszTempBuffer = NULL, pwszExpandedBuffer = NULL;
     LONG result;
 
-    if (s_pRegLoadMUIStringW)
+    if (s_pRegLoadMUIStringW && DO_FALLBACK)
         return s_pRegLoadMUIStringW(hKey, pszValue, pszOutBuf, cbOutBuf, pcbData, Flags, pszDirectory);
 
     /* Parameter sanity checks. */
@@ -336,7 +336,7 @@ RegLoadMUIStringAForXP(
     LONG result;
     LPWSTR pszValueW = NULL, pszBaseDirW = NULL;
 
-    if (s_pRegLoadMUIStringA)
+    if (s_pRegLoadMUIStringA && DO_FALLBACK)
         return s_pRegLoadMUIStringA(hKey, pszValue, pszOutBuf, cbOutBuf, pcbData, Flags, pszDirectory);
 
     if (!(pwszBuffer = HeapAlloc(GetProcessHeap(), 0, cbData)))
