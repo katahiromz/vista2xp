@@ -21,6 +21,7 @@
 - Vista以降の ole32 関数があれば、ole32.dll のインポートは v2xol.dll に変わります。
 - Vista以降の shell32 関数があれば、shell32.dll のインポートは v2xsh32.dll に変わります。
 - Vista以降の msvcrt 関数があれば、msvcrt.dll のインポートは v2xcrt.dll に変わります。
+- Vista以降の advapi32 関数があれば、advapi32.dll のインポートは v2xadv32.dll に変わります。
 
 Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェックできます。
 
@@ -65,7 +66,8 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
 - 2022.01.23 ver.0.8.1
     - GetThreadUILanguage/SetThreadUILanguageをサポート。
     - v2xctl32 序数エクスポートを改良。
-- 2024.XX.YY ver.0.8.2
+- 2024.06.02 ver.0.8.2
+    - v2xadv32 (advapi32) を追加。
 
 ## 警告
 

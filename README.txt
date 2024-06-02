@@ -19,6 +19,7 @@ It modifies the IAT (Import Address Table) of EXE/DLL files.
 - If any Vista+ ole32 functions, importing of ole32.dll will be altered to v2xol.dll.
 - If any Vista+ shell32 functions, importing of shell32.dll will be altered to v2xsh32.dll.
 - If any Vista+ msvcrt functions, importing of msvcrt.dll will be altered to v2xcrt.dll.
+- If any Vista+ advapi32 functions, importing of advapi32.dll will be altered to v2xadv32.dll.
 
 You can check the IAT by dumpbin /imports of Visual Studio Command Prompt.
 
@@ -63,7 +64,8 @@ You can check the IAT by dumpbin /imports of Visual Studio Command Prompt.
 - 2022.01.23 ver.0.8.1
     - Supported GetThreadUILanguage/SetThreadUILanguage.
     - Improved v2xctl32 ordinal exports.
-- 2024.XX.YY ver.0.8.2
+- 2024.06.02 ver.0.8.2
+    - Added v2xadv32 (advapi32).
 
 ## WARNING!
 

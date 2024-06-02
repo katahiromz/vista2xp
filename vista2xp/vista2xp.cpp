@@ -17,14 +17,10 @@
 #include <assert.h>
 #include "resource.h"
 
-#ifndef ARRAYSIZE
-    #define ARRAYSIZE(array) (sizeof(array) / sizeof(array[0]))
-#endif
-
 HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile);
 
 static HINSTANCE s_hInst;
-static TCHAR s_szDLLs[4][MAX_PATH];
+static TCHAR s_szDLLs[7][MAX_PATH];
 
 static const LPCTSTR s_aapszNames[][3] =
 {
@@ -34,6 +30,7 @@ static const LPCTSTR s_aapszNames[][3] =
     { TEXT("v2xol.dll"), TEXT("..\\v2xol.dll"), TEXT("..\\..\\v2xol.dll") },
     { TEXT("v2xsh32.dll"), TEXT("..\\v2xsh32.dll"), TEXT("..\\..\\v2xsh32.dll") },
     { TEXT("v2xcrt.dll"), TEXT("..\\v2xcrt.dll"), TEXT("..\\..\\v2xcrt.dll") },
+    { TEXT("v2xadv32.dll"), TEXT("..\\v2xadv32.dll"), TEXT("..\\..\\v2xadv32.dll") },
 };
 
 static const INT s_aids[] =
@@ -44,17 +41,26 @@ static const INT s_aids[] =
     IDS_LOADV2XOL,
     IDS_LOADV2XSH32,
     IDS_LOADV2XCRT,
+    IDS_LOADV2XADV32,
 };
+
+C_ASSERT(_countof(s_szDLLs) == _countof(s_aapszNames));
+C_ASSERT(_countof(s_szDLLs) == _countof(s_aids));
+
+INT GetDllCount(VOID)
+{
+    return _countof(s_szDLLs);
+}
 
 LPTSTR GetDllSource(INT i)
 {
-    assert(i < 6);
+    assert(i < _countof(s_szDLLs));
     return s_szDLLs[i];
 }
 
 LPCTSTR GetDllNames(INT i)
 {
-    assert(i < 6);
+    assert(i < _countof(s_aapszNames));
     return s_aapszNames[i][0];
 }
 
@@ -153,7 +159,7 @@ void AddFolder(HWND hwnd, LPCTSTR pszDir)
 
             StringCbCopy(szPath, sizeof(szPath), pszDir);
             PathAppend(szPath, find.cFileName);
-            GetFullPathName(szPath, ARRAYSIZE(szFullPath), szFullPath, NULL);
+            GetFullPathName(szPath, _countof(szFullPath), szFullPath, NULL);
 
             if (find.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
@@ -230,7 +236,7 @@ void OnDropFiles(HWND hwnd, HDROP hdrop)
 
     for (i = 0; i < nCount; ++i)
     {
-        DragQueryFile(hdrop, i, szPath, ARRAYSIZE(szPath));
+        DragQueryFile(hdrop, i, szPath, _countof(szPath));
 
         if (GetPathOfShortcutDx(hwnd, szPath, szTarget))
         {
@@ -256,14 +262,14 @@ void OnPsh1(HWND hwnd)
     OPENFILENAME ofn;
     TCHAR szText[128], szPath[MAX_PATH] = TEXT("");
 
-    LoadString(NULL, IDS_FILETITLE, szText, ARRAYSIZE(szText));
+    LoadString(NULL, IDS_FILETITLE, szText, _countof(szText));
 
     ZeroMemory(&ofn, sizeof(ofn));
     ofn.lStructSize = OPENFILENAME_SIZE_VERSION_400;
     ofn.hwndOwner = hwnd;
     ofn.lpstrFilter = TEXT("Executable Files (*.exe;*.dll)\0*.exe;*.dll\0All Files (*.*)\0*.*\0");
     ofn.lpstrFile = szPath;
-    ofn.nMaxFile = ARRAYSIZE(szPath);
+    ofn.nMaxFile = _countof(szPath);
     ofn.lpstrTitle = szText;
     ofn.Flags = OFN_EXPLORER | OFN_ENABLESIZING | OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST |
                 OFN_HIDEREADONLY;
@@ -281,7 +287,7 @@ void OnPsh2(HWND hwnd)
     BROWSEINFO bi;
     LPITEMIDLIST pidl;
 
-    LoadString(NULL, IDS_FOLDERTITLE, szText, ARRAYSIZE(szText));
+    LoadString(NULL, IDS_FOLDERTITLE, szText, _countof(szText));
 
     ZeroMemory(&bi, sizeof(bi));
     bi.hwndOwner = hwnd;
@@ -325,7 +331,7 @@ void OnOK(HWND hwnd)
     nCount = (INT)SendDlgItemMessage(hwnd, lst1, LB_GETCOUNT, 0, 0);
     if (nCount == LB_ERR || nCount == 0)
     {
-        LoadString(NULL, IDS_NOITEMS, szText, ARRAYSIZE(szText));
+        LoadString(NULL, IDS_NOITEMS, szText, _countof(szText));
         MessageBox(hwnd, szText, NULL, MB_ICONERROR);
         return;
     }
@@ -338,7 +344,7 @@ void OnOK(HWND hwnd)
             return;
     }
 
-    LoadString(NULL, IDS_COMPLETE, szText, ARRAYSIZE(szText));
+    LoadString(NULL, IDS_COMPLETE, szText, _countof(szText));
     MessageBox(hwnd, szText, TEXT("vista2xp"), MB_ICONINFORMATION);
 }
 
@@ -380,9 +386,9 @@ BOOL CheckSourceDlls(void)
 {
     TCHAR *pch, szPath[MAX_PATH];
 
-    for (size_t i = 0; i < ARRAYSIZE(s_aapszNames); ++i)
+    for (size_t i = 0; i < _countof(s_aapszNames); ++i)
     {
-        GetModuleFileName(NULL, szPath, ARRAYSIZE(szPath));
+        GetModuleFileName(NULL, szPath, _countof(szPath));
         pch = PathFindFileName(szPath);
         *pch = 0;
 
@@ -397,7 +403,7 @@ BOOL CheckSourceDlls(void)
                 PathAppend(szPath, s_aapszNames[i][2]);
                 if (!PathFileExists(szPath))
                 {
-                    LoadString(NULL, s_aids[i], szPath, ARRAYSIZE(szPath));
+                    LoadString(NULL, s_aids[i], szPath, _countof(szPath));
                     MessageBox(NULL, szPath, NULL, MB_ICONERROR);
                     return FALSE;
                 }

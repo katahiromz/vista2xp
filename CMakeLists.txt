@@ -4,7 +4,7 @@
 ##############################################################################
 
 # CMake minimum version
-cmake_minimum_required(VERSION 2.4)
+cmake_minimum_required(VERSION 3.6)
 
 # project name and languages
 project(vista2xp C CXX)
@@ -133,5 +133,11 @@ add_library(v2xcrt SHARED v2xcrt/v2xcrt.c v2xcrt/v2xcrt.def)
 target_link_libraries(v2xcrt user32)
 set_target_properties(v2xcrt PROPERTIES PREFIX "")
 set_target_properties(v2xcrt PROPERTIES OUTPUT_NAME "v2xcrt")
+
+# v2xadv32.dll
+add_library(v2xadv32 SHARED v2xadv32/v2xadv32.c v2xadv32/v2xadv32.def)
+target_link_libraries(v2xadv32 kernel32 advapi32)
+set_target_properties(v2xadv32 PROPERTIES PREFIX "")
+set_target_properties(v2xadv32 PROPERTIES OUTPUT_NAME "v2xadv32")
 
 ##############################################################################

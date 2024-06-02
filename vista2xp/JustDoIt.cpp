@@ -7,12 +7,8 @@
 #include <strsafe.h>
 #include "resource.h"
 
-#ifndef ARRAYSIZE
-    #define ARRAYSIZE(array) (sizeof(array) / sizeof(array[0]))
-#endif
-
+INT GetDllCount(VOID);
 LPTSTR GetDllSource(INT i);
-
 LPCTSTR GetDllNames(INT i);
 
 bool do_kernel32(codereverse::ExeImage& image, size_t i, char *name)
@@ -223,11 +219,44 @@ bool do_msvcrt(codereverse::ExeImage& image, size_t i, char *name)
     return false;
 }
 
+bool do_advapi32(codereverse::ExeImage& image, size_t i, char *name)
+{
+    std::vector<codereverse::ImportSymbol> symbols;
+    if (!image.get_import_symbols(i, symbols))
+    {
+        return false;
+    }
+
+    for (size_t k = 0; k < symbols.size(); ++k)
+    {
+        codereverse::ImportSymbol& symbol = symbols[k];
+        if (symbol.Name.wImportByName)
+        {
+            if (lstrcmpA(symbol.pszName, "RegCopyTreeW") == 0 ||
+                lstrcmpA(symbol.pszName, "RegDeleteTreeA") == 0 ||
+                lstrcmpA(symbol.pszName, "RegDeleteTreeW") == 0 ||
+                lstrcmpA(symbol.pszName, "RegSetKeyValueW") == 0 ||
+                lstrcmpA(symbol.pszName, "RegLoadMUIStringW") == 0 ||
+                lstrcmpA(symbol.pszName, "RegLoadMUIStringA") == 0)
+            {
+                if (lstrcmpiA(name, "advapi32") == 0)
+                    StringCbCopyA(const_cast<char *>(name), sizeof("v2xadv32"), "v2xadv32");
+                else if (lstrcmpiA(name, "advapi32.dll") == 0)
+                    StringCbCopyA(const_cast<char *>(name), sizeof("v2xadv32.dll"), "v2xadv32.dll");
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
 {
     LPCTSTR pszTitle = PathFindFileName(pszFile);
 
-    for (size_t i = 0; i < 6; ++i)
+    size_t cDLLs = GetDllCount();
+    for (size_t i = 0; i < cDLLs; ++i)
     {
         if (lstrcmpi(pszTitle, GetDllNames(i)) == 0)
         {
@@ -239,14 +268,14 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
     codereverse::ExeImage image;
     if (!image.load(pszFile))
     {
-        LoadString(NULL, IDS_CANTLOAD, szText, ARRAYSIZE(szText));
+        LoadString(NULL, IDS_CANTLOAD, szText, _countof(szText));
         MessageBox(hwnd, szText, NULL, MB_ICONERROR);
         return E_FAIL;
     }
 
     if (image.is_64bit())
     {
-        LoadString(NULL, IDS_NOTSUP64BIT, szText, ARRAYSIZE(szText));
+        LoadString(NULL, IDS_NOTSUP64BIT, szText, _countof(szText));
         MessageBox(hwnd, szText, TEXT("Warning"), MB_ICONWARNING);
         return S_FALSE;
     }
@@ -263,6 +292,7 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
     bool v2xol_found = false;
     bool v2xsh32_found = false;
     bool v2xcrt_found = false;
+    bool v2xadv_found = false;
 
     for (DWORD i = 0; i < names.size(); ++i)
     {
@@ -295,6 +325,11 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
                  lstrcmpiA(names[i], "msvcrt") == 0)
         {
             v2xcrt_found = do_msvcrt(image, i, const_cast<char *>(names[i]));
+        }
+        else if (lstrcmpiA(names[i], "advapi32.dll") == 0 ||
+                 lstrcmpiA(names[i], "advapi32") == 0)
+        {
+            v2xadv_found = do_msvcrt(image, i, const_cast<char *>(names[i]));
         }
     }
 
@@ -418,6 +453,25 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
             return E_FAIL;
     }
 
+    if (v2xadv_found)
+    {
+        // cut off file title
+        *pch = 0;
+
+        // create backup
+        PathAppend(szPath, TEXT("Vista2XP-Backup"));
+        CreateDirectory(szPath, NULL);
+        PathAppend(szPath, pszTitle);
+        CopyFile(pszFile, szPath, TRUE);
+
+        // cut off file title
+        *pch = 0;
+
+        PathAppend(szPath, GetDllNames(6));
+        if (!PathFileExists(szPath) && !CopyFile(GetDllSource(6), szPath, FALSE))
+            return E_FAIL;
+    }
+
     bool version_fix = false;
     {
         DWORD ver, preferred = MAKELONG(1, 5);
@@ -462,7 +516,7 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
     {
         if (!image.do_reverse_map() || !image.save(pszFile))
         {
-            LoadString(NULL, IDS_CANTWRITE, szText, ARRAYSIZE(szText));
+            LoadString(NULL, IDS_CANTWRITE, szText, _countof(szText));
             MessageBox(hwnd, szText, NULL, MB_ICONERROR);
             return E_FAIL;
         }

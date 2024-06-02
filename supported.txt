@@ -135,3 +135,8 @@ msvcrt.memmove_s
 msvcrt.memcpy_s
 msvcrt.__CxxFrameHandler3
 msvcrt._except_handler4_common
+advapi32.RegDeleteTreeA
+advapi32.RegDeleteTreeW
+advapi32.RegSetKeyValueW
+advapi32.RegLoadMUIStringW
+advapi32.RegLoadMUIStringA
