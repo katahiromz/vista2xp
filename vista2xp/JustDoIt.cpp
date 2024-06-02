@@ -512,7 +512,7 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
     }
 
     if (v2xker32_found || v2xctl32_found || v2xu32_found || v2xol_found ||
-        v2xsh32_found || v2xcrt_found || version_fix)
+        v2xsh32_found || v2xcrt_found || v2xadv_found || version_fix)
     {
         if (!image.do_reverse_map() || !image.save(pszFile))
         {
