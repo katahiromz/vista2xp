@@ -66,6 +66,7 @@ You can check the IAT by `dumpbin /imports` of Visual Studio Command Prompt.
     - Improved v2xctl32 ordinal exports.
 - 2024.06.02 ver.0.8.2
     - Added v2xadv32 (advapi32).
+- 2024.XX.YY ver.0.8.3
 
 ## How to build?
 
