@@ -62,8 +62,9 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
     - SRWロック関数を部分的にサポート。
     - Initialize-once関数を部分的にサポート。
     - 状態変数関数を部分的にサポート。
-- 2022.XX.YY ver.0.8.1
+- 2022.01.23 ver.0.8.1
     - GetThreadUILanguage/SetThreadUILanguageをサポート。
+    - v2xctl32 序数エクスポートを改良。
 
 ## 警告
 
