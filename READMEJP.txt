@@ -69,7 +69,7 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
 - 2024.06.02 ver.0.8.2
     - v2xadv32 (advapi32) を追加。
 - 2024.06.03 ver.0.8.3
-    - Supported CompareStringEx.
+    - CompareStringEx のサポート。
 
 ## 警告
 
