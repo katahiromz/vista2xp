@@ -63,6 +63,7 @@ You can check the IAT by dumpbin /imports of Visual Studio Command Prompt.
 - 2022.01.23 ver.0.8.1
     - Supported GetThreadUILanguage/SetThreadUILanguage.
     - Improved v2xctl32 ordinal exports.
+- 2024.XX.YY ver.0.8.2
 
 ## WARNING!
 

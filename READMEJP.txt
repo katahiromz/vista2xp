@@ -65,6 +65,7 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
 - 2022.01.23 ver.0.8.1
     - GetThreadUILanguage/SetThreadUILanguageをサポート。
     - v2xctl32 序数エクスポートを改良。
+- 2024.XX.YY ver.0.8.2
 
 ## 警告
 
