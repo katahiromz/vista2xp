@@ -70,6 +70,7 @@ You can check the IAT by `dumpbin /imports` of Visual Studio Command Prompt.
     - Supported CompareStringEx.
 - 2024.XX.YY ver.0.8.4
     - Fixed fallbacking of v2xadv32.
+    - Fixed loading DLLs.
 
 ## How to build?
 

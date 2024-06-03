@@ -316,7 +316,7 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
     case DLL_PROCESS_ATTACH:
         s_hinstDLL = hinstDLL;
         DisableThreadLibraryCalls(hinstDLL);
-        s_hShell32 = GetModuleHandleA("shell32");
+        s_hShell32 = LoadLibraryA("shell32");
         GETPROC(SHCreateShellItemArray);
         GETPROC(SHCreateShellItemArrayFromDataObject);
         GETPROC(SHCreateShellItemArrayFromIDLists);
@@ -330,6 +330,7 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         break;
 
     case DLL_PROCESS_DETACH:
+        FreeLibrary(s_hShell32);
         break;
     }
     return TRUE;

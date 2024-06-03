@@ -72,6 +72,7 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
     - CompareStringEx のサポート。
 - 2024.XX.YY ver.0.8.4
     - v2xadv32 のフォールバックを修正。
+    - DLLの読み込みを修正。
 
 ## 警告
 

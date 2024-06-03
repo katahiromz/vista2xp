@@ -580,7 +580,7 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         s_hinstDLL = hinstDLL;
         DisableThreadLibraryCalls(hinstDLL);
         s_bUseQPC = QueryPerformanceFrequency(&s_freq);
-        s_hKernel32 = GetModuleHandleA("kernel32");
+        s_hKernel32 = LoadLibraryA("kernel32");
         s_pIsWow64Process = (FN_IsWow64Process)GetProcAddress(s_hKernel32, "IsWow64Process");
         s_pGetTickCount64 = (FN_GetTickCount64)GetProcAddress(s_hKernel32, "GetTickCount64");
         s_pQueryFullProcessImageNameA = (FN_QueryFullProcessImageNameA)GetProcAddress(s_hKernel32, "QueryFullProcessImageNameA");
@@ -604,6 +604,7 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         s_pCompareStringEx = (FN_CompareStringEx)GetProcAddress(s_hKernel32, "CompareStringEx");
         break;
     case DLL_PROCESS_DETACH:
+        FreeLibrary(s_hKernel32);
         break;
     }
     return TRUE;

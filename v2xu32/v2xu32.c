@@ -113,13 +113,14 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
     case DLL_PROCESS_ATTACH:
         s_hinstDLL = hinstDLL;
         DisableThreadLibraryCalls(hinstDLL);
-        s_hUser32 = GetModuleHandleA("user32");
+        s_hUser32 = LoadLibraryA("user32");
         s_pChangeWindowMessageFilter = (FN_ChangeWindowMessageFilter)GetProcAddress(s_hUser32, "ChangeWindowMessageFilter");
         s_pChangeWindowMessageFilterEx = (FN_ChangeWindowMessageFilterEx)GetProcAddress(s_hUser32, "ChangeWindowMessageFilterEx");
         s_pGetDpiForWindow = (FN_GetDpiForWindow)GetProcAddress(s_hUser32, "GetDpiForWindow");
         s_pSetThreadDpiAwarenessContext = (FN_SetThreadDpiAwarenessContext)GetProcAddress(s_hUser32, "SetThreadDpiAwarenessContext");
         break;
     case DLL_PROCESS_DETACH:
+        FreeLibrary(s_hUser32);
         break;
     }
     return TRUE;

@@ -381,7 +381,7 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
     case DLL_PROCESS_ATTACH:
         s_hinstDLL = hinstDLL;
         DisableThreadLibraryCalls(hinstDLL);
-        s_hADVAPI32 = GetModuleHandleA("advapi32");
+        s_hADVAPI32 = LoadLibraryA("advapi32");
         GETPROC(RegCopyTreeW);
         GETPROC(RegDeleteTreeA);
         GETPROC(RegDeleteTreeW);
@@ -390,6 +390,7 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         GETPROC(RegLoadMUIStringA);
         break;
     case DLL_PROCESS_DETACH:
+        FreeLibrary(s_hADVAPI32);
         break;
     }
     return TRUE;

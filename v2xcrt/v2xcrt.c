@@ -122,13 +122,14 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
     case DLL_PROCESS_ATTACH:
         s_hinstDLL = hinstDLL;
         DisableThreadLibraryCalls(hinstDLL);
-        s_hMSVCRT = GetModuleHandleA("msvcrt");
+        s_hMSVCRT = LoadLibraryA("msvcrt");
         GETPROC(wcsnlen);
         GETPROC(memmove_s);
         GETPROC(memcpy_s);
         GETPROC(_except_handler4_common);
         break;
     case DLL_PROCESS_DETACH:
+        FreeLibrary(s_hMSVCRT);
         break;
     }
     return TRUE;

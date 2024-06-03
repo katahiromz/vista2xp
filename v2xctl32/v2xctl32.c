@@ -817,6 +817,9 @@ TaskDialogIndirectForXP(const TASKDIALOGCONFIG *pTaskConfig,
 
 #define GETPROC(fn) s_p##fn = (FN_##fn)GetProcAddress(s_hComCtl32, #fn)
 
+typedef void (WINAPI *FN_InitCommonControls)(VOID);
+FN_InitCommonControls s_pInitCommonControls;
+
 BOOL WINAPI
 DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
@@ -825,11 +828,15 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
     case DLL_PROCESS_ATTACH:
         s_hinstDLL = hinstDLL;
         DisableThreadLibraryCalls(hinstDLL);
-        s_hComCtl32 = GetModuleHandleA("comctl32");
+        s_hComCtl32 = LoadLibraryA("comctl32");
+        GETPROC(InitCommonControls);
+        if (s_pInitCommonControls)
+            s_pInitCommonControls();
         GETPROC(TaskDialog);
         GETPROC(TaskDialogIndirect);
         break;
     case DLL_PROCESS_DETACH:
+        FreeLibrary(s_hComCtl32);
         break;
     }
     return TRUE;
