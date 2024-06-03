@@ -68,7 +68,7 @@ You can check the IAT by dumpbin /imports of Visual Studio Command Prompt.
     - Added v2xadv32 (advapi32).
 - 2024.06.03 ver.0.8.3
     - Supported CompareStringEx.
-- 2024.XX.YY ver.0.8.4
+- 2024.06.03 ver.0.8.4
     - Fixed fallbacking of v2xadv32.
     - Fixed loading DLLs.
 
