@@ -11,6 +11,8 @@ INT GetDllCount(VOID);
 LPTSTR GetDllSource(INT i);
 LPCTSTR GetDllNames(INT i);
 
+typedef bool (*FN_do_dll)(codereverse::ExeImage& image, size_t i, char *name);
+
 bool do_kernel32(codereverse::ExeImage& image, size_t i, char *name)
 {
     std::vector<codereverse::ImportSymbol> symbols;
@@ -291,50 +293,49 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
         return S_OK;
     }
 
-    bool v2xker32_found = false;
-    bool v2xctl32_found = false;
-    bool v2xu32_found = false;
-    bool v2xol_found = false;
-    bool v2xsh32_found = false;
-    bool v2xcrt_found = false;
-    bool v2xadv_found = false;
+    bool found[7] = { false };
+    LPCSTR DllNames1[7] =
+    {
+        "kernel32",
+        "comctl32",
+        "user32",
+        "ole32",
+        "shell32",
+        "msvcrt",
+        "advapi32",
+    };
+    LPCSTR DllNames2[7] =
+    {
+        "kernel32.dll",
+        "comctl32.dll",
+        "user32.dll",
+        "ole32.dll",
+        "shell32.dll",
+        "msvcrt.dll",
+        "advapi32.dll",
+    };
+    FN_do_dll do_dll_funcs[7] =
+    {
+        do_kernel32,
+        do_comctl32,
+        do_user32,
+        do_ole32,
+        do_shell32,
+        do_msvcrt,
+        do_advapi32,
+    };
+
+    assert(GetDllCount() == _countof(found));
+    assert(GetDllCount() == _countof(DllNames1));
+    assert(GetDllCount() == _countof(DllNames2));
+    assert(GetDllCount() == _countof(do_dll_funcs));
 
     for (DWORD i = 0; i < names.size(); ++i)
     {
-        if (lstrcmpiA(names[i], "kernel32.dll") == 0 ||
-            lstrcmpiA(names[i], "kernel32") == 0)
+        if (lstrcmpiA(names[i], DllNames1[i]) == 0 ||
+            lstrcmpiA(names[i], DllNames2[i]) == 0)
         {
-            v2xker32_found = do_kernel32(image, i, const_cast<char *>(names[i]));
-        }
-        else if (lstrcmpiA(names[i], "comctl32.dll") == 0 ||
-                 lstrcmpiA(names[i], "comctl32") == 0)
-        {
-            v2xctl32_found = do_comctl32(image, i, const_cast<char *>(names[i]));
-        }
-        else if (lstrcmpiA(names[i], "user32.dll") == 0 ||
-                 lstrcmpiA(names[i], "user32") == 0)
-        {
-            v2xu32_found = do_user32(image, i, const_cast<char *>(names[i]));
-        }
-        else if (lstrcmpiA(names[i], "ole32.dll") == 0 ||
-                 lstrcmpiA(names[i], "ole32") == 0)
-        {
-            v2xol_found = do_ole32(image, i, const_cast<char *>(names[i]));
-        }
-        else if (lstrcmpiA(names[i], "shell32.dll") == 0 ||
-                 lstrcmpiA(names[i], "shell32") == 0)
-        {
-            v2xsh32_found = do_shell32(image, i, const_cast<char *>(names[i]));
-        }
-        else if (lstrcmpiA(names[i], "msvcrt.dll") == 0 ||
-                 lstrcmpiA(names[i], "msvcrt") == 0)
-        {
-            v2xcrt_found = do_msvcrt(image, i, const_cast<char *>(names[i]));
-        }
-        else if (lstrcmpiA(names[i], "advapi32.dll") == 0 ||
-                 lstrcmpiA(names[i], "advapi32") == 0)
-        {
-            v2xadv_found = do_msvcrt(image, i, const_cast<char *>(names[i]));
+            found[0] = do_dll_funcs[i](image, i, const_cast<char *>(names[i]));
         }
     }
 
@@ -344,9 +345,8 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
     if (pch == NULL)
         return E_FAIL;
 
-    if (v2xker32_found)
-    {
-        // cut off file title
+    for (INT i = 0; i < (INT)_countof(found); ++i)
+    {        // cut off file title
         *pch = 0;
 
         // create backup
@@ -358,122 +358,8 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
         // cut off file title
         *pch = 0;
 
-        PathAppend(szPath, GetDllNames(0));
-        if (!PathFileExists(szPath) && !CopyFile(GetDllSource(0), szPath, FALSE))
-            return E_FAIL;
-    }
-
-    if (v2xctl32_found)
-    {
-        // cut off file title
-        *pch = 0;
-
-        // create backup
-        PathAppend(szPath, TEXT("Vista2XP-Backup"));
-        CreateDirectory(szPath, NULL);
-        PathAppend(szPath, pszTitle);
-        CopyFile(pszFile, szPath, TRUE);
-
-        // cut off file title
-        *pch = 0;
-
-        PathAppend(szPath, GetDllNames(1));
-        if (!PathFileExists(szPath) && !CopyFile(GetDllSource(1), szPath, FALSE))
-            return E_FAIL;
-    }
-
-    if (v2xu32_found)
-    {
-        // cut off file title
-        *pch = 0;
-
-        // create backup
-        PathAppend(szPath, TEXT("Vista2XP-Backup"));
-        CreateDirectory(szPath, NULL);
-        PathAppend(szPath, pszTitle);
-        CopyFile(pszFile, szPath, TRUE);
-
-        // cut off file title
-        *pch = 0;
-
-        PathAppend(szPath, GetDllNames(2));
-        if (!PathFileExists(szPath) && !CopyFile(GetDllSource(2), szPath, FALSE))
-            return E_FAIL;
-    }
-
-    if (v2xol_found)
-    {
-        // cut off file title
-        *pch = 0;
-
-        // create backup
-        PathAppend(szPath, TEXT("Vista2XP-Backup"));
-        CreateDirectory(szPath, NULL);
-        PathAppend(szPath, pszTitle);
-        CopyFile(pszFile, szPath, TRUE);
-
-        // cut off file title
-        *pch = 0;
-
-        PathAppend(szPath, GetDllNames(3));
-        if (!PathFileExists(szPath) && !CopyFile(GetDllSource(3), szPath, FALSE))
-            return E_FAIL;
-    }
-
-    if (v2xsh32_found)
-    {
-        // cut off file title
-        *pch = 0;
-
-        // create backup
-        PathAppend(szPath, TEXT("Vista2XP-Backup"));
-        CreateDirectory(szPath, NULL);
-        PathAppend(szPath, pszTitle);
-        CopyFile(pszFile, szPath, TRUE);
-
-        // cut off file title
-        *pch = 0;
-
-        PathAppend(szPath, GetDllNames(4));
-        if (!PathFileExists(szPath) && !CopyFile(GetDllSource(4), szPath, FALSE))
-            return E_FAIL;
-    }
-
-    if (v2xcrt_found)
-    {
-        // cut off file title
-        *pch = 0;
-
-        // create backup
-        PathAppend(szPath, TEXT("Vista2XP-Backup"));
-        CreateDirectory(szPath, NULL);
-        PathAppend(szPath, pszTitle);
-        CopyFile(pszFile, szPath, TRUE);
-
-        // cut off file title
-        *pch = 0;
-
-        PathAppend(szPath, GetDllNames(5));
-        if (!PathFileExists(szPath) && !CopyFile(GetDllSource(5), szPath, FALSE))
-            return E_FAIL;
-    }
-
-    if (v2xadv_found)
-    {
-        // cut off file title
-        *pch = 0;
-
-        // create backup
-        PathAppend(szPath, TEXT("Vista2XP-Backup"));
-        CreateDirectory(szPath, NULL);
-        PathAppend(szPath, pszTitle);
-        CopyFile(pszFile, szPath, TRUE);
-
-        // cut off file title
-        *pch = 0;
-
-        PathAppend(szPath, GetDllNames(6));
-        if (!PathFileExists(szPath) && !CopyFile(GetDllSource(6), szPath, FALSE))
+        PathAppend(szPath, GetDllNames(i));
+        if (!PathFileExists(szPath) && !CopyFile(GetDllSource(i), szPath, FALSE))
             return E_FAIL;
     }
 
@@ -516,8 +402,20 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
         }
     }
 
-    if (v2xker32_found || v2xctl32_found || v2xu32_found || v2xol_found ||
-        v2xsh32_found || v2xcrt_found || v2xadv_found || version_fix)
+    bool fix = version_fix;
+    if (!fix)
+    {
+        for (size_t i = 0; i < _countof(found); ++i)
+        {
+            if (found[i])
+            {
+                fix = true;
+                break;
+            }
+        }
+    }
+
+    if (fix)
     {
         if (!image.do_reverse_map() || !image.save(pszFile))
         {

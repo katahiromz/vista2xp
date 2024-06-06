@@ -77,6 +77,7 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
     - RegDeleteKeyExA/W のサポート。
     - CreateEventExA/W のサポート。
 - 2024-06-07 ver.0.8.6
+    - v2xadv32 のフックを修正。
 
 ## 警告
 
