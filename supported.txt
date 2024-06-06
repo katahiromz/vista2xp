@@ -12,8 +12,6 @@ kernel32.OpenThreadToken
 kernel32.RegCloseKey
 kernel32.RegConnectRegistryA
 kernel32.RegConnectRegistryW
-kernel32.RegCopyTree
-kernel32.RegCopyTreeW
 kernel32.RegCreateKeyA
 kernel32.RegCreateKeyExA
 kernel32.RegCreateKeyExW

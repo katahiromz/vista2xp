@@ -73,9 +73,10 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
 - 2024-06-03 ver.0.8.4
     - v2xadv32 のフォールバックを修正。
     - DLLの読み込みを修正。
-- 2024-XX-YY ver.0.8.5
+- 2024-06-06 ver.0.8.5
     - RegDeleteKeyExA/W のサポート。
     - CreateEventExA/W のサポート。
+- 2024-06-07 ver.0.8.6
 
 ## 警告
 

@@ -2,6 +2,14 @@
 ; Copyright (C) 2024 Katayama Hirofumi MZ <katayama.hirofumi.mz@gmail.com>.
 
 EXPORTS
+    ; advapi32 --> v2xadv32
+    RegDeleteKeyExA = RegDeleteKeyExAForXP
+    RegDeleteKeyExW = RegDeleteKeyExWForXP
+    RegDeleteTreeA = RegDeleteTreeAForXP
+    RegDeleteTreeW = RegDeleteTreeWForXP
+    RegSetKeyValueW = RegSetKeyValueWForXP
+    RegLoadMUIStringW = RegLoadMUIStringWForXP
+    RegLoadMUIStringA = RegLoadMUIStringAForXP
     ; v2xadv32 --> advapi32
     I_ScGetCurrentGroupStateW = advapi32.I_ScGetCurrentGroupStateW
     A_SHAFinal = advapi32.A_SHAFinal
@@ -688,12 +696,3 @@ EXPORTS
     WmiSetSingleItemW = advapi32.WmiSetSingleItemW
     Wow64Win32ApiEntry = advapi32.Wow64Win32ApiEntry
     WriteEncryptedFileRaw = advapi32.WriteEncryptedFileRaw
-    ; advapi32_vista --> v2xadv32
-    RegCopyTreeW = RegCopyTreeWForXP
-    RegDeleteKeyExA = RegDeleteKeyExAForXP
-    RegDeleteKeyExW = RegDeleteKeyExWForXP
-    RegDeleteTreeA = RegDeleteTreeAForXP
-    RegDeleteTreeW = RegDeleteTreeWForXP
-    RegSetKeyValueW = RegSetKeyValueWForXP
-    RegLoadMUIStringW = RegLoadMUIStringWForXP
-    RegLoadMUIStringA = RegLoadMUIStringAForXP

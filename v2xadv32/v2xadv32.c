@@ -14,10 +14,6 @@
 static HINSTANCE s_hinstDLL;
 static HINSTANCE s_hADVAPI32;
 
-// RegCopyTreeW
-typedef LONG (WINAPI *FN_RegCopyTreeW)(HKEY, LPCWSTR, HKEY);
-FN_RegCopyTreeW s_pRegCopyTreeW = NULL;
-
 // RegDeleteKeyExA
 typedef LONG (WINAPI *FN_RegDeleteKeyExA)(HKEY, LPCSTR, REGSAM, DWORD);
 FN_RegDeleteKeyExA s_pRegDeleteKeyExA = NULL;
@@ -45,17 +41,6 @@ FN_RegLoadMUIStringW s_pRegLoadMUIStringW = NULL;
 // RegLoadMUIStringA
 typedef LONG (WINAPI *FN_RegLoadMUIStringA)(HKEY, LPCSTR, LPSTR, DWORD, LPDWORD, DWORD, LPCSTR pszDirectory);
 FN_RegLoadMUIStringA s_pRegLoadMUIStringA = NULL;
-
-LONG WINAPI
-RegCopyTreeWForXP(IN HKEY hKeySrc,
-                  IN LPCWSTR lpSubKey  OPTIONAL,
-                  IN HKEY hKeyDest)
-{
-    if (s_pRegCopyTreeW && DO_FALLBACK)
-        return s_pRegCopyTreeW(hKeySrc, lpSubKey, hKeyDest);
-
-    return ERROR_CALL_NOT_IMPLEMENTED;
-}
 
 static LONG DoRegDeleteTreeA(HKEY hKey, LPCSTR lpSubKey)
 {
@@ -423,7 +408,6 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         s_hinstDLL = hinstDLL;
         DisableThreadLibraryCalls(hinstDLL);
         s_hADVAPI32 = LoadLibraryA("advapi32");
-        GETPROC(RegCopyTreeW);
         GETPROC(RegDeleteKeyExA);
         GETPROC(RegDeleteKeyExW);
         GETPROC(RegDeleteTreeA);
