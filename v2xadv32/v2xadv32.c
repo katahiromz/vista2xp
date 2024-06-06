@@ -199,6 +199,9 @@ RegDeleteKeyExAForXP(
     if (s_pRegDeleteKeyExA && DO_FALLBACK)
         return s_pRegDeleteKeyExA(hKey, lpSubKey, samDesired, Reserved);
 
+    if (!lpSubKey)
+        return ERROR_INVALID_PARAMETER;
+
     return DoRegDeleteTreeA(hKey, lpSubKey);
 }
 
@@ -211,6 +214,9 @@ RegDeleteKeyExWForXP(
 {
     if (s_pRegDeleteKeyExW && DO_FALLBACK)
         return s_pRegDeleteKeyExW(hKey, lpSubKey, samDesired, Reserved);
+
+    if (!lpSubKey)
+        return ERROR_INVALID_PARAMETER;
 
     return DoRegDeleteTreeW(hKey, lpSubKey);
 }
