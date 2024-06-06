@@ -55,7 +55,9 @@ bool do_kernel32(codereverse::ExeImage& image, size_t i, char *name)
                 lstrcmpA(symbol.pszName, "WakeAllConditionVariable") == 0 ||
                 lstrcmpA(symbol.pszName, "GetThreadUILanguage") == 0 ||
                 lstrcmpA(symbol.pszName, "SetThreadUILanguage") == 0 ||
-                lstrcmpA(symbol.pszName, "CompareStringEx") == 0)
+                lstrcmpA(symbol.pszName, "CompareStringEx") == 0 ||
+                lstrcmpA(symbol.pszName, "CreateEventExA") == 0 ||
+                lstrcmpA(symbol.pszName, "CreateEventExW") == 0)
             {
                 if (lstrcmpiA(name, "kernel32") == 0)
                     StringCbCopyA(const_cast<char *>(name), sizeof("v2xker32"), "v2xker32");

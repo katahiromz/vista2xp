@@ -72,6 +72,8 @@ You can check the IAT by dumpbin /imports of Visual Studio Command Prompt.
     - Fixed fallbacking of v2xadv32.
     - Fixed loading DLLs.
 - 2024-XX-YY ver.0.8.5
+    - Supported RegDeleteKeyExA/W.
+    - Supported CreateEventExA/W.
 
 ## WARNING!
 

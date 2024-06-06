@@ -143,3 +143,5 @@ advapi32.RegLoadMUIStringA
 kernel32.CompareStringEx
 advapi32.RegDeleteKeyExA
 advapi32.RegDeleteKeyExW
+kernel32.CreateEventExA
+kernel32.CreateEventExW

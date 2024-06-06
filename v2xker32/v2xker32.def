@@ -27,6 +27,8 @@ EXPORTS
     GetThreadUILanguage = GetThreadUILanguageForXP
     SetThreadUILanguage = SetThreadUILanguageForXP
     CompareStringEx = CompareStringExForXP
+    CreateEventExA = CreateEventExAForXP
+    CreateEventExW = CreateEventExWForXP
 
     ; kernel32 --> advapi32
     CreateProcessAsUserA = advapi32.CreateProcessAsUserA

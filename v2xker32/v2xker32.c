@@ -82,6 +82,11 @@ static FN_SetThreadUILanguage s_pSetThreadUILanguage;
 typedef INT (WINAPI *FN_CompareStringEx)(LPCWSTR, DWORD, LPCWCH, INT, LPCWCH, INT, LPNLSVERSIONINFO, LPVOID, LPARAM);
 static FN_CompareStringEx s_pCompareStringEx;
 
+typedef HANDLE (WINAPI *FN_CreateEventExA)(LPSECURITY_ATTRIBUTES, LPCSTR, DWORD, DWORD);
+typedef HANDLE (WINAPI *FN_CreateEventExW)(LPSECURITY_ATTRIBUTES, LPCWSTR, DWORD, DWORD);
+static FN_CreateEventExA s_pCreateEventExA;
+static FN_CreateEventExW s_pCreateEventExW;
+
 BOOL WINAPI
 IsWow64ProcessForXP(HANDLE hProcess, PBOOL Wow64Process)
 {
@@ -571,6 +576,49 @@ CompareStringExForXP(
                           cchCount2);
 }
 
+#ifndef CREATE_EVENT_MANUAL_RESET
+    #define CREATE_EVENT_MANUAL_RESET   0x00000001
+    #define CREATE_EVENT_INITIAL_SET    0x00000002
+#endif
+
+HANDLE WINAPI
+CreateEventExAForXP(
+    LPSECURITY_ATTRIBUTES lpEventAttributes,
+    LPCSTR                lpName,
+    DWORD                 dwFlags,
+    DWORD                 dwDesiredAccess)
+{
+    BOOL bManualReset, bInitialSet;
+
+    if (s_pCreateEventExA && DO_FALLBACK)
+        return s_pCreateEventExA(lpEventAttributes, lpName, dwFlags, dwDesiredAccess);
+
+    bManualReset = !!(dwFlags & CREATE_EVENT_MANUAL_RESET);
+    bInitialSet = !!(dwFlags & CREATE_EVENT_INITIAL_SET);
+
+    return CreateEventA(lpEventAttributes, bManualReset, bInitialSet, lpName);
+}
+
+HANDLE WINAPI
+CreateEventExWForXP(
+    LPSECURITY_ATTRIBUTES lpEventAttributes,
+    LPCWSTR               lpName,
+    DWORD                 dwFlags,
+    DWORD                 dwDesiredAccess)
+{
+    BOOL bManualReset, bInitialSet;
+
+    if (s_pCreateEventExW && DO_FALLBACK)
+        return s_pCreateEventExW(lpEventAttributes, lpName, dwFlags, dwDesiredAccess);
+
+    bManualReset = !!(dwFlags & CREATE_EVENT_MANUAL_RESET);
+    bInitialSet = !!(dwFlags & CREATE_EVENT_INITIAL_SET);
+
+    return CreateEventW(lpEventAttributes, bManualReset, bInitialSet, lpName);
+}
+
+#define GETPROC(fn) s_p##fn = (FN_##fn)GetProcAddress(s_hKernel32, #fn)
+
 BOOL WINAPI
 DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
 {
@@ -581,27 +629,29 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         DisableThreadLibraryCalls(hinstDLL);
         s_bUseQPC = QueryPerformanceFrequency(&s_freq);
         s_hKernel32 = LoadLibraryA("kernel32");
-        s_pIsWow64Process = (FN_IsWow64Process)GetProcAddress(s_hKernel32, "IsWow64Process");
-        s_pGetTickCount64 = (FN_GetTickCount64)GetProcAddress(s_hKernel32, "GetTickCount64");
-        s_pQueryFullProcessImageNameA = (FN_QueryFullProcessImageNameA)GetProcAddress(s_hKernel32, "QueryFullProcessImageNameA");
-        s_pQueryFullProcessImageNameW = (FN_QueryFullProcessImageNameW)GetProcAddress(s_hKernel32, "QueryFullProcessImageNameW");
-        s_pInitializeSRWLock = (FN_InitializeSRWLock)GetProcAddress(s_hKernel32, "InitializeSRWLock");
-        s_pAcquireSRWLockExclusive = (FN_AcquireSRWLockExclusive)GetProcAddress(s_hKernel32, "AcquireSRWLockExclusive");
-        s_pAcquireSRWLockShared = (FN_AcquireSRWLockShared)GetProcAddress(s_hKernel32, "AcquireSRWLockShared");
-        s_pTryAcquireSRWLockExclusive = (FN_TryAcquireSRWLockExclusive)GetProcAddress(s_hKernel32, "TryAcquireSRWLockExclusive");
-        s_pTryAcquireSRWLockShared = (FN_TryAcquireSRWLockShared)GetProcAddress(s_hKernel32, "TryAcquireSRWLockShared");
-        s_pReleaseSRWLockExclusive = (FN_ReleaseSRWLockExclusive)GetProcAddress(s_hKernel32, "ReleaseSRWLockExclusive");
-        s_pReleaseSRWLockShared = (FN_ReleaseSRWLockShared)GetProcAddress(s_hKernel32, "ReleaseSRWLockShared");
-        s_pInitOnceInitialize = (FN_InitOnceInitialize)GetProcAddress(s_hKernel32, "InitOnceInitialize");
-        s_pInitOnceExecuteOnce = (FN_InitOnceExecuteOnce)GetProcAddress(s_hKernel32, "InitOnceExecuteOnce");
-        s_pInitializeConditionVariable = (FN_InitializeConditionVariable)GetProcAddress(s_hKernel32, "InitializeConditionVariable");
-        s_pSleepConditionVariableCS = (FN_SleepConditionVariableCS)GetProcAddress(s_hKernel32, "SleepConditionVariableCS");
-        s_pSleepConditionVariableSRW = (FN_SleepConditionVariableSRW)GetProcAddress(s_hKernel32, "SleepConditionVariableSRW");
-        s_pWakeConditionVariable = (FN_WakeConditionVariable)GetProcAddress(s_hKernel32, "WakeConditionVariable");
-        s_pWakeAllConditionVariable = (FN_WakeAllConditionVariable)GetProcAddress(s_hKernel32, "WakeAllConditionVariable");
-        s_pGetThreadUILanguage = (FN_GetThreadUILanguage)GetProcAddress(s_hKernel32, "GetThreadUILanguage");
-        s_pSetThreadUILanguage = (FN_SetThreadUILanguage)GetProcAddress(s_hKernel32, "SetThreadUILanguage");
-        s_pCompareStringEx = (FN_CompareStringEx)GetProcAddress(s_hKernel32, "CompareStringEx");
+        GETPROC(IsWow64Process);
+        GETPROC(GetTickCount64);
+        GETPROC(QueryFullProcessImageNameA);
+        GETPROC(QueryFullProcessImageNameW);
+        GETPROC(InitializeSRWLock);
+        GETPROC(AcquireSRWLockExclusive);
+        GETPROC(AcquireSRWLockShared);
+        GETPROC(TryAcquireSRWLockExclusive);
+        GETPROC(TryAcquireSRWLockShared);
+        GETPROC(ReleaseSRWLockExclusive);
+        GETPROC(ReleaseSRWLockShared);
+        GETPROC(InitOnceInitialize);
+        GETPROC(InitOnceExecuteOnce);
+        GETPROC(InitializeConditionVariable);
+        GETPROC(SleepConditionVariableCS);
+        GETPROC(SleepConditionVariableSRW);
+        GETPROC(WakeConditionVariable);
+        GETPROC(WakeAllConditionVariable);
+        GETPROC(GetThreadUILanguage);
+        GETPROC(SetThreadUILanguage);
+        GETPROC(CompareStringEx);
+        GETPROC(CreateEventExA);
+        GETPROC(CreateEventExW);
         break;
     case DLL_PROCESS_DETACH:
         FreeLibrary(s_hKernel32);
