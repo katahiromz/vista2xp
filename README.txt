@@ -33,20 +33,20 @@ You can check the IAT by dumpbin /imports of Visual Studio Command Prompt.
 
 ## History
 
-- 2019.05.05 ver.0.2
+- 2019-05-05 ver.0.2
     - First release.
-- 2019.05.06 ver.0.3
+- 2019-05-06 ver.0.3
     - Add v2xctl32 and v2xu32.
-- 2019.05.09 ver.0.4
+- 2019-05-09 ver.0.4
     - Support K32* functions.
     - Improve TaskDialog.
     - Add v2xol (ole32).
     - Add v2xsh32 (shell32).
-- 2019.05.22 ver.0.5
+- 2019-05-22 ver.0.5
     - Make [Cancel] button [Exit].
     - Supported SHGetLocalizedName, SHSetFolderPathA and SHSetFolderPathW.
     - Supported TaskDialogIndirect.
-- 2019.08.16 ver.0.6
+- 2019-08-16 ver.0.6
     - Fixed broken v2xu32.dll.
     - Supported SHCreateItemFromParsingName.
     - Supported GetDpiForWindow.
@@ -54,23 +54,24 @@ You can check the IAT by dumpbin /imports of Visual Studio Command Prompt.
     - Add v2xcrt (msvcrt).
     - Supported wcsnlen, memmove_s and memcpy_s.
     - Supported __CxxFrameHandler3 and _except_handler4_common.
-- 2019.09.15 ver.0.7
+- 2019-09-15 ver.0.7
     - Modify optional header's version info.
     - Supported GetVersion, GetVersionExA and GetVersionExW.
-- 2021.05.11 ver.0.8
+- 2021-05-11 ver.0.8
     - SRW lock functions are partially supported.
     - Initialize-once functions are partially supported.
     - Condition variables functions are partially supported.
-- 2022.01.23 ver.0.8.1
+- 2022-01-23 ver.0.8.1
     - Supported GetThreadUILanguage/SetThreadUILanguage.
     - Improved v2xctl32 ordinal exports.
-- 2024.06.02 ver.0.8.2
+- 2024-06-02 ver.0.8.2
     - Added v2xadv32 (advapi32).
-- 2024.06.03 ver.0.8.3
+- 2024-06-03 ver.0.8.3
     - Supported CompareStringEx.
-- 2024.06.03 ver.0.8.4
+- 2024-06-03 ver.0.8.4
     - Fixed fallbacking of v2xadv32.
     - Fixed loading DLLs.
+- 2024-XX-YY ver.0.8.5
 
 ## WARNING!
 
