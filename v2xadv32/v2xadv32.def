@@ -690,6 +690,8 @@ EXPORTS
     WriteEncryptedFileRaw = advapi32.WriteEncryptedFileRaw
     ; advapi32_vista --> v2xadv32
     RegCopyTreeW = RegCopyTreeWForXP
+    RegDeleteKeyExA = RegDeleteKeyExAForXP
+    RegDeleteKeyExW = RegDeleteKeyExWForXP
     RegDeleteTreeA = RegDeleteTreeAForXP
     RegDeleteTreeW = RegDeleteTreeWForXP
     RegSetKeyValueW = RegSetKeyValueWForXP

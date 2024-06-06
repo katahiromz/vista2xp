@@ -234,6 +234,8 @@ bool do_advapi32(codereverse::ExeImage& image, size_t i, char *name)
         if (symbol.Name.wImportByName)
         {
             if (lstrcmpA(symbol.pszName, "RegCopyTreeW") == 0 ||
+                lstrcmpA(symbol.pszName, "RegDeleteKeyExA") == 0 ||
+                lstrcmpA(symbol.pszName, "RegDeleteKeyExW") == 0 ||
                 lstrcmpA(symbol.pszName, "RegDeleteTreeA") == 0 ||
                 lstrcmpA(symbol.pszName, "RegDeleteTreeW") == 0 ||
                 lstrcmpA(symbol.pszName, "RegSetKeyValueW") == 0 ||

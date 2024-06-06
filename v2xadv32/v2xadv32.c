@@ -18,6 +18,14 @@ static HINSTANCE s_hADVAPI32;
 typedef LONG (WINAPI *FN_RegCopyTreeW)(HKEY, LPCWSTR, HKEY);
 FN_RegCopyTreeW s_pRegCopyTreeW = NULL;
 
+// RegDeleteKeyExA
+typedef LONG (WINAPI *FN_RegDeleteKeyExA)(HKEY, LPCSTR, REGSAM, DWORD);
+FN_RegDeleteKeyExA s_pRegDeleteKeyExA = NULL;
+
+// RegDeleteKeyExW
+typedef LONG (WINAPI *FN_RegDeleteKeyExW)(HKEY, LPCWSTR, REGSAM, DWORD);
+FN_RegDeleteKeyExW s_pRegDeleteKeyExW = NULL;
+ 
 // RegDeleteTreeA
 typedef LONG (WINAPI *FN_RegDeleteTreeA)(HKEY, LPCSTR);
 FN_RegDeleteTreeA s_pRegDeleteTreeA = NULL;
@@ -180,6 +188,33 @@ cleanup:
         RegCloseKey(hSubKey);
     return ret;
 }
+
+LONG WINAPI
+RegDeleteKeyExAForXP(
+    HKEY    hKey,
+    LPCSTR  lpSubKey,
+    REGSAM  samDesired,
+    DWORD   Reserved)
+{
+    if (s_pRegDeleteKeyExA && DO_FALLBACK)
+        return s_pRegDeleteKeyExA(hKey, lpSubKey, samDesired, Reserved);
+
+    return DoRegDeleteTreeA(hKey, lpSubKey);
+}
+
+LONG WINAPI
+RegDeleteKeyExWForXP(
+    HKEY    hKey,
+    LPCWSTR lpSubKey,
+    REGSAM  samDesired,
+    DWORD   Reserved)
+{
+    if (s_pRegDeleteKeyExW && DO_FALLBACK)
+        return s_pRegDeleteKeyExW(hKey, lpSubKey, samDesired, Reserved);
+
+    return DoRegDeleteTreeW(hKey, lpSubKey);
+}
+
 
 LONG WINAPI
 RegDeleteTreeAForXP(IN HKEY hKey,
@@ -383,6 +418,8 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         DisableThreadLibraryCalls(hinstDLL);
         s_hADVAPI32 = LoadLibraryA("advapi32");
         GETPROC(RegCopyTreeW);
+        GETPROC(RegDeleteKeyExA);
+        GETPROC(RegDeleteKeyExW);
         GETPROC(RegDeleteTreeA);
         GETPROC(RegDeleteTreeW);
         GETPROC(RegSetKeyValueW);
