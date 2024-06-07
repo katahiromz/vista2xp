@@ -148,3 +148,4 @@ kernel32.GetFileInformationByHandleEx
 kernel32.OpenFileById
 kernel32.GetFinalPathNameByHandleA
 kernel32.GetFinalPathNameByHandleW
+kernel32.InitializeCriticalSectionEx

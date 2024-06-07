@@ -125,6 +125,13 @@ typedef DWORD (WINAPI *FN_GetFinalPathNameByHandleW)(
 FN_GetFinalPathNameByHandleA s_pGetFinalPathNameByHandleA;
 FN_GetFinalPathNameByHandleW s_pGetFinalPathNameByHandleW;
 
+typedef BOOL (WINAPI *FN_InitializeCriticalSectionEx)(
+    LPCRITICAL_SECTION lpCriticalSection,
+    DWORD              dwSpinCount,
+    DWORD              Flags);
+
+FN_InitializeCriticalSectionEx s_pInitializeCriticalSectionEx;
+
 BOOL WINAPI
 IsWow64ProcessForXP(HANDLE hProcess, PBOOL Wow64Process)
 {
@@ -745,6 +752,20 @@ DWORD WINAPI GetFinalPathNameByHandleWForXP(
     return WonGetFinalPathNameByHandleW(hFile, lpszFilePath, cchFilePath, dwFlags);
 }
 
+BOOL WINAPI
+InitializeCriticalSectionExForXP(
+    LPCRITICAL_SECTION lpCriticalSection,
+    DWORD              dwSpinCount,
+    DWORD              Flags)
+{
+    if (s_pInitializeCriticalSectionEx && DO_FALLBACK)
+        return s_pInitializeCriticalSectionEx(lpCriticalSection, dwSpinCount, Flags);
+
+    InitializeCriticalSection(lpCriticalSection);
+    SetCriticalSectionSpinCount(lpCriticalSection, dwSpinCount);
+    return TRUE;
+}
+
 #define GETPROC(fn) s_p##fn = (FN_##fn)GetProcAddress(s_hKernel32, #fn)
 
 BOOL WINAPI
@@ -785,6 +806,7 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         GETPROC(OpenFileById);
         GETPROC(GetFinalPathNameByHandleA);
         GETPROC(GetFinalPathNameByHandleW);
+        GETPROC(InitializeCriticalSectionEx);
         break;
     case DLL_PROCESS_DETACH:
         FreeLibrary(s_hKernel32);

@@ -81,6 +81,7 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
     - SetFileInformationByHandle、GetFileInformationByHandleEx および OpenFileById のサポート。
     - GetFinalPathNameByHandleA/W のサポート。
 - 2024-XX-YY ver.0.8.7
+    - InitializeCriticalSectionEx のサポート。
 
 ## 警告
 

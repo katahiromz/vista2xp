@@ -64,7 +64,8 @@ bool do_kernel32(codereverse::ExeImage& image, size_t i, char *name)
                 lstrcmpA(symbol.pszName, "GetFileInformationByHandleEx") == 0 ||
                 lstrcmpA(symbol.pszName, "OpenFileById") == 0 ||
                 lstrcmpA(symbol.pszName, "GetFinalPathNameByHandleA") == 0 ||
-                lstrcmpA(symbol.pszName, "GetFinalPathNameByHandleW") == 0)
+                lstrcmpA(symbol.pszName, "GetFinalPathNameByHandleW") == 0 ||
+                lstrcmpA(symbol.pszName, "InitializeCriticalSectionEx") == 0)
             {
                 if (lstrcmpiA(name, "kernel32") == 0)
                     StringCbCopyA(const_cast<char *>(name), sizeof("v2xker32"), "v2xker32");
