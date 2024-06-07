@@ -9,7 +9,7 @@
 
 INT GetDllCount(VOID);
 LPTSTR GetDllSource(INT i);
-LPCTSTR GetDllNames(INT i);
+LPCTSTR GetNewDllNames(INT i);
 
 typedef bool (*FN_do_dll)(codereverse::ExeImage& image, size_t i, char *name);
 
@@ -271,7 +271,7 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
     size_t cDLLs = GetDllCount();
     for (size_t i = 0; i < cDLLs; ++i)
     {
-        if (lstrcmpi(pszTitle, GetDllNames(i)) == 0)
+        if (lstrcmpi(pszTitle, GetNewDllNames(i)) == 0)
         {
             return S_FALSE;
         }
@@ -299,8 +299,7 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
         return S_OK;
     }
 
-    bool found[7] = { false };
-    LPCSTR DllNames1[7] =
+    LPCSTR DllNames1[] =
     {
         "kernel32",
         "comctl32",
@@ -310,7 +309,7 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
         "msvcrt",
         "advapi32",
     };
-    LPCSTR DllNames2[7] =
+    LPCSTR DllNames2[] =
     {
         "kernel32.dll",
         "comctl32.dll",
@@ -320,7 +319,7 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
         "msvcrt.dll",
         "advapi32.dll",
     };
-    FN_do_dll do_dll_funcs[7] =
+    FN_do_dll do_dll_funcs[] =
     {
         do_kernel32,
         do_comctl32,
@@ -330,18 +329,23 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
         do_msvcrt,
         do_advapi32,
     };
+    bool found[7] = { false };
 
-    assert(GetDllCount() == _countof(found));
-    assert(GetDllCount() == _countof(DllNames1));
-    assert(GetDllCount() == _countof(DllNames2));
-    assert(GetDllCount() == _countof(do_dll_funcs));
+    assert(cDLLs == _countof(found));
+    assert(cDLLs == _countof(DllNames1));
+    assert(cDLLs == _countof(DllNames2));
+    assert(cDLLs == _countof(do_dll_funcs));
 
-    for (DWORD i = 0; i < names.size(); ++i)
+    for (UINT k = 0; k < cDLLs; ++k)
     {
-        if (lstrcmpiA(names[i], DllNames1[i]) == 0 ||
-            lstrcmpiA(names[i], DllNames2[i]) == 0)
+        for (DWORD i = 0; i < names.size(); ++i)
         {
-            found[i] = do_dll_funcs[i](image, i, const_cast<char *>(names[i]));
+            if (lstrcmpiA(names[i], DllNames1[k]) == 0 ||
+                lstrcmpiA(names[i], DllNames2[k]) == 0)
+            {
+                found[k] = do_dll_funcs[k](image, i, const_cast<char *>(names[i]));
+                break;
+            }
         }
     }
 
@@ -351,8 +355,11 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
     if (pch == NULL)
         return E_FAIL;
 
-    for (INT i = 0; i < (INT)_countof(found); ++i)
+    for (UINT k = 0; k < cDLLs; ++k)
     {
+        if (!found[k])
+            continue;
+
         // cut off file title
         *pch = 0;
 
@@ -365,8 +372,8 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
         // cut off file title
         *pch = 0;
 
-        PathAppend(szPath, GetDllNames(i));
-        if (!PathFileExists(szPath) && !CopyFile(GetDllSource(i), szPath, FALSE))
+        PathAppend(szPath, GetNewDllNames(k));
+        if (!PathFileExists(szPath) && !CopyFile(GetDllSource(k), szPath, FALSE))
             return E_FAIL;
     }
 
@@ -409,20 +416,7 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
         }
     }
 
-    bool fix = version_fix;
-    if (!fix)
-    {
-        for (size_t i = 0; i < _countof(found); ++i)
-        {
-            if (found[i])
-            {
-                fix = true;
-                break;
-            }
-        }
-    }
-
-    if (fix)
+    if (found && version_fix)
     {
         if (!image.do_reverse_map() || !image.save(pszFile))
         {

@@ -58,7 +58,7 @@ LPTSTR GetDllSource(INT i)
     return s_szDLLs[i];
 }
 
-LPCTSTR GetDllNames(INT i)
+LPCTSTR GetNewDllNames(INT i)
 {
     assert(i < _countof(s_aapszNames));
     return s_aapszNames[i][0];
