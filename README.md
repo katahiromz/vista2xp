@@ -77,6 +77,7 @@ You can check the IAT by `dumpbin /imports` of Visual Studio Command Prompt.
 - 2024-06-07 ver.0.8.6
     - Fixed v2xadv32 hooking.
     - Supported SetFileInformationByHandle, GetFileInformationByHandleEx, and OpenFileById.
+    - Supported GetFinalPathNameByHandleA/W.
 
 ## How to build?
 

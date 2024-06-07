@@ -146,3 +146,5 @@ kernel32.CreateEventExW
 kernel32.SetFileInformationByHandle
 kernel32.GetFileInformationByHandleEx
 kernel32.OpenFileById
+kernel32.GetFinalPathNameByHandleA
+kernel32.GetFinalPathNameByHandleW

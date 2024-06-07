@@ -32,6 +32,8 @@ EXPORTS
     SetFileInformationByHandle = SetFileInformationByHandleForXP
     GetFileInformationByHandleEx = GetFileInformationByHandleExForXP
     OpenFileById = OpenFileByIdForXP
+    GetFinalPathNameByHandleA = GetFinalPathNameByHandleAForXP
+    GetFinalPathNameByHandleW = GetFinalPathNameByHandleWForXP
 
     ; kernel32 --> advapi32
     CreateProcessAsUserA = advapi32.CreateProcessAsUserA

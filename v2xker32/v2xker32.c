@@ -7,6 +7,7 @@
 #include <strsafe.h>
 #include <psapi.h>
 #include "WonFileID.h"
+#include "WonFinalPathName.h"
 
 typedef struct tagSRWLOCK_FOR_XP
 {
@@ -109,6 +110,20 @@ typedef HANDLE (WINAPI *FN_OpenFileById)(
 FN_SetFileInformationByHandle s_pSetFileInformationByHandle;
 FN_GetFileInformationByHandleEx s_pGetFileInformationByHandleEx;
 FN_OpenFileById s_pOpenFileById;
+
+typedef DWORD (WINAPI *FN_GetFinalPathNameByHandleA)(
+    HANDLE hFile,
+    LPSTR lpszFilePath,
+    DWORD  cchFilePath,
+    DWORD  dwFlags);
+typedef DWORD (WINAPI *FN_GetFinalPathNameByHandleW)(
+    HANDLE hFile,
+    LPWSTR lpszFilePath,
+    DWORD  cchFilePath,
+    DWORD  dwFlags);
+
+FN_GetFinalPathNameByHandleA s_pGetFinalPathNameByHandleA;
+FN_GetFinalPathNameByHandleW s_pGetFinalPathNameByHandleW;
 
 BOOL WINAPI
 IsWow64ProcessForXP(HANDLE hProcess, PBOOL Wow64Process)
@@ -706,6 +721,30 @@ OpenFileByIdForXP(
                            dwFlagsAndAttributes);
 }
 
+DWORD WINAPI GetFinalPathNameByHandleAForXP(
+    HANDLE hFile,
+    LPSTR lpszFilePath,
+    DWORD  cchFilePath,
+    DWORD  dwFlags)
+{
+    if (s_pGetFinalPathNameByHandleA && DO_FALLBACK)
+        return s_pGetFinalPathNameByHandleA(hFile, lpszFilePath, cchFilePath, dwFlags);
+
+    return WonGetFinalPathNameByHandleA(hFile, lpszFilePath, cchFilePath, dwFlags);
+}
+
+DWORD WINAPI GetFinalPathNameByHandleWForXP(
+    HANDLE hFile,
+    LPWSTR lpszFilePath,
+    DWORD  cchFilePath,
+    DWORD  dwFlags)
+{
+    if (s_pGetFinalPathNameByHandleW && DO_FALLBACK)
+        return s_pGetFinalPathNameByHandleW(hFile, lpszFilePath, cchFilePath, dwFlags);
+
+    return WonGetFinalPathNameByHandleW(hFile, lpszFilePath, cchFilePath, dwFlags);
+}
+
 #define GETPROC(fn) s_p##fn = (FN_##fn)GetProcAddress(s_hKernel32, #fn)
 
 BOOL WINAPI
@@ -744,6 +783,8 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         GETPROC(SetFileInformationByHandle);
         GETPROC(GetFileInformationByHandleEx);
         GETPROC(OpenFileById);
+        GETPROC(GetFinalPathNameByHandleA);
+        GETPROC(GetFinalPathNameByHandleW);
         break;
     case DLL_PROCESS_DETACH:
         FreeLibrary(s_hKernel32);
