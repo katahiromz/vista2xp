@@ -1,3 +1,6 @@
 [submodule "WonFileID"]
 	path = WonFileID
 	url = https://github.com/katahiromz/WonFileID.git
+[submodule "WonFinalPathName"]
+	path = WonFinalPathName
+	url = https://github.com/katahiromz/WonFinalPathName
