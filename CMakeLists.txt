@@ -84,6 +84,9 @@ endif()
 # Unicode support
 add_definitions(-DUNICODE -D_UNICODE)
 
+# libWonFileID.a
+add_subdirectory(WonFileID)
+
 # vista2xp.exe
 add_executable(vista2xp WIN32
     vista2xp/vista2xp.cpp
@@ -92,7 +95,7 @@ add_executable(vista2xp WIN32
 target_link_libraries(vista2xp comdlg32 comctl32 shlwapi)
 
 # dll files and test programs
-subdirs(tests)
+add_subdirectory(tests)
 
 ##############################################################################
 

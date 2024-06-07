@@ -346,7 +346,8 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
         return E_FAIL;
 
     for (INT i = 0; i < (INT)_countof(found); ++i)
-    {        // cut off file title
+    {
+        // cut off file title
         *pch = 0;
 
         // create backup
