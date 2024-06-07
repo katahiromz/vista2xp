@@ -341,7 +341,7 @@ HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile)
         if (lstrcmpiA(names[i], DllNames1[i]) == 0 ||
             lstrcmpiA(names[i], DllNames2[i]) == 0)
         {
-            found[0] = do_dll_funcs[i](image, i, const_cast<char *>(names[i]));
+            found[i] = do_dll_funcs[i](image, i, const_cast<char *>(names[i]));
         }
     }
 
