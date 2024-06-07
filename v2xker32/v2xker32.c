@@ -761,6 +761,9 @@ InitializeCriticalSectionExForXP(
     if (s_pInitializeCriticalSectionEx && DO_FALLBACK)
         return s_pInitializeCriticalSectionEx(lpCriticalSection, dwSpinCount, Flags);
 
+    if (!lpCriticalSection)
+        return FALSE;
+
     InitializeCriticalSection(lpCriticalSection);
     SetCriticalSectionSpinCount(lpCriticalSection, dwSpinCount);
     return TRUE;
