@@ -80,6 +80,7 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
     - v2xadv32 のフックを修正。
     - SetFileInformationByHandle、GetFileInformationByHandleEx および OpenFileById のサポート。
     - GetFinalPathNameByHandleA/W のサポート。
+- 2024-XX-YY ver.0.8.7
 
 ## 警告
 
