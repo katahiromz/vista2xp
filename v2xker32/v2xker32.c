@@ -6,6 +6,7 @@
 #include <string.h>
 #include <strsafe.h>
 #include <psapi.h>
+#include "WonFileID.h"
 
 typedef struct tagSRWLOCK_FOR_XP
 {
@@ -86,6 +87,28 @@ typedef HANDLE (WINAPI *FN_CreateEventExA)(LPSECURITY_ATTRIBUTES, LPCSTR, DWORD,
 typedef HANDLE (WINAPI *FN_CreateEventExW)(LPSECURITY_ATTRIBUTES, LPCWSTR, DWORD, DWORD);
 static FN_CreateEventExA s_pCreateEventExA;
 static FN_CreateEventExW s_pCreateEventExW;
+
+typedef BOOL (WINAPI *FN_SetFileInformationByHandle)(
+    HANDLE hFile,
+    WON_FILE_INFO_BY_HANDLE_CLASS FileInformationClass,
+    LPVOID lpFileInformation,
+    DWORD dwBufferSize);
+typedef BOOL (WINAPI *FN_GetFileInformationByHandleEx)(
+    HANDLE hFile,
+    WON_FILE_INFO_BY_HANDLE_CLASS FileInformationClass,
+    LPVOID lpFileInformation,
+    DWORD dwBufferSize);
+typedef HANDLE (WINAPI *FN_OpenFileById)(
+    HANDLE hVolumeHint,
+    LPWON_FILE_ID_DESCRIPTOR lpFileId,
+    DWORD dwDesiredAccess,
+    DWORD dwShareMode,
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+    DWORD dwFlagsAndAttributes);
+
+FN_SetFileInformationByHandle s_pSetFileInformationByHandle;
+FN_GetFileInformationByHandleEx s_pGetFileInformationByHandleEx;
+FN_OpenFileById s_pOpenFileById;
 
 BOOL WINAPI
 IsWow64ProcessForXP(HANDLE hProcess, PBOOL Wow64Process)
@@ -617,6 +640,72 @@ CreateEventExWForXP(
     return CreateEventW(lpEventAttributes, bManualReset, bInitialSet, lpName);
 }
 
+BOOL WINAPI
+SetFileInformationByHandleForXP(
+    HANDLE hFile,
+    WON_FILE_INFO_BY_HANDLE_CLASS FileInformationClass,
+    LPVOID lpFileInformation,
+    DWORD dwBufferSize)
+{
+    if (s_pSetFileInformationByHandle && DO_FALLBACK)
+    {
+        return s_pSetFileInformationByHandle(hFile,
+                                             FileInformationClass,
+                                             lpFileInformation,
+                                             dwBufferSize);
+    }
+    return WonSetFileInformationByHandle(hFile,
+                                         FileInformationClass,
+                                         lpFileInformation,
+                                         dwBufferSize);
+}
+
+BOOL WINAPI
+GetFileInformationByHandleExForXP(
+    HANDLE hFile,
+    WON_FILE_INFO_BY_HANDLE_CLASS FileInformationClass,
+    LPVOID lpFileInformation,
+    DWORD dwBufferSize)
+{
+    if (s_pGetFileInformationByHandleEx && DO_FALLBACK)
+    {
+        return s_pGetFileInformationByHandleEx(hFile,
+                                               FileInformationClass,
+                                               lpFileInformation,
+                                               dwBufferSize);
+    }
+    return WonGetFileInformationByHandleEx(hFile,
+                                           FileInformationClass,
+                                           lpFileInformation,
+                                           dwBufferSize);
+}
+
+HANDLE WINAPI
+OpenFileByIdForXP(
+    HANDLE hVolumeHint,
+    LPWON_FILE_ID_DESCRIPTOR lpFileId,
+    DWORD dwDesiredAccess,
+    DWORD dwShareMode,
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+    DWORD dwFlagsAndAttributes)
+{
+    if (s_pOpenFileById && DO_FALLBACK)
+    {
+        return s_pOpenFileById(hVolumeHint,
+                               lpFileId,
+                               dwDesiredAccess,
+                               dwShareMode,
+                               lpSecurityAttributes,
+                               dwFlagsAndAttributes);
+    }
+    return WonOpenFileById(hVolumeHint,
+                           lpFileId,
+                           dwDesiredAccess,
+                           dwShareMode,
+                           lpSecurityAttributes,
+                           dwFlagsAndAttributes);
+}
+
 #define GETPROC(fn) s_p##fn = (FN_##fn)GetProcAddress(s_hKernel32, #fn)
 
 BOOL WINAPI
@@ -652,6 +741,9 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         GETPROC(CompareStringEx);
         GETPROC(CreateEventExA);
         GETPROC(CreateEventExW);
+        GETPROC(SetFileInformationByHandle);
+        GETPROC(GetFileInformationByHandleEx);
+        GETPROC(OpenFileById);
         break;
     case DLL_PROCESS_DETACH:
         FreeLibrary(s_hKernel32);

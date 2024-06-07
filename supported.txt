@@ -143,3 +143,6 @@ advapi32.RegDeleteKeyExA
 advapi32.RegDeleteKeyExW
 kernel32.CreateEventExA
 kernel32.CreateEventExW
+kernel32.SetFileInformationByHandle
+kernel32.GetFileInformationByHandleEx
+kernel32.OpenFileById

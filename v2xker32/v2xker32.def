@@ -29,6 +29,9 @@ EXPORTS
     CompareStringEx = CompareStringExForXP
     CreateEventExA = CreateEventExAForXP
     CreateEventExW = CreateEventExWForXP
+    SetFileInformationByHandle = SetFileInformationByHandleForXP
+    GetFileInformationByHandleEx = GetFileInformationByHandleExForXP
+    OpenFileById = OpenFileByIdForXP
 
     ; kernel32 --> advapi32
     CreateProcessAsUserA = advapi32.CreateProcessAsUserA
