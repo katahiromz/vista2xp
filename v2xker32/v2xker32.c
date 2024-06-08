@@ -4,10 +4,10 @@
 #include "targetverxp.h"
 #include <windows.h>
 #include <string.h>
-#include <strsafe.h>
 #include <psapi.h>
-#include "WonFileID.h"
-#include "WonFinalPathName.h"
+#include "../logging.h"
+#include "../WonFileID/WonFileID.h"
+#include "../WonFinalPathName/WonFinalPathName.h"
 
 typedef struct tagSRWLOCK_FOR_XP
 {
@@ -139,6 +139,9 @@ typedef BOOL (WINAPI *FN_Wow64RevertWow64FsRedirection)(PVOID OldValue);
 FN_Wow64EnableWow64FsRedirection s_pWow64EnableWow64FsRedirection;
 FN_Wow64DisableWow64FsRedirection s_pWow64DisableWow64FsRedirection;
 FN_Wow64RevertWow64FsRedirection s_pWow64RevertWow64FsRedirection;
+
+typedef FARPROC (WINAPI *FN_GetProcAddress)(HMODULE hModule, LPCSTR lpProcName);
+FN_GetProcAddress s_pGetProcAddress;
 
 BOOL WINAPI
 IsWow64ProcessForXP(HANDLE hProcess, PBOOL Wow64Process)
@@ -804,6 +807,17 @@ Wow64RevertWow64FsRedirectionForXP(PVOID OldValue)
     return TRUE;
 }
 
+FARPROC WINAPI
+GetProcAddressForXP(HMODULE hModule, LPCSTR lpProcName)
+{
+    mlog_trace_a("GetProcAddressForXP(%p, '%s')\n", hModule, lpProcName);
+
+    if (!s_pGetProcAddress)
+        return NULL;
+
+    return s_pGetProcAddress(hModule, lpProcName);
+}
+
 #define GETPROC(fn) s_p##fn = (FN_##fn)GetProcAddress(s_hKernel32, #fn)
 
 BOOL WINAPI
@@ -848,6 +862,7 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         GETPROC(Wow64EnableWow64FsRedirection);
         GETPROC(Wow64DisableWow64FsRedirection);
         GETPROC(Wow64RevertWow64FsRedirection);
+        GETPROC(GetProcAddress);
         break;
     case DLL_PROCESS_DETACH:
         FreeLibrary(s_hKernel32);

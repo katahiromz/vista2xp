@@ -38,6 +38,7 @@ EXPORTS
     Wow64EnableWow64FsRedirection = Wow64EnableWow64FsRedirectionForXP
     Wow64DisableWow64FsRedirection = Wow64DisableWow64FsRedirectionForXP
     Wow64RevertWow64FsRedirection = Wow64RevertWow64FsRedirectionForXP
+    GetProcAddress = GetProcAddressForXP
 
     ; kernel32 --> advapi32
     CreateProcessAsUserA = advapi32.CreateProcessAsUserA

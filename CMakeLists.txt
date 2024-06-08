@@ -86,11 +86,9 @@ add_definitions(-DUNICODE -D_UNICODE)
 
 # libWonFileID.a
 add_subdirectory(WonFileID)
-include_directories(WonFileID)
 
 # libWonFinalPathName.a
 add_subdirectory(WonFinalPathName)
-include_directories(WonFinalPathName)
 
 # vista2xp.exe
 add_executable(vista2xp WIN32

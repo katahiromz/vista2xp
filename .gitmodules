@@ -4,3 +4,6 @@
 [submodule "WonFinalPathName"]
 	path = WonFinalPathName
 	url = https://github.com/katahiromz/WonFinalPathName
+[submodule "MLog"]
+	path = MLog
+	url = https://github.com/katahiromz/MLog

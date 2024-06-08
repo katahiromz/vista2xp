@@ -68,7 +68,8 @@ bool do_kernel32(codereverse::ExeImage& image, size_t i, char *name)
                 lstrcmpA(symbol.pszName, "InitializeCriticalSectionEx") == 0 ||
                 lstrcmpA(symbol.pszName, "Wow64EnableWow64FsRedirection") == 0 ||
                 lstrcmpA(symbol.pszName, "Wow64DisableWow64FsRedirection") == 0 ||
-                lstrcmpA(symbol.pszName, "Wow64RevertWow64FsRedirection") == 0)
+                lstrcmpA(symbol.pszName, "Wow64RevertWow64FsRedirection") == 0 ||
+                lstrcmpA(symbol.pszName, "GetProcAddress") == 0)
             {
                 if (lstrcmpiA(name, "kernel32") == 0)
                     StringCbCopyA(const_cast<char *>(name), sizeof("v2xker32"), "v2xker32");
