@@ -10,7 +10,7 @@
 #include <strsafe.h>
 #include <new>
 #include "FileDialog.hpp"
-#include "ShellItemArray.hpp"
+#include "../ShellItemArray.hpp"
 
 #define DOGIF_ONLY_IF_ONE 0x8
 

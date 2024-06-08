@@ -8,7 +8,7 @@
 #include <shlwapi.h>
 #include <shlobj.h>
 #include <strsafe.h>
-#include "ShellItemArray.hpp"
+#include "../ShellItemArray.hpp"
 
 static HINSTANCE s_hinstDLL;
 static HINSTANCE s_hShell32;
