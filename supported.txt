@@ -149,3 +149,6 @@ kernel32.OpenFileById
 kernel32.GetFinalPathNameByHandleA
 kernel32.GetFinalPathNameByHandleW
 kernel32.InitializeCriticalSectionEx
+kernel32.Wow64EnableWow64FsRedirection
+kernel32.Wow64DisableWow64FsRedirection
+kernel32.Wow64RevertWow64FsRedirection

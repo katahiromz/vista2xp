@@ -83,6 +83,7 @@ Visual Studio コマンドプロンプトの dumpbin /imports で IAT をチェ�
 - 2024-06-08 ver.0.8.7
     - InitializeCriticalSectionEx のサポート。
 - 2024-XX-YY ver.0.8.8
+    - ファイルシステム リダイレクション関数群のサポート。
 
 ## 警告
 

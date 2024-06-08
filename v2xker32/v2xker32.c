@@ -132,6 +132,14 @@ typedef BOOL (WINAPI *FN_InitializeCriticalSectionEx)(
 
 FN_InitializeCriticalSectionEx s_pInitializeCriticalSectionEx;
 
+typedef BOOLEAN (WINAPI *FN_Wow64EnableWow64FsRedirection)(BOOLEAN Wow64FsEnableRedirection);
+typedef BOOL (WINAPI *FN_Wow64DisableWow64FsRedirection)(PVOID *OldValue);
+typedef BOOL (WINAPI *FN_Wow64RevertWow64FsRedirection)(PVOID OldValue);
+
+FN_Wow64EnableWow64FsRedirection s_pWow64EnableWow64FsRedirection;
+FN_Wow64DisableWow64FsRedirection s_pWow64DisableWow64FsRedirection;
+FN_Wow64RevertWow64FsRedirection s_pWow64RevertWow64FsRedirection;
+
 BOOL WINAPI
 IsWow64ProcessForXP(HANDLE hProcess, PBOOL Wow64Process)
 {
@@ -769,6 +777,33 @@ InitializeCriticalSectionExForXP(
     return TRUE;
 }
 
+BOOLEAN WINAPI
+Wow64EnableWow64FsRedirectionForXP(BOOLEAN Wow64FsEnableRedirection)
+{
+    if (s_pWow64EnableWow64FsRedirection)
+        return s_pWow64EnableWow64FsRedirection(Wow64FsEnableRedirection);
+
+    return TRUE;
+}
+
+BOOL WINAPI
+Wow64DisableWow64FsRedirectionForXP(PVOID *OldValue)
+{
+    if (s_pWow64DisableWow64FsRedirection)
+        return s_pWow64DisableWow64FsRedirection(OldValue);
+
+    return TRUE;
+}
+
+BOOL WINAPI
+Wow64RevertWow64FsRedirectionForXP(PVOID OldValue)
+{
+    if (s_pWow64RevertWow64FsRedirection)
+        return s_pWow64RevertWow64FsRedirection(OldValue);
+
+    return TRUE;
+}
+
 #define GETPROC(fn) s_p##fn = (FN_##fn)GetProcAddress(s_hKernel32, #fn)
 
 BOOL WINAPI
@@ -810,6 +845,9 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
         GETPROC(GetFinalPathNameByHandleA);
         GETPROC(GetFinalPathNameByHandleW);
         GETPROC(InitializeCriticalSectionEx);
+        GETPROC(Wow64EnableWow64FsRedirection);
+        GETPROC(Wow64DisableWow64FsRedirection);
+        GETPROC(Wow64RevertWow64FsRedirection);
         break;
     case DLL_PROCESS_DETACH:
         FreeLibrary(s_hKernel32);
@@ -817,3 +855,4 @@ DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
     }
     return TRUE;
 }
+
