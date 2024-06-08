@@ -20,8 +20,8 @@ IDI_MAIN ICON "res/Icon_1.ico"
 // RT_VERSION
 
 1 VERSIONINFO
-FILEVERSION     0, 8, 7, 0
-PRODUCTVERSION  0, 8, 7, 0
+FILEVERSION     0, 8, 8, 0
+PRODUCTVERSION  0, 8, 8, 0
 FILEOS          0x40004
 FILETYPE        0x1
 {
@@ -31,10 +31,10 @@ FILETYPE        0x1
         {
             VALUE "CompanyName", "Katayama Hirofumi MZ\0"
             VALUE "FileDescription", "vista2xp\0"
-            VALUE "FileVersion", "0.8.7\0"
+            VALUE "FileVersion", "0.8.8\0"
             VALUE "LegalCopyright", "Copyright (C) 2019 Katayama Hirofumi MZ.\0"
             VALUE "ProductName", "vista2xp\0"
-            VALUE "ProductVersion", "0.8.7\0"
+            VALUE "ProductVersion", "0.8.8\0"
         }
     }
     BLOCK "VarFileInfo"
