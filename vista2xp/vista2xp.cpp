@@ -153,10 +153,10 @@ BOOL Settings_OnOK(HWND hwnd)
     switch (iVersion)
     {
     case 0: // (Default)
-        Version = 0x23F00206;
-        dwMajorVersion = 6;
-        dwMinorVersion = 2;
-        dwBuildNumber = 9200;
+        Version = 0x4A65000A;
+        dwMajorVersion = 10;
+        dwMinorVersion = 0;
+        dwBuildNumber = 19045;
         dwPlatformId = 2;
         szCSDVersion[0] = 0;
         break;
