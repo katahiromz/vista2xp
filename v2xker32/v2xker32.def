@@ -7,9 +7,9 @@ EXPORTS
     QueryFullProcessImageNameA = QueryFullProcessImageNameAForXP
     QueryFullProcessImageNameW = QueryFullProcessImageNameWForXP
     IsWow64Process = IsWow64ProcessForXP
-    GetVersion = GetVersionHacked
-    GetVersionExA = GetVersionExAHacked
-    GetVersionExW = GetVersionExWHacked
+    GetVersion = GetVersionForXP
+    GetVersionExA = GetVersionExAForXP
+    GetVersionExW = GetVersionExWForXP
     InitializeSRWLock = InitializeSRWLockForXP
     AcquireSRWLockExclusive = AcquireSRWLockExclusiveForXP
     AcquireSRWLockShared = AcquireSRWLockSharedForXP

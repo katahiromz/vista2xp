@@ -320,19 +320,19 @@ QueryFullProcessImageNameWForXP(
 }
 
 DWORD WINAPI
-GetVersionHacked(void)
+GetVersionForXP(void)
 {
     return WonGetVersion();
 }
 
 BOOL WINAPI
-GetVersionExAHacked(LPOSVERSIONINFOA osver)
+GetVersionExAForXP(LPOSVERSIONINFOA osver)
 {
     return WonGetVersionExA(osver);
 }
 
 BOOL WINAPI
-GetVersionExWHacked(LPOSVERSIONINFOW osver)
+GetVersionExWForXP(LPOSVERSIONINFOW osver)
 {
     return WonGetVersionExW(osver);
 }
