@@ -5,6 +5,7 @@
 
 #include "targetvervista.h"
 #include <windows.h>
+#include <commctrl.h>
 
 INT WINAPI
 WinMain(HINSTANCE   hInstance,
@@ -12,6 +13,7 @@ WinMain(HINSTANCE   hInstance,
         LPSTR       lpCmdLine,
         INT         nCmdShow)
 {
+    InitCommonControls();
     DWORD dwVersion = GetVersion();
     OSVERSIONINFOA osver = { sizeof(osver) };
     GetVersionExA(&osver);

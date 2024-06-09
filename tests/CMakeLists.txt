@@ -1,33 +1,27 @@
+
 # taskdlg.exe
-add_executable(taskdlg taskdlg/taskdlg.c taskdlg/taskdlg_res.rc)
-target_link_libraries(taskdlg comctl32)
+add_subdirectory(taskdlg)
 
 # taskdlgi.exe
-add_executable(taskdlgi taskdlgi/taskdlgi.c taskdlgi/taskdlgi_res.rc)
-target_link_libraries(taskdlgi comctl32)
+add_subdirectory(taskdlgi)
 
 # regtest.exe
-add_executable(regtest regtest/regtest.c)
+add_subdirectory(regtest)
 
 # opendlg.exe
-add_executable(opendlg opendlg/opendlg.cpp)
-target_link_libraries(opendlg uuid)
+add_subdirectory(opendlg)
 
 # savedlg.exe
-add_executable(savedlg savedlg/savedlg.cpp)
-target_link_libraries(savedlg uuid)
+add_subdirectory(savedlg)
 
 # multifile.exe
-add_executable(multifile multifile/multifile.cpp)
-target_link_libraries(multifile uuid)
+add_subdirectory(multifile)
 
 # folder.exe
-add_executable(folder folder/folder.cpp)
-target_link_libraries(folder uuid)
+add_subdirectory(folder)
 
 # localized.exe
-add_executable(localized localized/localized.cpp)
-target_link_libraries(localized shell32)
+add_subdirectory(localized)
 
 # winverex.exe
-add_executable(winverex WIN32 winverex/winverex.c)
+add_subdirectory(winverex)
