@@ -193,24 +193,17 @@ BOOL Settings_OnOK(HWND hwnd)
         break;
     }
 
-    DWORD cbValue;
-
-    cbValue = sizeof(iVersion);
     SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
-                L"iVersion", REG_DWORD, &iVersion, cbValue);
-    cbValue = sizeof(dwMajorVersion);
+                L"iVersion", REG_DWORD, &iVersion, sizeof(iVersion));
     SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
-                L"dwMajorVersion", REG_DWORD, &dwMajorVersion, cbValue);
-    cbValue = sizeof(dwMinorVersion);
+                L"dwMajorVersion", REG_DWORD, &dwMajorVersion, sizeof(dwMajorVersion));
     SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
-                L"dwMinorVersion", REG_DWORD, &dwMinorVersion, cbValue);
-    cbValue = sizeof(dwBuildNumber);
+                L"dwMinorVersion", REG_DWORD, &dwMinorVersion, sizeof(dwMinorVersion));
     SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
-                L"dwBuildNumber", REG_DWORD, &dwBuildNumber, cbValue);
-    cbValue = sizeof(dwPlatformId);
+                L"dwBuildNumber", REG_DWORD, &dwBuildNumber, sizeof(dwBuildNumber));
     SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
-                L"dwPlatformId", REG_DWORD, &dwPlatformId, cbValue);
-    cbValue = (lstrlen(szCSDVersion) + 1) * sizeof(TCHAR);
+                L"dwPlatformId", REG_DWORD, &dwPlatformId, sizeof(dwPlatformId));
+    DWORD cbValue = (lstrlen(szCSDVersion) + 1) * sizeof(TCHAR);
     SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
                 L"szCSDVersion", REG_SZ, szCSDVersion, cbValue);
 
