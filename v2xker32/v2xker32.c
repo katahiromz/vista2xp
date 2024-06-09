@@ -6,6 +6,7 @@
 #include <string.h>
 #include <psapi.h>
 #include "../logging.h"
+#include "../WonGetVersion/WonGetVersion.h"
 #include "../WonFileID/WonFileID.h"
 #include "../WonFinalPathName/WonFinalPathName.h"
 
@@ -321,62 +322,19 @@ QueryFullProcessImageNameWForXP(
 DWORD WINAPI
 GetVersionHacked(void)
 {
-    // Win10
-    return 0x23F00206;
+    return WonGetVersion();
 }
 
 BOOL WINAPI
 GetVersionExAHacked(LPOSVERSIONINFOA osver)
 {
-    if (osver->dwOSVersionInfoSize != sizeof(OSVERSIONINFOA) ||
-        osver->dwOSVersionInfoSize != sizeof(OSVERSIONINFOEXA))
-    {
-        return FALSE;
-    }
-
-    // Win10
-    osver->dwMajorVersion = 0x00000006;
-    osver->dwMinorVersion = 0x00000002;
-    osver->dwBuildNumber = 0x000023F0;
-    osver->dwPlatformId = 0x00000002;
-    osver->szCSDVersion[0] = 0;
-    if (osver->dwOSVersionInfoSize == sizeof(OSVERSIONINFOEXA))
-    {
-        LPOSVERSIONINFOEXA osverx = (LPOSVERSIONINFOEXA)osver;
-        osverx->wServicePackMajor = 0x0000;
-        osverx->wServicePackMinor = 0x0000;
-        osverx->wSuiteMask = 0x0300;
-        osverx->wProductType = 1;
-        osverx->wReserved = 0;
-    }
-    return TRUE;
+    return WonGetVersionExA(osver);
 }
 
 BOOL WINAPI
 GetVersionExWHacked(LPOSVERSIONINFOW osver)
 {
-    if (osver->dwOSVersionInfoSize != sizeof(OSVERSIONINFOW) ||
-        osver->dwOSVersionInfoSize != sizeof(OSVERSIONINFOEXW))
-    {
-        return FALSE;
-    }
-
-    // Win10
-    osver->dwMajorVersion = 0x00000006;
-    osver->dwMinorVersion = 0x00000002;
-    osver->dwBuildNumber = 0x000023F0;
-    osver->dwPlatformId = 0x00000002;
-    osver->szCSDVersion[0] = 0;
-    if (osver->dwOSVersionInfoSize == sizeof(OSVERSIONINFOEXW))
-    {
-        LPOSVERSIONINFOEXW osverx = (LPOSVERSIONINFOEXW)osver;
-        osverx->wServicePackMajor = 0x0000;
-        osverx->wServicePackMinor = 0x0000;
-        osverx->wSuiteMask = 0x0300;
-        osverx->wProductType = 1;
-        osverx->wReserved = 0;
-    }
-    return TRUE;
+    return WonGetVersionExW(osver);
 }
 
 VOID WINAPI InitializeSRWLockForXP(PSRWLOCK_FOR_XP SRWLock)

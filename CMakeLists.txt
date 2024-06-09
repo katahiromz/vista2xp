@@ -70,6 +70,9 @@ endif()
 # Unicode support
 add_definitions(-DUNICODE -D_UNICODE)
 
+# libWonGetVersion.a
+add_subdirectory(WonGetVersion)
+
 # libWonFileID.a
 add_subdirectory(WonFileID)
 

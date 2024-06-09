@@ -7,3 +7,6 @@
 [submodule "MLog"]
 	path = MLog
 	url = https://github.com/katahiromz/MLog
+[submodule "WonGetVersion"]
+	path = WonGetVersion
+	url = https://github.com/katahiromz/WonGetVersion
