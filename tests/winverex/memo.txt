@@ -61,3 +61,11 @@ Windows 8:
     osver.dwBuildNumber: 9200
     osver.dwPlatformId: 2
     osver.szCSDVersion: 
+
+Windows 10:
+    GetVersion: 0x4A65000A
+    osver.dwMajorVersion: 10
+    osver.dwMinorVersion: 0
+    osver.dwBuildNumber: 19045
+    osver.dwPlatformId: 2
+    osver.szCSDVersion: 

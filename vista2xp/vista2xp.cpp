@@ -118,6 +118,7 @@ BOOL Settings_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     ComboBox_AddString(hCmb1, TEXT("Windows Vista (SP2)"));
     ComboBox_AddString(hCmb1, TEXT("Windows 7"));
     ComboBox_AddString(hCmb1, TEXT("Windows 8"));
+    ComboBox_AddString(hCmb1, TEXT("Windows 10"));
 
     DWORD iVersion = 0xFFFFFFFF;
     DWORD cbValue = sizeof(iVersion);
@@ -214,6 +215,17 @@ BOOL Settings_OnOK(HWND hwnd)
         dwBuildNumber = 9200;
         dwPlatformId = 2;
         szCSDVersion[0] = 0;
+        break;
+    case 8: // Windows 10
+        Version = 0x4A65000A;
+        dwMajorVersion = 10;
+        dwMinorVersion = 0;
+        dwBuildNumber = 19045;
+        dwPlatformId = 2;
+        szCSDVersion[0] = 0;
+        break;
+    default:
+        assert(0);
         break;
     }
 
