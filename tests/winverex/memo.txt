@@ -1,0 +1,63 @@
+Default:
+    GetVersion: 0x23F00206
+    osver.dwMajorVersion: 6
+    osver.dwMinorVersion: 2
+    osver.dwBuildNumber: 9200
+    osver.dwPlatformId: 2
+    osver.szCSDVersion: 
+
+Windows XP (SP2):
+    GetVersion: 0x0A280105
+    osver.dwMajorVersion: 5
+    osver.dwMinorVersion: 1
+    osver.dwBuildNumber: 2600
+    osver.dwPlatformId: 2
+    osver.szCSDVersion: Service Pack 2
+
+Windows XP (SP3):
+    GetVersion: 0x0A280105
+    osver.dwMajorVersion: 5
+    osver.dwMinorVersion: 1
+    osver.dwBuildNumber: 2600
+    osver.dwPlatformId: 2
+    osver.szCSDVersion: Service Pack 3
+
+Windows Vista:
+    GetVersion: 0x17700006
+    osver.dwMajorVersion: 6
+    osver.dwMinorVersion: 0
+    osver.dwBuildNumber: 6000
+    osver.dwPlatformId: 2
+    osver.szCSDVersion: 
+
+Windows Vista (SP1):
+    GetVersion: 0x17710006
+    osver.dwMajorVersion: 6
+    osver.dwMinorVersion: 0
+    osver.dwBuildNumber: 6001
+    osver.dwPlatformId: 2
+    osver.szCSDVersion: Service Pack 1
+
+Windows Vista (SP2):
+    GetVersion: 0x17720006
+    osver.dwMajorVersion: 6
+    osver.dwMinorVersion: 0
+    osver.dwBuildNumber: 6002
+    osver.dwPlatformId: 2
+    osver.szCSDVersion: Service Pack 2
+
+Windows 7:
+    GetVersion: 0x1DB00106
+    osver.dwMajorVersion: 6
+    osver.dwMinorVersion: 1
+    osver.dwBuildNumber: 7600
+    osver.dwPlatformId: 2
+    osver.szCSDVersion: 
+
+Windows 8:
+    GetVersion: 0x23F00206
+    osver.dwMajorVersion: 6
+    osver.dwMinorVersion: 2
+    osver.dwBuildNumber: 9200
+    osver.dwPlatformId: 2
+    osver.szCSDVersion: 

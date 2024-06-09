@@ -30,4 +30,4 @@ add_executable(localized localized/localized.cpp)
 target_link_libraries(localized shell32)
 
 # winverex.exe
-add_executable(winverex winverex/winverex.c)
+add_executable(winverex WIN32 winverex/winverex.c)
