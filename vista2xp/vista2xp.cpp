@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include "resource.h"
+#include "../logging.h"
 
 HRESULT JustDoIt(HWND hwnd, LPCTSTR pszFile);
 
@@ -109,6 +110,8 @@ BOOL Settings_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         iVersion = 0;
 
     ComboBox_SetCurSel(hCmb1, iVersion);
+
+    SetTimer(hwnd, 999, 1000, NULL);
     return TRUE;
 }
 
@@ -221,12 +224,37 @@ void Settings_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     case IDOK:
         if (Settings_OnOK(hwnd))
         {
+            KillTimer(hwnd, 999);
             EndDialog(hwnd, id);
         }
         break;
     case IDCANCEL:
+        KillTimer(hwnd, 999);
         EndDialog(hwnd, id);
         break;
+    case psh1: // Open Log
+        ShellExecute(hwnd, NULL, mlog_log_file(), NULL, NULL, SW_SHOWNORMAL);
+        break;
+    case psh2: // Delete Log
+        DeleteFile(mlog_log_file());
+        break;
+    }
+}
+
+void Settings_OnTimer(HWND hwnd, UINT id)
+{
+    if (id == 999)
+    {
+        if (PathFileExists(mlog_log_file()))
+        {
+            EnableWindow(GetDlgItem(hwnd, psh1), TRUE);
+            EnableWindow(GetDlgItem(hwnd, psh2), TRUE);
+        }
+        else
+        {
+            EnableWindow(GetDlgItem(hwnd, psh1), FALSE);
+            EnableWindow(GetDlgItem(hwnd, psh2), FALSE);
+        }
     }
 }
 
@@ -237,6 +265,7 @@ Settings_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
         HANDLE_MSG(hwnd, WM_INITDIALOG, Settings_OnInitDialog);
         HANDLE_MSG(hwnd, WM_COMMAND, Settings_OnCommand);
+        HANDLE_MSG(hwnd, WM_TIMER, Settings_OnTimer);
     }
     return 0;
 }
