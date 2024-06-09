@@ -82,6 +82,7 @@ You can check the IAT by `dumpbin /imports` of Visual Studio Command Prompt.
     - Supported InitializeCriticalSectionEx.
 - 2024-XX-YY ver.0.8.8
     - Supported filesystem redirection functions.
+    - Introduced version control setting.
 
 ## How to build?
 

@@ -89,6 +89,158 @@ static FN_ChangeWindowMessageFilter s_pChangeWindowMessageFilter = NULL;
 typedef BOOL (WINAPI *FN_ChangeWindowMessageFilterEx)(HWND, UINT, DWORD, PCHANGEFILTERSTRUCT);
 static FN_ChangeWindowMessageFilterEx s_pChangeWindowMessageFilterEx = NULL;
 
+BOOL Settings_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
+{
+    HWND hCmb1 = GetDlgItem(hwnd, cmb1);
+    ComboBox_AddString(hCmb1, TEXT("(Default)"));
+    ComboBox_AddString(hCmb1, TEXT("Windows XP (SP2)"));
+    ComboBox_AddString(hCmb1, TEXT("Windows XP (SP3)"));
+    ComboBox_AddString(hCmb1, TEXT("Windows Vista"));
+    ComboBox_AddString(hCmb1, TEXT("Windows Vista (SP1)"));
+    ComboBox_AddString(hCmb1, TEXT("Windows Vista (SP2)"));
+    ComboBox_AddString(hCmb1, TEXT("Windows 7"));
+    ComboBox_AddString(hCmb1, TEXT("Windows 8"));
+
+    DWORD iVersion = 0xFFFFFFFF;
+    DWORD cbValue = sizeof(iVersion);
+    SHGetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
+                L"iVersion", NULL, &iVersion, &cbValue);
+    if (iVersion == 0xFFFFFFFF || cbValue != sizeof(DWORD))
+        iVersion = 0;
+
+    ComboBox_SetCurSel(hCmb1, iVersion);
+    return TRUE;
+}
+
+BOOL Settings_OnOK(HWND hwnd)
+{
+    HWND hCmb1 = GetDlgItem(hwnd, cmb1);
+    INT iVersion = ComboBox_GetCurSel(hCmb1);
+    if (iVersion == CB_ERR)
+        return FALSE;
+
+    DWORD Version, dwMajorVersion, dwMinorVersion, dwBuildNumber, dwPlatformId;
+    TCHAR szCSDVersion[64];
+
+    switch (iVersion)
+    {
+    case 0: // (Default)
+        Version = 0x23F00206;
+        dwMajorVersion = 6;
+        dwMinorVersion = 2;
+        dwBuildNumber = 9200;
+        dwPlatformId = 2;
+        szCSDVersion[0] = 0;
+        break;
+    case 1: // Windows XP (SP2)
+        Version = 0x0A280105;
+        dwMajorVersion = 5;
+        dwMinorVersion = 1;
+        dwBuildNumber = 2600;
+        dwPlatformId = 2;
+        lstrcpyn(szCSDVersion, TEXT("Service Pack 2"), _countof(szCSDVersion));
+        break;
+    case 2: // Windows XP (SP3)
+        Version = 0x0A280105;
+        dwMajorVersion = 5;
+        dwMinorVersion = 1;
+        dwBuildNumber = 2600;
+        dwPlatformId = 2;
+        lstrcpyn(szCSDVersion, TEXT("Service Pack 3"), _countof(szCSDVersion));
+        break;
+    case 3: // Windows Vista
+        Version = 0x17700006;
+        dwMajorVersion = 6;
+        dwMinorVersion = 0;
+        dwBuildNumber = 6000;
+        dwPlatformId = 2;
+        szCSDVersion[0] = 0;
+        break;
+    case 4: // Windows Vista (SP1)
+        Version = 0x17710006;
+        dwMajorVersion = 6;
+        dwMinorVersion = 0;
+        dwBuildNumber = 6001;
+        dwPlatformId  = 2;
+        lstrcpyn(szCSDVersion, TEXT("Service Pack 1"), _countof(szCSDVersion));
+        break;
+    case 5: // Windows Vista (SP2)
+        Version = 0x17720006;
+        dwMajorVersion = 6;
+        dwMinorVersion = 0;
+        dwBuildNumber = 6002;
+        dwPlatformId = 2;
+        lstrcpyn(szCSDVersion, TEXT("Service Pack 2"), _countof(szCSDVersion));
+        break;
+    case 6: // Windows 7
+        Version = 0x1DB00106;
+        dwMajorVersion = 6;
+        dwMinorVersion = 1;
+        dwBuildNumber = 7600;
+        dwPlatformId = 2;
+        szCSDVersion[0] = 0;
+        break;
+    case 7: // Windows 8
+        Version = 0x23F00206;
+        dwMajorVersion = 6;
+        dwMinorVersion = 2;
+        dwBuildNumber = 9200;
+        dwPlatformId = 2;
+        szCSDVersion[0] = 0;
+        break;
+    }
+
+    DWORD cbValue;
+
+    cbValue = sizeof(iVersion);
+    SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
+                L"iVersion", REG_DWORD, &iVersion, cbValue);
+    cbValue = sizeof(dwMajorVersion);
+    SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
+                L"dwMajorVersion", REG_DWORD, &dwMajorVersion, cbValue);
+    cbValue = sizeof(dwMinorVersion);
+    SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
+                L"dwMinorVersion", REG_DWORD, &dwMinorVersion, cbValue);
+    cbValue = sizeof(dwBuildNumber);
+    SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
+                L"dwBuildNumber", REG_DWORD, &dwBuildNumber, cbValue);
+    cbValue = sizeof(dwPlatformId);
+    SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
+                L"dwPlatformId", REG_DWORD, &dwPlatformId, cbValue);
+    cbValue = (lstrlen(szCSDVersion) + 1) * sizeof(TCHAR);
+    SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
+                L"szCSDVersion", REG_SZ, szCSDVersion, cbValue);
+
+    return TRUE;
+}
+
+void Settings_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
+{
+    switch (id)
+    {
+    case IDOK:
+        if (Settings_OnOK(hwnd))
+        {
+            EndDialog(hwnd, id);
+        }
+        break;
+    case IDCANCEL:
+        EndDialog(hwnd, id);
+        break;
+    }
+}
+
+INT_PTR CALLBACK
+Settings_DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    switch (uMsg)
+    {
+        HANDLE_MSG(hwnd, WM_INITDIALOG, Settings_OnInitDialog);
+        HANDLE_MSG(hwnd, WM_COMMAND, Settings_OnCommand);
+    }
+    return 0;
+}
+
 BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     HINSTANCE hUser32 = GetModuleHandleA("user32");
@@ -348,6 +500,11 @@ void OnOK(HWND hwnd)
     MessageBox(hwnd, szText, TEXT("vista2xp"), MB_ICONINFORMATION);
 }
 
+void OnSettings(HWND hwnd)
+{
+    DialogBox(s_hInst, MAKEINTRESOURCE(IDD_SETTINGS), hwnd, Settings_DlgProc);
+}
+
 void OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     switch (id)
@@ -360,6 +517,9 @@ void OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
         break;
     case psh3:
         OnPsh3(hwnd);
+        break;
+    case psh4:
+        OnSettings(hwnd);
         break;
     case IDOK:
         OnOK(hwnd);
@@ -428,7 +588,7 @@ WinMain(HINSTANCE   hInstance,
     if (!CheckSourceDlls())
         return -1;
 
-    DialogBox(hInstance, MAKEINTRESOURCE(1), NULL, DialogProc);
+    DialogBox(hInstance, MAKEINTRESOURCE(IDD_MAIN), NULL, DialogProc);
     CoUninitialize();
     return 0;
 }
