@@ -90,6 +90,23 @@ static FN_ChangeWindowMessageFilter s_pChangeWindowMessageFilter = NULL;
 typedef BOOL (WINAPI *FN_ChangeWindowMessageFilterEx)(HWND, UINT, DWORD, PCHANGEFILTERSTRUCT);
 static FN_ChangeWindowMessageFilterEx s_pChangeWindowMessageFilterEx = NULL;
 
+void Settings_OnTimer(HWND hwnd, UINT id)
+{
+    if (id != 999)
+        return;
+
+    if (PathFileExists(mlog_log_file()))
+    {
+        EnableWindow(GetDlgItem(hwnd, psh1), TRUE);
+        EnableWindow(GetDlgItem(hwnd, psh2), TRUE);
+    }
+    else
+    {
+        EnableWindow(GetDlgItem(hwnd, psh1), FALSE);
+        EnableWindow(GetDlgItem(hwnd, psh2), FALSE);
+    }
+}
+
 BOOL Settings_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     HWND hCmb1 = GetDlgItem(hwnd, cmb1);
@@ -104,14 +121,21 @@ BOOL Settings_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
     DWORD iVersion = 0xFFFFFFFF;
     DWORD cbValue = sizeof(iVersion);
-    SHGetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
-                L"iVersion", NULL, &iVersion, &cbValue);
+    SHGetValueW(HKEY_CURRENT_USER, MLOG_REGKEY, L"iVersion", NULL, &iVersion, &cbValue);
     if (iVersion == 0xFFFFFFFF || cbValue != sizeof(DWORD))
         iVersion = 0;
 
     ComboBox_SetCurSel(hCmb1, iVersion);
 
+    DWORD dwValue = FALSE;
+    cbValue = sizeof(dwValue);
+    SHGetValueW(HKEY_CURRENT_USER, MLOG_REGKEY, L"EnableLogging", NULL, &dwValue, &cbValue);
+    if (dwValue)
+        CheckDlgButton(hwnd, chx1, BST_CHECKED);
+
     SetTimer(hwnd, 999, 1000, NULL);
+    Settings_OnTimer(hwnd, 999);
+
     return TRUE;
 }
 
@@ -193,19 +217,15 @@ BOOL Settings_OnOK(HWND hwnd)
         break;
     }
 
-    SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
-                L"iVersion", REG_DWORD, &iVersion, sizeof(iVersion));
-    SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
-                L"dwMajorVersion", REG_DWORD, &dwMajorVersion, sizeof(dwMajorVersion));
-    SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
-                L"dwMinorVersion", REG_DWORD, &dwMinorVersion, sizeof(dwMinorVersion));
-    SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
-                L"dwBuildNumber", REG_DWORD, &dwBuildNumber, sizeof(dwBuildNumber));
-    SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
-                L"dwPlatformId", REG_DWORD, &dwPlatformId, sizeof(dwPlatformId));
+    SHSetValueW(HKEY_CURRENT_USER, MLOG_REGKEY, L"iVersion", REG_DWORD, &iVersion, sizeof(iVersion));
+    SHSetValueW(HKEY_CURRENT_USER, MLOG_REGKEY, L"dwMajorVersion", REG_DWORD, &dwMajorVersion, sizeof(dwMajorVersion));
+    SHSetValueW(HKEY_CURRENT_USER, MLOG_REGKEY, L"dwMinorVersion", REG_DWORD, &dwMinorVersion, sizeof(dwMinorVersion));
+    SHSetValueW(HKEY_CURRENT_USER, MLOG_REGKEY, L"dwBuildNumber", REG_DWORD, &dwBuildNumber, sizeof(dwBuildNumber));
+    SHSetValueW(HKEY_CURRENT_USER, MLOG_REGKEY, L"dwPlatformId", REG_DWORD, &dwPlatformId, sizeof(dwPlatformId));
     DWORD cbValue = (lstrlen(szCSDVersion) + 1) * sizeof(TCHAR);
-    SHSetValueW(HKEY_CURRENT_USER, L"Software\\Katayama Hirofumi MZ\\vista2xp",
-                L"szCSDVersion", REG_SZ, szCSDVersion, cbValue);
+    SHSetValueW(HKEY_CURRENT_USER, MLOG_REGKEY, L"szCSDVersion", REG_SZ, szCSDVersion, cbValue);
+    DWORD dwValue = !!(IsDlgButtonChecked(hwnd, chx1) & BST_CHECKED);
+    SHSetValueW(HKEY_CURRENT_USER, MLOG_REGKEY, L"EnableLogging", REG_DWORD, &dwValue, sizeof(dwValue));
 
     return TRUE;
 }
@@ -231,23 +251,6 @@ void Settings_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     case psh2: // Delete Log
         DeleteFile(mlog_log_file());
         break;
-    }
-}
-
-void Settings_OnTimer(HWND hwnd, UINT id)
-{
-    if (id == 999)
-    {
-        if (PathFileExists(mlog_log_file()))
-        {
-            EnableWindow(GetDlgItem(hwnd, psh1), TRUE);
-            EnableWindow(GetDlgItem(hwnd, psh2), TRUE);
-        }
-        else
-        {
-            EnableWindow(GetDlgItem(hwnd, psh1), FALSE);
-            EnableWindow(GetDlgItem(hwnd, psh2), FALSE);
-        }
     }
 }
 
