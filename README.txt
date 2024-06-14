@@ -80,7 +80,7 @@ You can check the IAT by dumpbin /imports of Visual Studio Command Prompt.
     - Supported GetFinalPathNameByHandleA/W.
 - 2024-06-08 ver.0.8.7
     - Supported InitializeCriticalSectionEx.
-- 2024-XX-YY ver.0.8.8
+- 2024-06-14 ver.0.8.8
     - Supported filesystem redirection functions.
     - Introduced version control setting.
 
